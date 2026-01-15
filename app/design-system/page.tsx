@@ -135,6 +135,43 @@ export default function DesignSystemPage() {
         </div>
       </Section>
 
+      <Section
+        title="Status colors"
+        description="Interactive palettes for info, success, warning, and error states."
+      >
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <p className="ds-text-label">Text tokens</p>
+            <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-4">
+              <p className="ds-text-body text-interactive-info-500">Info 500 – inline links, notices.</p>
+              <p className="ds-text-body text-interactive-success-500">
+                Success 500 – confirmations, positive KPIs.
+              </p>
+              <p className="ds-text-body text-interactive-warning-500">Warning 500 – cautions and notices.</p>
+              <p className="ds-text-body text-interactive-error-500">Error 500 – failures and blocking errors.</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <p className="ds-text-label">Background tokens</p>
+            <div className="grid gap-3 md:grid-cols-4">
+              <div className="rounded-lg bg-interactive-info-100 px-4 py-3">
+                <p className="ds-text-small text-interactive-info-700">Info 100 / 700</p>
+              </div>
+              <div className="rounded-lg bg-interactive-success-100 px-4 py-3">
+                <p className="ds-text-small text-interactive-success-700">Success 100 / 700</p>
+              </div>
+              <div className="rounded-lg bg-interactive-warning-100 px-4 py-3">
+                <p className="ds-text-small text-interactive-warning-700">Warning 100 / 700</p>
+              </div>
+              <div className="rounded-lg bg-interactive-error-100 px-4 py-3">
+                <p className="ds-text-small text-interactive-error-700">Error 100 / 700</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
       {/* Buttons */}
       <Section
         title="Buttons"
@@ -207,6 +244,26 @@ export default function DesignSystemPage() {
               </button>
             </div>
           </div>
+
+          <div className="space-y-4">
+            <p className="ds-text-label">Section spacing helpers</p>
+            <div className="space-y-3">
+              <div className="bg-surface-muted">
+                <div className="ds-section-tight">
+                  <div className="ds-container">
+                    <p className="ds-text-small">ds-section-tight</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-surface-muted">
+                <div className="ds-section-loose">
+                  <div className="ds-container">
+                    <p className="ds-text-small">ds-section-loose</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </Section>
 
@@ -221,6 +278,11 @@ export default function DesignSystemPage() {
               Explore 2026 web scraping trends and get early access to Zyte&apos;s industry report.
             </p>
             <button className="ds-button ds-button--secondary ds-button--sm">Register now</button>
+          </div>
+
+          <div className="ds-banner ds-banner--success rounded-xl">
+            <p className="ds-text-small">All systems operational. No scraping incidents reported.</p>
+            <button className="ds-button ds-button--secondary ds-button--sm">View status page</button>
           </div>
 
           <div className="ds-banner ds-banner--warm rounded-xl">

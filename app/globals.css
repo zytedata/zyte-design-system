@@ -265,62 +265,62 @@ body {
   .ds-heading-display {
     font-family: var(--font-brand-display);
     letter-spacing: -0.05em;
-    @apply text-5xl md:text-6xl font-semibold leading-tight text-text-700;
+    @apply text-5xl md:text-6xl font-semibold leading-tight text-text-main;
   }
 
   .ds-heading-xl {
     font-family: var(--font-brand-display);
     letter-spacing: -0.04em;
-    @apply text-4xl md:text-5xl font-semibold leading-tight text-text-700;
+    @apply text-4xl md:text-5xl font-semibold leading-tight text-text-main;
   }
 
   .ds-heading-lg {
     font-family: var(--font-brand-display);
     letter-spacing: -0.03em;
-    @apply text-3xl md:text-4xl font-semibold leading-snug text-text-700;
+    @apply text-3xl md:text-4xl font-semibold leading-snug text-text-main;
   }
 
   .ds-heading-md {
     font-family: var(--font-brand-display);
     letter-spacing: -0.02em;
-    @apply text-2xl md:text-3xl font-semibold leading-snug text-text-700;
+    @apply text-2xl md:text-3xl font-semibold leading-snug text-text-main;
   }
 
   .ds-heading-sm {
     font-family: var(--font-brand-display);
     letter-spacing: -0.01em;
-    @apply text-xl md:text-2xl font-semibold leading-snug text-text-700;
+    @apply text-xl md:text-2xl font-semibold leading-snug text-text-main;
   }
 
   .ds-text-lead {
     font-family: var(--font-brand-sans);
-    @apply text-lg md:text-xl leading-relaxed text-text-500;
+    @apply text-lg md:text-xl leading-relaxed text-text-main;
   }
 
   .ds-text-body {
     font-family: var(--font-brand-sans);
-    @apply text-base md:text-lg leading-relaxed text-text-500;
+    @apply text-base md:text-lg leading-relaxed text-text-main;
   }
 
   .ds-text-small {
     font-family: var(--font-brand-sans);
-    @apply text-sm leading-relaxed text-text-500;
+    @apply text-sm leading-relaxed text-text-muted;
   }
 
   .ds-text-caption {
     font-family: var(--font-brand-sans);
-    @apply text-xs md:text-sm leading-relaxed text-text-400;
+    @apply text-xs md:text-sm leading-relaxed text-text-muted;
   }
 
   .ds-text-hint {
     font-family: var(--font-brand-sans);
-    @apply text-xs leading-snug text-text-400;
+    @apply text-xs leading-snug text-text-muted;
   }
 
   .ds-text-label {
     font-family: var(--font-brand-sans);
     letter-spacing: 0.08em;
-    @apply text-xs font-semibold uppercase text-text-600;
+    @apply text-xs font-semibold uppercase text-text-main;
   }
 
   .ds-text-mono {
@@ -385,7 +385,7 @@ body {
 
   .ds-table thead th {
     background-color: var(--color-surface-muted);
-    @apply px-5 py-3 text-sm font-semibold text-text-600;
+    @apply px-5 py-3 text-sm font-semibold text-text-main;
   }
 
   .ds-table tbody tr + tr {
@@ -394,7 +394,7 @@ body {
 
   .ds-table tbody th,
   .ds-table tbody td {
-    @apply px-5 py-4 text-sm text-text-500 align-middle;
+    @apply px-5 py-4 text-sm text-text-main align-middle;
   }
 
   /* Buttons - aligned to zyte.com .btn / .btn-solid / .btn-link */

@@ -1,26 +1,553 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Fonts */
+  --font-sans: var(--font-zyte-sans);
+  --font-mono: var(--font-zyte-mono);
+  --font-brand-sans: var(--font-sans);
+  --font-brand-display: var(--font-sans);
+  --font-brand-mono: var(--font-mono);
+
+  /* Brand color scales (from zyte-website-nextjs/styles/_colors.scss) */
+  --color-primary-action-50: #fdf2f6;
+  --color-primary-action-100: #f7ccdf;
+  --color-primary-action-200: #e9669f;
+  --color-primary-action-400: #e2337e;
+  --color-primary-action-500: #db005f;
+  --color-primary-action-600: #b5004f;
+  --color-primary-action-700: #7a0035;
+  --color-primary-action-800: #520023;
+
+  --color-brand-secondary-warm-100: #f9dad9;
+  --color-brand-secondary-warm-200: #f9c2c0;
+  --color-brand-secondary-warm-300: #fa716b;
+  --color-brand-secondary-warm-500: #f9433b;
+  --color-brand-secondary-warm-600: #de271f;
+  --color-brand-secondary-warm-700: #bd2c26;
+  --color-brand-secondary-warm-800: #801813;
+
+  --color-brand-primary-50: #fafbfc;
+  --color-brand-primary-100: #dddff3;
+  --color-brand-primary-200: #c8dfe8;
+  --color-brand-primary-300: #8c95ed;
+  --color-brand-primary-400: #3f4fed;
+  --color-brand-primary-500: #181e5a;
+  --color-brand-primary-700: #121745;
+  --color-brand-primary-800: #0c0e2b;
+
+  --color-brand-secondary-cool-50: #f3f4f5;
+  --color-brand-secondary-cool-100: #e2afee;
+  --color-brand-secondary-cool-200: #dc64f7;
+  --color-brand-secondary-cool-500: #b02cce;
+  --color-brand-secondary-cool-600: #68137a;
+  --color-brand-secondary-cool-700: #460d52;
+  --color-brand-secondary-cool-800: #360a40;
+
+  --color-text-50: #fefefe;
+  --color-text-100: #f3f4f5;
+  --color-text-200: #d9e4e8;
+  --color-text-300: #9badb5;
+  --color-text-400: #667d87;
+  --color-text-500: #33525f;
+  --color-text-600: #181e5a;
+  --color-text-700: #050c4d;
+
+  --color-surface-white: #fefefe;
+  --color-surface-grey: #f3f4f5;
+  --color-surface-light-grey: #eeeff3;
+  --color-surface-cool-grey: #ccd3d7;
+  --color-surface-medium-grey: #e7e7e7;
+
+  --color-interactive-info-100: #ecf8fc;
+  --color-interactive-info-150: #ccdef0;
+  --color-interactive-info-200: #b4e2f4;
+  --color-interactive-info-400: #90d4ee;
+  --color-interactive-info-500: #41b6e6;
+  --color-interactive-info-600: #328db2;
+  --color-interactive-info-700: #29718f;
+  --color-interactive-info-800: #174152;
+
+  --color-interactive-success-100: #d1f0e8;
+  --color-interactive-success-200: #7accb8;
+  --color-interactive-success-400: #40b397;
+  --color-interactive-success-500: #00b388;
+  --color-interactive-success-600: #008a69;
+  --color-interactive-success-700: #00694f;
+  --color-interactive-success-800: #003b2c;
+
+  --color-interactive-warning-100: #fff5e9;
+  --color-interactive-warning-200: #fec47c;
+  --color-interactive-warning-400: #fdb153;
+  --color-interactive-warning-500: #ff9e1b;
+  --color-interactive-warning-600: #ff9e1b;
+  --color-interactive-warning-700: #8a550f;
+  --color-interactive-warning-800: #402807;
+
+  --color-interactive-error-50: #fee7e7;
+  --color-interactive-error-100: #fccccd;
+  --color-interactive-error-200: #f56668;
+  --color-interactive-error-400: #f13336;
+  --color-interactive-error-500: #db0004;
+  --color-interactive-error-600: #a10003;
+  --color-interactive-error-700: #660002;
+  --color-interactive-error-800: #2e0001;
+
+  --color-interactive-hover-200: #cad4d8;
+
+  --color-gradient-zyte: linear-gradient(to right, #6b21a8, #db005f);
+  --color-gradient-zyte-v2: linear-gradient(102deg, #131457 39.45%, #b02cce 108.24%);
+  --color-gradient-vscode-banner: radial-gradient(450.08% 136.17% at 1.77% 5.69%, #301366 0%, #74128a 100%);
+
+  --color-white: #ffffff;
+
+  /* Semantic color aliases */
+  --color-surface-main: var(--color-surface-white);
+  --color-surface-muted: var(--color-surface-grey);
+  --color-border-subtle: var(--color-surface-cool-grey);
+  --color-border-strong: var(--color-text-200);
+
+  --color-text-main: var(--color-text-600);
+  --color-text-muted: var(--color-text-400);
+
+  --color-accent-primary: var(--color-brand-primary-400);
+  --color-accent-primary-strong: var(--color-brand-primary-500);
+  --color-accent-secondary-warm: var(--color-brand-secondary-warm-500);
+  --color-accent-secondary-cool: var(--color-brand-secondary-cool-500);
+
+  /* Component-level tokens */
+  --color-pill-bg: var(--color-brand-primary-100);
+  --color-pill-bg-hover: var(--color-interactive-hover-200);
+  --color-pill-text: var(--color-text-600);
+
+  --color-banner-primary-bg: var(--color-brand-primary-400);
+  --color-banner-success-bg: var(--color-interactive-success-400);
+  --color-banner-warm-bg: var(--color-brand-secondary-warm-500);
+  --color-banner-cool-bg: var(--color-brand-secondary-cool-500);
+
+  --color-card-bg: var(--color-surface-main);
+  --color-card-border: var(--color-border-subtle);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  --color-button-primary-bg: var(--color-primary-action-500);
+  --color-button-primary-bg-hover: var(--color-primary-action-400);
+  --color-button-primary-text: var(--color-surface-white);
+
+  --color-button-secondary-bg: var(--color-surface-main);
+  --color-button-secondary-border: var(--color-primary-action-500);
+  --color-button-secondary-text: var(--color-primary-action-500);
+
+  --color-button-ghost-bg: transparent;
+  --color-button-ghost-text: var(--color-primary-action-500);
+
+  --color-button-link-text: var(--color-primary-action-500);
+
+  --color-background: var(--color-surface-main);
+  --color-foreground: var(--color-text-main);
 }
 
+:root {
+  --background: var(--color-surface-main);
+  --foreground: var(--color-text-main);
+}
+
+/* Prefer system dark mode when no explicit theme is set */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme]):not([theme]) {
+    --color-surface-main: var(--color-brand-primary-800);
+    --color-surface-muted: var(--color-brand-primary-500);
+    --color-border-subtle: var(--color-surface-white);
+    --color-text-main: var(--color-surface-white);
+    --color-text-muted: var(--color-surface-grey);
+
+    --color-pill-bg: var(--color-brand-primary-500);
+    --color-pill-bg-hover: var(--color-brand-primary-400);
+    --color-pill-text: var(--color-surface-white);
+
+    --color-card-bg: var(--color-brand-primary-500);
+    --color-card-border: var(--color-surface-white);
+
+    --color-banner-primary-bg: var(--color-brand-primary-500);
+    --color-banner-success-bg: var(--color-interactive-success-400);
+    --color-banner-warm-bg: var(--color-brand-secondary-warm-500);
+    --color-banner-cool-bg: var(--color-brand-secondary-cool-500);
+
+    --color-background: var(--color-surface-main);
+    --color-foreground: var(--color-text-main);
   }
+}
+
+/* Explicit theme overrides via [data-theme] / [theme] attributes */
+:root[data-theme="light"],
+:root[theme="light"] {
+  --color-surface-main: var(--color-surface-white);
+  --color-surface-muted: var(--color-surface-grey);
+  --color-border-subtle: var(--color-surface-cool-grey);
+  --color-text-main: var(--color-text-600);
+  --color-text-muted: var(--color-text-400);
+
+  --color-pill-bg: var(--color-brand-primary-100);
+  --color-pill-bg-hover: var(--color-interactive-hover-200);
+  --color-pill-text: var(--color-text-600);
+
+  --color-card-bg: var(--color-surface-main);
+  --color-card-border: var(--color-border-subtle);
+
+  --color-banner-primary-bg: var(--color-brand-primary-400);
+  --color-banner-success-bg: var(--color-interactive-success-400);
+  --color-banner-warm-bg: var(--color-brand-secondary-warm-500);
+  --color-banner-cool-bg: var(--color-brand-secondary-cool-500);
+
+  --color-background: var(--color-surface-main);
+  --color-foreground: var(--color-text-main);
+}
+
+:root[data-theme="dark"],
+:root[theme="dark"] {
+  --color-surface-main: var(--color-brand-primary-800);
+  --color-surface-muted: var(--color-brand-primary-500);
+  --color-border-subtle: var(--color-surface-white);
+  --color-text-main: var(--color-surface-white);
+  --color-text-muted: var(--color-surface-grey);
+
+  --color-pill-bg: var(--color-brand-primary-500);
+  --color-pill-bg-hover: var(--color-brand-primary-400);
+  --color-pill-text: var(--color-surface-white);
+
+  --color-card-bg: var(--color-brand-primary-500);
+  --color-card-border: var(--color-surface-white);
+
+  --color-banner-primary-bg: var(--color-brand-primary-500);
+  --color-banner-success-bg: var(--color-interactive-success-400);
+  --color-banner-warm-bg: var(--color-brand-secondary-warm-500);
+  --color-banner-cool-bg: var(--color-brand-secondary-cool-500);
+
+  --color-background: var(--color-surface-main);
+  --color-foreground: var(--color-text-main);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  /* Inherit text color and use design-system focus ring */
+  a {
+    color: inherit;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Layout */
+  .ds-section {
+    @apply py-16 md:py-24;
+  }
+
+  .ds-section-tight {
+    @apply py-10 md:py-16;
+  }
+
+  .ds-section-loose {
+    @apply py-20 md:py-28;
+  }
+
+  .ds-container {
+    @apply mx-auto w-full max-w-6xl px-4 md:px-6 lg:px-8;
+  }
+
+  /* Typography */
+  .ds-heading-display {
+    font-family: var(--font-brand-display);
+    letter-spacing: -0.05em;
+    @apply text-5xl md:text-6xl font-semibold leading-tight text-text-700;
+  }
+
+  .ds-heading-xl {
+    font-family: var(--font-brand-display);
+    letter-spacing: -0.04em;
+    @apply text-4xl md:text-5xl font-semibold leading-tight text-text-700;
+  }
+
+  .ds-heading-lg {
+    font-family: var(--font-brand-display);
+    letter-spacing: -0.03em;
+    @apply text-3xl md:text-4xl font-semibold leading-snug text-text-700;
+  }
+
+  .ds-heading-md {
+    font-family: var(--font-brand-display);
+    letter-spacing: -0.02em;
+    @apply text-2xl md:text-3xl font-semibold leading-snug text-text-700;
+  }
+
+  .ds-heading-sm {
+    font-family: var(--font-brand-display);
+    letter-spacing: -0.01em;
+    @apply text-xl md:text-2xl font-semibold leading-snug text-text-700;
+  }
+
+  .ds-text-lead {
+    font-family: var(--font-brand-sans);
+    @apply text-lg md:text-xl leading-relaxed text-text-500;
+  }
+
+  .ds-text-body {
+    font-family: var(--font-brand-sans);
+    @apply text-base md:text-lg leading-relaxed text-text-500;
+  }
+
+  .ds-text-small {
+    font-family: var(--font-brand-sans);
+    @apply text-sm leading-relaxed text-text-500;
+  }
+
+  .ds-text-caption {
+    font-family: var(--font-brand-sans);
+    @apply text-xs md:text-sm leading-relaxed text-text-400;
+  }
+
+  .ds-text-hint {
+    font-family: var(--font-brand-sans);
+    @apply text-xs leading-snug text-text-400;
+  }
+
+  .ds-text-label {
+    font-family: var(--font-brand-sans);
+    letter-spacing: 0.08em;
+    @apply text-xs font-semibold uppercase text-text-600;
+  }
+
+  .ds-text-mono {
+    font-family: var(--font-brand-mono);
+    @apply text-sm;
+  }
+
+  /* Pill / topic tag */
+  .ds-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 9999px;
+    background-color: var(--color-pill-bg);
+    color: var(--color-pill-text);
+    @apply px-3 py-1 text-xs font-semibold;
+  }
+
+  .ds-pill:hover {
+    background-color: var(--color-pill-bg-hover);
+  }
+
+  /* Card */
+  .ds-card {
+    background-color: var(--color-card-bg);
+    border-radius: 1rem;
+    border: 1px solid var(--color-card-border);
+    box-shadow: var(--shadow-card);
+    @apply p-6 md:p-8;
+  }
+
+  /* Marketing/banner strip */
+  .ds-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--color-surface-white);
+    @apply px-4 md:px-14 py-4 text-sm md:text-base;
+  }
+
+  .ds-banner--primary {
+    background: var(--color-banner-primary-bg);
+  }
+
+  .ds-banner--success {
+    background: var(--color-banner-success-bg);
+  }
+
+  .ds-banner--warm {
+    background: var(--color-banner-warm-bg);
+  }
+
+  .ds-banner--cool {
+    background: var(--color-banner-cool-bg);
+  }
+
+  /* Data table */
+  .ds-table {
+    @apply w-full border-collapse text-left;
+  }
+
+  .ds-table thead th {
+    background-color: var(--color-surface-muted);
+    @apply px-5 py-3 text-sm font-semibold text-text-600;
+  }
+
+  .ds-table tbody tr + tr {
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .ds-table tbody th,
+  .ds-table tbody td {
+    @apply px-5 py-4 text-sm text-text-500 align-middle;
+  }
+
+  /* Buttons - aligned to zyte.com .btn / .btn-solid / .btn-link */
+  .ds-button {
+    font-family: var(--font-brand-sans);
+    @apply inline-flex items-center justify-center text-center whitespace-pre-wrap outline-none transition-colors transition-opacity duration-300;
+  }
+
+  .ds-button:focus,
+  .ds-button:focus-visible {
+    outline: none;
+  }
+
+  /* Primary solid button (equivalent to .btn .btn-solid.primary) */
+  .ds-button--primary {
+    @apply box-border rounded-lg border-2 border-transparent px-[1.6rem] py-[0.6rem];
+    background-color: var(--color-button-primary-bg);
+    color: var(--color-button-primary-text);
+    font-size: 18px;
+    line-height: 1.8;
+    font-weight: 600;
+  }
+
+  .ds-button--primary:hover {
+    border-color: var(--color-button-primary-bg);
+    background-color: var(--color-primary-action-50);
+    color: var(--color-button-primary-bg);
+  }
+
+  .ds-button--primary:focus,
+  .ds-button--primary:focus-visible {
+    border-color: var(--color-text-700);
+  }
+
+  /* Secondary (inverse) solid button (equivalent to .btn-solid.inverse) */
+  .ds-button--secondary {
+    @apply box-border rounded-lg border-2 border-transparent px-[1.6rem] py-[0.6rem];
+    background-color: var(--color-primary-action-50);
+    color: var(--color-button-primary-bg);
+    font-size: 18px;
+    line-height: 1.8;
+    font-weight: 600;
+  }
+
+  .ds-button--secondary:hover {
+    background-color: var(--color-button-primary-bg);
+    color: var(--color-surface-white);
+    border-color: var(--color-primary-action-50);
+  }
+
+  .ds-button--secondary:focus,
+  .ds-button--secondary:focus-visible {
+    background-color: var(--color-surface-white);
+    border-color: var(--color-text-100);
+  }
+
+  .ds-button--secondary:focus:hover {
+    background-color: var(--color-primary-action-200);
+    border-color: transparent;
+  }
+
+  /* Ghost text button (equivalent to .btn-simple) */
+  .ds-button--ghost {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    line-height: 32px;
+    font-weight: 600;
+    color: var(--color-button-primary-bg);
+    padding-inline: 0;
+    padding-block: 0;
+  }
+
+  .ds-button--ghost:hover,
+  .ds-button--ghost:focus {
+    @apply opacity-80;
+  }
+
+  /* Link-style button (equivalent to .btn-link) */
+  .ds-button--link {
+    @apply inline-flex items-center border-2 border-transparent rounded-lg px-[1.6rem] py-[0.6rem] no-underline;
+    background: none;
+    color: var(--color-button-link-text);
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 600;
+  }
+
+  .ds-button--link span {
+    position: relative;
+  }
+
+  .ds-button--link span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 1px;
+    background-color: currentColor;
+    transition: width 300ms ease-out;
+  }
+
+  .ds-button--link:hover span::after {
+    width: 100%;
+  }
+
+  .ds-button--link:focus,
+  .ds-button--link:focus-visible {
+    border-color: var(--color-text-700);
+  }
+
+  .ds-button--link:focus span::after,
+  .ds-button--link:focus-visible span::after {
+    width: 0;
+  }
+
+  .ds-button--link:focus:hover span::after {
+    width: 100%;
+  }
+
+  /* Size modifiers */
+  .ds-button--sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .ds-button--lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* Skeleton */
+  .ds-skeleton {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-surface-muted);
+  }
+
+  .ds-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(282deg, #f5defa 8.76%, #ffffff 105.76%);
+    transform: translateX(-100%);
+    animation: ds-skeleton-shimmer 1.4s ease-in-out infinite;
+    opacity: 0.7;
+  }
+
+  @keyframes ds-skeleton-shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }

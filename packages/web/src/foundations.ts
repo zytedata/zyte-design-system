@@ -166,7 +166,7 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
     "50": 50,
   },
   canonicalDoc: {
-    assetPath: "src/data/products/web/design.body.md",
+    assetPath: "packages/web/src/design.body.md",
     title: "Web — Design System",
     version: "1.0",
   },

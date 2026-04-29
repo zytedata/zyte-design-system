@@ -135,7 +135,7 @@ export const SCRAPY_FOUNDATIONS: ProductFoundations = {
     "50": 50,
   },
   canonicalDoc: {
-    assetPath: "src/data/products/scrapy/design.body.md",
+    assetPath: "packages/scrapy/src/design.body.md",
     title: "Scrapy — Design System",
     version: "1.0",
   },

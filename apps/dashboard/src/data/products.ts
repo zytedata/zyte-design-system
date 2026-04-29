@@ -105,6 +105,12 @@ const SCRAPY_NAV: ProductNavItem[] = [
   { group: "library", label: "Foundations", href: "/products/scrapy/foundations" },
   {
     group: "reference",
+    label: "Documentation",
+    href: "/products/scrapy/documentation",
+    matchExact: true,
+  },
+  {
+    group: "reference",
     label: "Changelog",
     href: "/products/scrapy/changelog",
     matchExact: true,
@@ -114,6 +120,12 @@ const SCRAPY_NAV: ProductNavItem[] = [
 const EXTRACT_SUMMIT_NAV: ProductNavItem[] = [
   { group: "overview", label: "Dashboard", href: "/products/extract-summit", matchExact: true },
   { group: "library", label: "Foundations", href: "/products/extract-summit/foundations" },
+  {
+    group: "reference",
+    label: "Documentation",
+    href: "/products/extract-summit/documentation",
+    matchExact: true,
+  },
   {
     group: "reference",
     label: "Changelog",
@@ -180,7 +192,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       components: { enabled: false },
       templates: { enabled: false },
       prototyping: { enabled: false },
-      documentation: { enabled: false },
+      documentation: { enabled: true, href: "/products/scrapy/documentation" },
       assets: { enabled: false },
     },
   },
@@ -198,7 +210,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       components: { enabled: false },
       templates: { enabled: false },
       prototyping: { enabled: false },
-      documentation: { enabled: false },
+      documentation: { enabled: true, href: "/products/extract-summit/documentation" },
       assets: { enabled: false },
     },
   },

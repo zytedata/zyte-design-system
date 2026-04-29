@@ -1,30 +1,21 @@
 import "server-only";
 
 import { promises as fs } from "node:fs";
-import { createRequire } from "node:module";
 import path from "node:path";
 
 import type { ProductId } from "@/data/products";
 
-// To read the codegen artefacts (tokens.{json,css,scss,tailwind.cjs} and
-// design.md) we resolve only each package's `package.json` — which Turbopack
-// can parse as a regular JSON module — then compute paths into the package's
-// `dist/` from there. Resolving the artefact files directly trips Turbopack
-// into trying to compile them (`tokens.scss` triggers a Sass loader, etc.),
-// which we don't want; we just want the file contents at runtime.
-const requireFromHere = createRequire(import.meta.url);
-
-const PACKAGE_ROOT_RESOLVERS: Record<ProductId, () => string> = {
-  web: () => path.dirname(requireFromHere.resolve("@zyte/ds-web/package.json")),
-  core: () =>
-    path.dirname(requireFromHere.resolve("@zyte/ds-core/package.json")),
-  scrapy: () =>
-    path.dirname(requireFromHere.resolve("@zyte/ds-scrapy/package.json")),
-  extractSummit: () =>
-    path.dirname(
-      requireFromHere.resolve("@zyte/ds-extract-summit/package.json"),
-    ),
-};
+// We deliberately avoid `createRequire(import.meta.url)` here: Turbopack's
+// server runtime can rewrite `import.meta.url` to a bundle-internal path
+// that no longer sees the workspace's `node_modules`, which makes
+// `@zyte/*` specifiers fail to resolve. Instead we anchor at the dashboard
+// package root (`process.cwd()` is `apps/dashboard` for both `next dev` and
+// `next build`) and walk to `node_modules/@zyte/ds-<slug>/`, which works
+// uniformly for:
+//   - pnpm workspace symlinks (current monorepo setup)
+//   - registry installs (future, when the dashboard runs against published
+//     `@zyte/ds-*` packages instead of workspace links)
+const DASHBOARD_ROOT = process.cwd();
 
 const SLUG_BY_PRODUCT_ID: Record<ProductId, string> = {
   web: "web",
@@ -32,6 +23,12 @@ const SLUG_BY_PRODUCT_ID: Record<ProductId, string> = {
   scrapy: "scrapy",
   extractSummit: "extract-summit",
 };
+
+function packageRoot(productId: ProductId): string | null {
+  const slug = SLUG_BY_PRODUCT_ID[productId];
+  if (!slug) return null;
+  return path.join(DASHBOARD_ROOT, "node_modules", "@zyte", `ds-${slug}`);
+}
 
 export type CanonicalDocPayload = {
   productId: ProductId;
@@ -66,10 +63,25 @@ const ARTEFACT_DEFS: Array<{
 ];
 
 function distPath(productId: ProductId, filename: string): string | null {
-  const resolver = PACKAGE_ROOT_RESOLVERS[productId];
-  if (!resolver) return null;
+  const root = packageRoot(productId);
+  if (!root) return null;
+  return path.join(root, "dist", filename);
+}
+
+/**
+ * Read the version field from `@zyte/ds-<slug>/package.json` so the
+ * dashboard can surface "npm-installable today" version strings without
+ * hard-coding them.
+ */
+export async function readPackageVersion(
+  productId: ProductId,
+): Promise<string | null> {
+  const root = packageRoot(productId);
+  if (!root) return null;
   try {
-    return path.join(resolver(), "dist", filename);
+    const pkgPath = path.join(root, "package.json");
+    const raw = await fs.readFile(pkgPath, "utf-8");
+    return (JSON.parse(raw) as { version?: string }).version ?? null;
   } catch {
     return null;
   }

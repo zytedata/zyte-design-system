@@ -280,11 +280,11 @@ export function AgenticSection({
         <p className="text-muted-foreground text-sm leading-relaxed">
           This product does not declare a <code>canonicalDoc</code> yet. Add the prose to{" "}
           <code className="bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-xs">
-            src/data/products/{productSlug}/design.body.md
+            packages/{productSlug}/src/design.body.md
           </code>{" "}
           and the tokens to <code>foundations.ts</code>; running{" "}
           <code className="bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-xs">
-            npm run tokens:build
+            pnpm tokens:build
           </code>{" "}
           regenerates <code>dist/design.md</code> for preview, copy and download here.
         </p>

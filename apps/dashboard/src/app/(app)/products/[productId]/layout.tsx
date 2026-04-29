@@ -1,34 +1,37 @@
 import { promises as fs } from "node:fs";
-import { createRequire } from "node:module";
 import path from "node:path";
 
 import { getProductBySlug } from "@/data/products";
 
-// We resolve only `@zyte/ds-<slug>/package.json` (which Turbopack treats as a
-// regular JSON module) and compute the path to `dist/tokens.css` from there.
-// Resolving the CSS file directly would make Turbopack try to bundle it as
-// a stylesheet, which we don't want — we just want to read the bytes and
-// inline them into a `<style>` tag.
-const requireFromHere = createRequire(import.meta.url);
+// We deliberately avoid `createRequire(import.meta.url)` here: Turbopack's
+// server runtime can rewrite `import.meta.url` to a bundle-internal path
+// that no longer sees the workspace's `node_modules`, which makes
+// `@zyte/*` specifiers fail to resolve. Instead we anchor at the dashboard
+// root (`process.cwd()` is `apps/dashboard` in both `next dev` and
+// `next build`) and walk to `node_modules/@zyte/ds-<slug>/dist/tokens.css`,
+// which works for both pnpm workspace symlinks and registry installs.
+const DASHBOARD_ROOT = process.cwd();
 
-const PACKAGE_ROOT_RESOLVERS: Record<string, () => string> = {
-  web: () => path.dirname(requireFromHere.resolve("@zyte/ds-web/package.json")),
-  core: () =>
-    path.dirname(requireFromHere.resolve("@zyte/ds-core/package.json")),
-  scrapy: () =>
-    path.dirname(requireFromHere.resolve("@zyte/ds-scrapy/package.json")),
-  extractSummit: () =>
-    path.dirname(
-      requireFromHere.resolve("@zyte/ds-extract-summit/package.json"),
-    ),
+const SLUG_BY_PRODUCT_ID: Record<string, string> = {
+  web: "web",
+  core: "core",
+  scrapy: "scrapy",
+  extractSummit: "extract-summit",
 };
 
 async function readGeneratedCss(productId: string): Promise<string | null> {
-  const resolver = PACKAGE_ROOT_RESOLVERS[productId];
-  if (!resolver) return null;
+  const slug = SLUG_BY_PRODUCT_ID[productId];
+  if (!slug) return null;
   try {
     return await fs.readFile(
-      path.join(resolver(), "dist", "tokens.css"),
+      path.join(
+        DASHBOARD_ROOT,
+        "node_modules",
+        "@zyte",
+        `ds-${slug}`,
+        "dist",
+        "tokens.css",
+      ),
       "utf-8",
     );
   } catch {

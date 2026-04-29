@@ -6,16 +6,24 @@ import path from "node:path";
 import type { ProductId } from "@/data/products";
 
 // We deliberately avoid `createRequire(import.meta.url)` here: Turbopack's
-// server runtime can rewrite `import.meta.url` to a bundle-internal path
+// server runtime rewrites `import.meta.url` to a bundle-internal path
 // that no longer sees the workspace's `node_modules`, which makes
-// `@zyte/*` specifiers fail to resolve. Instead we anchor at the dashboard
-// package root (`process.cwd()` is `apps/dashboard` for both `next dev` and
-// `next build`) and walk to `node_modules/@zyte/ds-<slug>/`, which works
-// uniformly for:
-//   - pnpm workspace symlinks (current monorepo setup)
-//   - registry installs (future, when the dashboard runs against published
-//     `@zyte/ds-*` packages instead of workspace links)
+// `@zyte/*` specifiers fail to resolve.
+//
+// Anchoring at `process.cwd()` (which is `apps/dashboard` for both
+// `next dev` and `next build`) and walking to the sibling
+// `packages/<slug>/dist/...` works in three environments:
+//   - local pnpm workspace (packages/<slug> is a real directory)
+//   - Vercel/Next.js lambda with outputFileTracingRoot pointing at the
+//     workspace root + outputFileTracingIncludes for packages/*/dist/**
+//     (NFT preserves the relative layout inside the lambda, so the
+//     dist files land at /var/task/packages/<slug>/dist/...)
+//   - registry installs (future): we'd swap this for a node_modules
+//     lookup, but as long as the dashboard ships in the same workspace
+//     as the packages, the workspace-relative path is the most reliable
+//     one — no createRequire, no bin shenanigans, no symlink resolution.
 const DASHBOARD_ROOT = process.cwd();
+const WORKSPACE_ROOT = path.resolve(DASHBOARD_ROOT, "..", "..");
 
 const SLUG_BY_PRODUCT_ID: Record<ProductId, string> = {
   web: "web",
@@ -27,7 +35,7 @@ const SLUG_BY_PRODUCT_ID: Record<ProductId, string> = {
 function packageRoot(productId: ProductId): string | null {
   const slug = SLUG_BY_PRODUCT_ID[productId];
   if (!slug) return null;
-  return path.join(DASHBOARD_ROOT, "node_modules", "@zyte", `ds-${slug}`);
+  return path.join(WORKSPACE_ROOT, "packages", slug);
 }
 
 export type CanonicalDocPayload = {

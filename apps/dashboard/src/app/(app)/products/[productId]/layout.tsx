@@ -3,14 +3,14 @@ import path from "node:path";
 
 import { getProductBySlug } from "@/data/products";
 
-// We deliberately avoid `createRequire(import.meta.url)` here: Turbopack's
-// server runtime can rewrite `import.meta.url` to a bundle-internal path
-// that no longer sees the workspace's `node_modules`, which makes
-// `@zyte/*` specifiers fail to resolve. Instead we anchor at the dashboard
-// root (`process.cwd()` is `apps/dashboard` in both `next dev` and
-// `next build`) and walk to `node_modules/@zyte/ds-<slug>/dist/tokens.css`,
-// which works for both pnpm workspace symlinks and registry installs.
+// Anchor at the workspace root (two levels up from the dashboard) and
+// walk to the sibling `packages/<slug>/dist/tokens.css`. See the longer
+// comment in `src/data/foundations/docs.ts` for why this resolves in
+// Vercel's lambda too: `outputFileTracingRoot` is set to the workspace
+// root and `outputFileTracingIncludes` lists the packages/*/dist globs,
+// so NFT preserves the same relative layout inside /var/task.
 const DASHBOARD_ROOT = process.cwd();
+const WORKSPACE_ROOT = path.resolve(DASHBOARD_ROOT, "..", "..");
 
 const SLUG_BY_PRODUCT_ID: Record<string, string> = {
   web: "web",
@@ -24,14 +24,7 @@ async function readGeneratedCss(productId: string): Promise<string | null> {
   if (!slug) return null;
   try {
     return await fs.readFile(
-      path.join(
-        DASHBOARD_ROOT,
-        "node_modules",
-        "@zyte",
-        `ds-${slug}`,
-        "dist",
-        "tokens.css",
-      ),
+      path.join(WORKSPACE_ROOT, "packages", slug, "dist", "tokens.css"),
       "utf-8",
     );
   } catch {

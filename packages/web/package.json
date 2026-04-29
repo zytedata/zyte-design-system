@@ -32,8 +32,8 @@
   },
   "scripts": {
     "build:js": "tsc -p tsconfig.build.json",
-    "build:tokens": "tokens-build",
-    "check:tokens": "tokens-check",
+    "build:tokens": "node ../tokens-build/dist/bin/build.js",
+    "check:tokens": "node ../tokens-build/dist/bin/check.js",
     "build": "pnpm run build:js && pnpm run build:tokens",
     "lint": "echo \"@zyte/ds-web: no lint configured\"",
     "lint:fix": "echo \"@zyte/ds-web: no lint configured\"",

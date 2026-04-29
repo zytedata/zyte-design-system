@@ -1,0 +1,62 @@
+name: validate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: typecheck · lint · tokens:check · dashboard build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.4
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          # Allow `pnpm install` to read @zyte/* from GitHub Packages once we
+          # have published versions; for an unpublished workspace this is a
+          # no-op since every cross-package dep is `workspace:*`.
+          registry-url: https://npm.pkg.github.com
+          scope: "@zyte"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build all packages (tsc + tokens-build)
+        # @zyte/ds-* tsc emits dist/foundations.js, then tokens-build emits
+        # dist/tokens.{json,css,scss,tailwind.cjs} + dist/design.md. The
+        # dashboard build below depends on those artefacts being present.
+        run: pnpm -r --filter "./packages/*" run build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Validate token artefacts (tokens-check)
+        run: pnpm tokens:check
+
+      - name: Dashboard build smoke
+        run: pnpm --filter dashboard run build

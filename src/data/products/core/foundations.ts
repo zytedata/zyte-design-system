@@ -152,7 +152,7 @@ export const CORE_FOUNDATIONS: ProductFoundations = {
     "50": 50,
   },
   canonicalDoc: {
-    assetPath: "src/data/products/core/design.md",
+    assetPath: "src/data/products/core/design.body.md",
     title: "Core — Design System",
     version: "1.0",
   },

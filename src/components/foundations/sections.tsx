@@ -1,11 +1,15 @@
 import type { ProductFoundations } from "@/data/foundations/types";
 import type { FileChangelog } from "@/data/foundations/types";
-import type { CanonicalDocPayload } from "@/data/foundations/docs";
+import type {
+  CanonicalDocPayload,
+  GeneratedArtefact,
+} from "@/data/foundations/docs";
 import { cn } from "@/lib/utils";
 import { paletteRowsFor } from "@/lib/foundations";
 import { TAILWIND_COLOR_FAMILIES } from "@/data/tailwind-palette";
 
 import { AgenticDoc } from "@/components/foundations/agentic-doc";
+import { GeneratedArtefacts } from "@/components/foundations/generated-artefacts";
 import { LucideIconsCatalog } from "@/components/foundations/lucide-icons-catalog";
 import { Badge } from "@/components/ui/badge";
 
@@ -258,11 +262,13 @@ export function AgenticSection({
   productLabel,
   productSlug,
   doc,
+  artefacts,
 }: {
   bundle: ProductFoundations;
   productLabel: string;
   productSlug: string;
   doc: CanonicalDocPayload | null;
+  artefacts: GeneratedArtefact[];
 }) {
   const meta = bundle.canonicalDoc;
 
@@ -272,12 +278,15 @@ export function AgenticSection({
         <Badge variant="secondary">No canonical DESIGN.md</Badge>
         <h3 className="text-lg font-semibold">Agentic spec not wired</h3>
         <p className="text-muted-foreground text-sm leading-relaxed">
-          This product does not declare a <code>canonicalDoc</code> yet. Add a markdown file under{" "}
+          This product does not declare a <code>canonicalDoc</code> yet. Add the prose to{" "}
           <code className="bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-xs">
-            src/data/products/{productSlug}/design.md
+            src/data/products/{productSlug}/design.body.md
           </code>{" "}
-          and wire it from the product&apos;s foundations bundle to enable preview, copy and
-          download here.
+          and the tokens to <code>foundations.ts</code>; running{" "}
+          <code className="bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-xs">
+            npm run tokens:build
+          </code>{" "}
+          regenerates <code>dist/design.md</code> for preview, copy and download here.
         </p>
       </article>
     );
@@ -300,14 +309,17 @@ export function AgenticSection({
   }
 
   return (
-    <AgenticDoc
-      productLabel={productLabel}
-      productSlug={productSlug}
-      meta={meta}
-      doc={doc}
-      bundle={bundle}
-      stats={tokenSurfaceStats(bundle)}
-    />
+    <div className="space-y-6">
+      <AgenticDoc
+        productLabel={productLabel}
+        productSlug={productSlug}
+        meta={meta}
+        doc={doc}
+        bundle={bundle}
+        stats={tokenSurfaceStats(bundle)}
+      />
+      <GeneratedArtefacts productLabel={productLabel} artefacts={artefacts} />
+    </div>
   );
 }
 

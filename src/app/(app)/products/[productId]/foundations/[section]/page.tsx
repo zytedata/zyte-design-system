@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 
 import { PRODUCT_LIST, getProductBySlug } from "@/data/products";
 import { getFoundations } from "@/data/foundations";
-import { readCanonicalDoc } from "@/data/foundations/docs";
+import { readCanonicalDoc, readGeneratedArtefacts } from "@/data/foundations/docs";
 import { buildFoundationSections, findSectionBySlug, paletteLabelFor } from "@/lib/foundations";
 import { Badge } from "@/components/ui/badge";
 import { FoundationsSidenav } from "@/components/foundations/foundations-sidenav";
@@ -59,10 +59,13 @@ export default async function FoundationsSectionPage({ params }: { params: Promi
   const section = findSectionBySlug(bundle, sectionSlug);
   if (!section) notFound();
 
-  const canonicalDoc =
-    section.id === "agent" && bundle.canonicalDoc
-      ? await readCanonicalDoc(product.id)
-      : null;
+  const isAgentSection = section.id === "agent" && bundle.canonicalDoc;
+  const [canonicalDoc, generatedArtefacts] = isAgentSection
+    ? await Promise.all([
+        readCanonicalDoc(product.id),
+        readGeneratedArtefacts(product.id),
+      ])
+    : [null, []];
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6 pt-10 pb-20 md:px-10">
@@ -97,6 +100,7 @@ export default async function FoundationsSectionPage({ params }: { params: Promi
                 productLabel={product.label}
                 productSlug={product.slug}
                 doc={canonicalDoc}
+                artefacts={generatedArtefacts}
               />
             ) : section.id === "tailwindColors" ? (
               <TailwindColorsSection />

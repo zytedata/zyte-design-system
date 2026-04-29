@@ -241,7 +241,7 @@ export const EXTRACT_SUMMIT_FOUNDATIONS: ProductFoundations = {
   },
   components: EXTRACT_SUMMIT_COMPONENTS,
   canonicalDoc: {
-    assetPath: "src/data/products/extract-summit/design.md",
+    assetPath: "src/data/products/extract-summit/design.body.md",
     title: "Extract Summit — Design System",
     version: "1.0",
   },

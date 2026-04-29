@@ -1,0 +1,29 @@
+{
+  "name": "@zyte/ds-types",
+  "version": "0.1.0",
+  "description": "Shared TypeScript contract for Zyte design-system foundations.",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "echo \"@zyte/ds-types: no lint configured\"",
+    "lint:fix": "echo \"@zyte/ds-types: no lint configured\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}

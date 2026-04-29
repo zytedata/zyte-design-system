@@ -1,0 +1,37 @@
+{
+  "name": "@zyte/tokens-build",
+  "version": "0.1.0",
+  "description": "Schema-tolerant codegen that turns @zyte/ds-* foundations.ts into shippable token artefacts.",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "src"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "tokens-build": "./dist/bin/build.js",
+    "tokens-check": "./dist/bin/check.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && chmod +x dist/bin/build.js dist/bin/check.js",
+    "lint": "echo \"@zyte/tokens-build: no lint configured\"",
+    "lint:fix": "echo \"@zyte/tokens-build: no lint configured\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zyte/ds-types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5"
+  }
+}

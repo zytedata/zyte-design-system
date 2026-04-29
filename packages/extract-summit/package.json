@@ -1,0 +1,49 @@
+{
+  "name": "@zyte/ds-extract-summit",
+  "version": "0.1.0",
+  "description": "Zyte Extract Summit design system tokens, foundations and design.md spec.",
+  "license": "UNLICENSED",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./foundations": {
+      "types": "./dist/foundations.d.ts",
+      "import": "./dist/foundations.js"
+    },
+    "./tokens.json": "./dist/tokens.json",
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens.scss": "./dist/tokens.scss",
+    "./tailwind": "./dist/tokens.tailwind.cjs",
+    "./design.md": "./dist/design.md",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build:js": "tsc -p tsconfig.build.json",
+    "build:tokens": "tokens-build",
+    "check:tokens": "tokens-check",
+    "build": "pnpm run build:js && pnpm run build:tokens",
+    "lint": "echo \"@zyte/ds-extract-summit: no lint configured\"",
+    "lint:fix": "echo \"@zyte/ds-extract-summit: no lint configured\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@zyte/ds-types": "workspace:*"
+  },
+  "devDependencies": {
+    "@zyte/tokens-build": "workspace:*",
+    "typescript": "^5"
+  }
+}

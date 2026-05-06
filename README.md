@@ -11,6 +11,22 @@ You're looking at the **producer** repo. If you want to **consume** the design s
 
 ---
 
+## Quick start
+
+```bash
+git clone git@github.com:arkadiuszjaneczko1/zyte-design-system-nextjs.git
+cd zyte-design-system-nextjs
+
+corepack enable                              # one-off, ensures pnpm is available
+pnpm install
+pnpm -r --filter "./packages/*" run build    # generate every package's dist/ (one-off)
+pnpm dev                                     # → http://localhost:3000
+```
+
+That's it. Open the dashboard, navigate to `/products/web/foundations`, and you should see live tokens. The full local-dev guide (commands, routes, recipes, troubleshooting) lives in [Local development](#local-development).
+
+---
+
 ## At a glance
 
 ```
@@ -267,44 +283,150 @@ You will **never** need to clone this repo, edit `foundations.ts`, or run the co
 
 ## Local development
 
-If you're working in this repo (not just consuming it):
+This section is for anyone working _in_ this repo (not just consuming the published packages).
 
 ### Prerequisites
 
-- Node.js ≥ 20
-- pnpm ≥ 8 (`corepack enable && corepack prepare pnpm@latest --activate`)
+- **Node.js ≥ 20** (`node -v`)
+- **pnpm ≥ 8** — easiest via Corepack: `corepack enable` (Node 20 ships with Corepack). The `packageManager` field in `package.json` pins the exact pnpm version Corepack will use.
+- A **GitHub Personal Access Token** with `read:packages` scope (only required if you ever need to read the published `@zyte/*` artefacts; not required for daily work in this repo since everything is built locally from source).
 
-### Bootstrap
+### First-time bootstrap
 
 ```bash
 git clone git@github.com:arkadiuszjaneczko1/zyte-design-system-nextjs.git
 cd zyte-design-system-nextjs
+
+corepack enable
 pnpm install
-pnpm -r --filter "./packages/*" run build   # populate every package's dist/
-pnpm dev                                    # → http://localhost:3000
+pnpm -r --filter "./packages/*" run build
+pnpm dev
 ```
 
-The first `build` is needed because `dist/` is gitignored. After that, `pnpm dev` keeps everything fresh — the dashboard's `predev` hook regenerates tokens before each dev server start.
+The packages need to be built once because each package's `dist/` is gitignored, and the dashboard reads the generated `tokens.css` / `design.md` from there.
 
-### Useful scripts (root)
+After the first build, `pnpm dev` is enough — the dashboard's `predev` hook regenerates tokens automatically before the dev server starts.
+
+### Running the dashboard
+
+```bash
+pnpm dev                       # dashboard on http://localhost:3000
+```
+
+Routes to know once it's up:
+
+| URL | What it shows |
+|---|---|
+| `/` | Landing page with the product switcher |
+| `/products/web` | Web product dashboard |
+| `/products/web/foundations` | Live tokens + palette + typography for Web |
+| `/products/web/foundations/design-md` | Rendered `design.md` (the LLM-readable spec) |
+| `/products/web/documentation` | Onboarding / consumption guide |
+| `/products/web/changelog` | Release log for `@zyte/ds-web` |
+
+Replace `web` with `core`, `scrapy`, or `extract-summit` for the other products.
+
+### Root commands (most-used)
+
+Run these from the repo root.
 
 | Command | What it does |
 |---|---|
-| `pnpm dev` | Start the dashboard dev server (Turbopack) |
-| `pnpm build` | Build all packages, then build the dashboard |
+| `pnpm dev` | Start the dashboard dev server (Turbopack) on `:3000` |
+| `pnpm build` | Build every package, then build the dashboard for production |
+| `pnpm start` | Serve the production dashboard build (`next start`) |
 | `pnpm tokens:build` | Regenerate `dist/{tokens.*,design.md}` for every product |
-| `pnpm tokens:check` | Verify codegen is consistent + token-shape valid |
+| `pnpm tokens:check` | Validate codegen + token shapes (CI-equivalent dry run) |
 | `pnpm typecheck` | `tsc --noEmit` across every workspace project |
-| `pnpm lint` | ESLint for the dashboard + every package |
-| `pnpm changeset` | Record a version bump for the changed package(s) |
-| `pnpm version` | Apply queued changesets, bump versions, write CHANGELOGs |
-| `pnpm release` | Build packages + publish bumped versions to GitHub Packages |
+| `pnpm lint` | ESLint across the dashboard and every package |
+| `pnpm lint:fix` | Same, with `--fix` |
+| `pnpm format` | Prettier-format the entire repo |
+| `pnpm format:check` | Verify formatting (CI) |
+| `pnpm changeset` | Queue a version bump for the changed package(s) |
+| `pnpm version` | Apply queued changesets locally (bump + write CHANGELOGs) |
+| `pnpm release` | Build packages + `changeset publish` to GitHub Packages |
 
-The dashboard has its own scoped scripts under `apps/dashboard/package.json` — typically you don't need them; the root scripts orchestrate everything via `pnpm --filter` / `pnpm -r`.
+### Working in a single package
+
+`pnpm` filters scope any command to one workspace:
+
+```bash
+pnpm --filter @zyte/ds-web run build           # build only the web package
+pnpm --filter @zyte/ds-web run typecheck       # typecheck only the web package
+pnpm --filter dashboard run lint               # lint only the dashboard
+
+pnpm --filter @zyte/ds-web run build:tokens    # regenerate just web's dist/tokens.*
+```
+
+`pnpm -r ...` is the same with the `-r` (recursive) flag, applied to every workspace.
+
+### Common recipes
+
+**Iterate on a token change**
+
+```bash
+$EDITOR packages/web/src/foundations.ts
+pnpm --filter @zyte/ds-web run build:tokens    # fast: skips TS rebuild
+# refresh http://localhost:3000/products/web/foundations
+```
+
+**Iterate on dashboard UI only** (no token change)
+
+```bash
+pnpm dev
+# edits under apps/dashboard/src/** hot-reload via Turbopack
+```
+
+**Pre-PR checklist**
+
+```bash
+pnpm tokens:check && pnpm typecheck && pnpm lint && pnpm format:check
+```
+
+**Clean rebuild** (when something feels stale or after a long break)
+
+```bash
+pnpm -r exec rm -rf dist .next .turbo node_modules
+rm -rf node_modules
+pnpm install
+pnpm -r --filter "./packages/*" run build
+pnpm dev
+```
+
+### Project layout (where things live)
+
+```
+apps/dashboard/src/
+├── app/                    # App Router routes (incl. /products/[productId]/…)
+├── components/             # UI: ui/ (shadcn primitives), layout/, products/, foundations/, common/
+├── data/                   # In-app data layer (products.ts, foundations resolvers, …)
+├── config/                 # Site metadata, navigation
+├── hooks/                  # Reusable client hooks
+└── lib/                    # cn(), utility helpers
+
+packages/<product>/src/
+├── foundations.ts          # Token source of truth
+├── design.body.md          # Prose spec (front-matter is generated)
+├── changelog.ts            # Release log fed to the dashboard
+├── components.ts           # Component contracts
+├── content.ts              # Optional narrative content blocks
+├── documentation.ts        # Per-product onboarding guide
+└── index.ts                # Barrel re-export
+
+packages/tokens-build/      # Codegen CLI (build-time only)
+packages/types/             # @zyte/ds-types — shared TS contract
+```
 
 ### Adding a new product
 
-See the *Adding a fifth product* section in [`.github/RELEASING.md`](.github/RELEASING.md). Short version: copy a sibling under `packages/`, rename, drop in `foundations.ts` + `design.body.md`, wire it into `apps/dashboard/src/data/products.ts`.
+See the *Adding a fifth product* section in [`.github/RELEASING.md`](.github/RELEASING.md). Short version: copy a sibling under `packages/`, rename to `@zyte/ds-<slug>`, drop in `foundations.ts` + `design.body.md`, wire it into `apps/dashboard/src/data/products.ts` and the resolver tables in `apps/dashboard/src/data/foundations/docs.ts` + `apps/dashboard/src/app/(app)/products/[productId]/layout.tsx`.
+
+### Troubleshooting
+
+- **"Failed to load `packages/<slug>/src/design.body.md`" in the dashboard.** Run `pnpm -r --filter "./packages/*" run build` to populate `dist/`.
+- **Tailwind classes from a `@zyte/ds-*` preset don't apply.** Make sure the consumer's `tailwind.config.js` lists the preset under `presets: [require("@zyte/ds-web/tailwind")]` _and_ that the consumer also imports `@zyte/ds-web/tokens.css` so the underlying CSS variables are actually defined.
+- **`tokens-build: command not found` during `pnpm --filter @zyte/ds-* run build`.** Build the codegen first: `pnpm --filter @zyte/tokens-build run build`, then retry.
+- **`pnpm install` warns about missing bin links.** Same root cause — build `@zyte/ds-types` and `@zyte/tokens-build` once, then re-run `pnpm install`.
 
 ---
 

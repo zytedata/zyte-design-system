@@ -5,6 +5,8 @@ on:
     branches: [main]
   push:
     branches: [main]
+permissions:
+  contents: read
 
 concurrency:
   group: validate-${{ github.workflow }}-${{ github.ref }}
@@ -42,6 +44,8 @@ jobs:
         run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Audit dependencies
+        run: pnpm audit --audit-level moderate
 
       - name: Build all packages (tsc + tokens-build)
         # @zyte/ds-* tsc emits dist/foundations.js, then tokens-build emits

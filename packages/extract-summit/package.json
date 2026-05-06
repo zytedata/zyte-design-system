@@ -44,6 +44,6 @@
   },
   "devDependencies": {
     "@zyte/tokens-build": "workspace:*",
-    "typescript": "^5"
+    "typescript": "^6.0.3"
   }
 }

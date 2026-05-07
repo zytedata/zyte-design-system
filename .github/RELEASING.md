@@ -40,6 +40,11 @@ Phase 2 ships every product as its own publishable package on **GitHub Packages*
 | `GITHUB_TOKEN`          | both      | Auto-provided. Reads from / publishes to GitHub Packages within this repo.                                  |
 | `PERSONAL_GITHUB_TOKEN` | `release` | _Optional._ Fine-grained PAT (contents/pull-requests/packages write). Required if you want the release PR's commit to trigger downstream workflows (the default `GITHUB_TOKEN` will not). |
 
+For Vercel's Git-based deploy attribution, when `arkadiuszjaneczko1`
+triggers the release workflow, the release commit and tag identity is
+rewritten to `angel-mzurdo <angel.munoz@zyte.com>`. GitHub still records
+the original workflow actor on the run itself.
+
 ## Local publish (escape hatch)
 
 Only do this when the GH Actions flow is unavailable.

@@ -58,6 +58,18 @@ jobs:
       - name: Build all packages
         run: pnpm -r --filter "./packages/*" run build
 
+      - name: Use Angel release identity for Arkadiusz-triggered runs
+        if: github.actor == 'arkadiuszjaneczko1'
+        run: |
+          git config user.name "angel-mzurdo"
+          git config user.email "angel.munoz@zyte.com"
+          {
+            echo "GIT_AUTHOR_NAME=angel-mzurdo"
+            echo "GIT_AUTHOR_EMAIL=angel.munoz@zyte.com"
+            echo "GIT_COMMITTER_NAME=angel-mzurdo"
+            echo "GIT_COMMITTER_EMAIL=angel.munoz@zyte.com"
+          } >> "$GITHUB_ENV"
+
       - name: Create release PR or publish
         id: changesets
         uses: changesets/action@v1

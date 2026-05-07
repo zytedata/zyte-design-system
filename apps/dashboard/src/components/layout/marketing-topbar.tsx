@@ -27,9 +27,6 @@ export function MarketingTopbar() {
           className="text-foreground inline-flex items-center gap-2"
         >
           <ZyteLogo width={56} height={24} />
-          <span className="text-sm font-semibold tracking-tight md:inline-block">
-            {siteConfig.shortName}
-          </span>
         </Link>
 
         <nav

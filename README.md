@@ -14,8 +14,8 @@ You're looking at the **producer** repo. If you want to **consume** the design s
 ## Quick start
 
 ```bash
-git clone git@github.com:arkadiuszjaneczko1/zyte-design-system-nextjs.git
-cd zyte-design-system-nextjs
+git clone git@github.com:zytedata/zyte-design-system.git
+cd zyte-design-system
 
 corepack enable                              # one-off, ensures pnpm is available
 pnpm install
@@ -30,7 +30,7 @@ That's it. Open the dashboard, navigate to `/products/web/foundations`, and you 
 ## At a glance
 
 ```
-zyte-design-system-nextjs/
+zyte-design-system/
 ├── apps/
 │   └── dashboard/                # The DesignOps Next.js app (private, not published)
 └── packages/
@@ -294,8 +294,8 @@ This section is for anyone working _in_ this repo (not just consuming the publis
 ### First-time bootstrap
 
 ```bash
-git clone git@github.com:arkadiuszjaneczko1/zyte-design-system-nextjs.git
-cd zyte-design-system-nextjs
+git clone git@github.com:zytedata/zyte-design-system.git
+cd zyte-design-system
 
 corepack enable
 pnpm install

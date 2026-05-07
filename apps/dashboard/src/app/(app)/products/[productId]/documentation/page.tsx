@@ -30,7 +30,7 @@ const DOCS_BY_PRODUCT: Record<ProductId, ProductDocumentation> = {
 // to a public-facing repo or a registry web UI different from GitHub
 // Packages. The dashboard surfaces these so newcomers can deep-link from
 // the docs to the actual source/spec/registry.
-const REPO_URL = "https://github.com/arkadiuszjaneczko1/zyte-design-system-nextjs";
+const REPO_URL = "https://github.com/zytedata/zyte-design-system";
 
 function buildLinks(productSlug: string) {
   return {

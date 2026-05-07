@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     # Skip the release flow on the version PR's own merge commit.
-    if: github.repository == 'arkadiuszjaneczko1/zyte-design-system-nextjs'
+    if: github.repository == 'zytedata/zyte-design-system'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

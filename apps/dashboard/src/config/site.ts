@@ -8,7 +8,7 @@ export const siteConfig = {
   meta: ["Open source docs shell", "Built for Zyte teams", "DesignOps workspace"],
   url: "https://design.zyte.com",
   links: {
-    github: "https://github.com/placeholder/zyte-design-system",
+    github: "https://github.com/zytedata/zyte-design-system",
     figma: "https://www.figma.com/",
   },
 } as const;

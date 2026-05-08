@@ -41,6 +41,10 @@ Phase 2 ships every product as its own publishable package on **GitHub Packages*
 | `PERSONAL_GITHUB_TOKEN` | `release` | _Optional._ Fine-grained PAT (contents/pull-requests/packages write). Required if you want the release PR's commit to trigger downstream workflows (the default `GITHUB_TOKEN` will not). |
 | `VERCEL_DEPLOY_HOOK_URL` | `deploy-vercel` | Deploy Hook URL for the dashboard project. Called on every push to `main` and every PR targeting `main`. |
 
+`release.yml` sets `GITHUB_TOKEN`, `NODE_AUTH_TOKEN`, and `NPM_TOKEN` from
+`PERSONAL_GITHUB_TOKEN || GITHUB_TOKEN` so `changesets/action` publishes via
+token auth (not OIDC) to GitHub Packages.
+
 `apps/dashboard/vercel.json` sets `git.deploymentEnabled: false`, so Vercel
 does not auto-deploy on Git pushes. Production deploys are triggered by the
 `deploy-vercel.yml` workflow via `VERCEL_DEPLOY_HOOK_URL`.

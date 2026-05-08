@@ -45,6 +45,10 @@ triggers the release workflow, the release commit and tag identity is
 rewritten to `angel-mzurdo <angel.munoz@zyte.com>`. GitHub still records
 the original workflow actor on the run itself.
 
+`release.yml` also disables `NPM_CONFIG_PROVENANCE` for the publish step.
+GitHub Packages publishes are restricted/private, and provenance generation
+fails there with `EUSAGE`.
+
 ## Local publish (escape hatch)
 
 Only do this when the GH Actions flow is unavailable.

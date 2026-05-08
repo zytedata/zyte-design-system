@@ -59,7 +59,7 @@ jobs:
         run: pnpm -r --filter "./packages/*" run build
 
       - name: Use Angel release identity for Arkadiusz-triggered runs
-        if: github.actor == 'arkadiuszjaneczko1'
+        if: github.actor == 'arkadiuszjaneczko1' || github.event.head_commit.author.name == 'arkadiuszjaneczko1' || github.event.head_commit.author.email == 'arkadiusz.janeczko@zyte.com'
         run: |
           git config user.name "angel-mzurdo"
           git config user.email "angel.munoz@zyte.com"
@@ -84,4 +84,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_CONFIG_PROVENANCE: "true"
+          # GitHub Packages publishes are private/restricted; npm provenance
+          # generation fails there (EUSAGE), so keep this disabled.
+          NPM_CONFIG_PROVENANCE: "false"

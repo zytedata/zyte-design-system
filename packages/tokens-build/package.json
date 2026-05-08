@@ -20,10 +20,6 @@
       "import": "./dist/index.js"
     }
   },
-  "bin": {
-    "tokens-build": "./dist/bin/build.js",
-    "tokens-check": "./dist/bin/check.js"
-  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json && chmod +x dist/bin/build.js dist/bin/check.js",
     "lint": "echo \"@zyte/tokens-build: no lint configured\"",

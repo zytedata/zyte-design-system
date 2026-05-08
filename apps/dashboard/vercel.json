@@ -4,5 +4,5 @@
     "deploymentEnabled": false
   },
   "buildCommand": "cd ../.. && pnpm -r --filter \"./packages/*\" run build && pnpm --filter dashboard run build",
-  "installCommand": "cd ../.. && pnpm install --frozen-lockfile"
+  "installCommand": "cd ../.. && NODE_OPTIONS=--no-deprecation pnpm install --frozen-lockfile"
 }

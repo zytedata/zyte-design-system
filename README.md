@@ -5,7 +5,7 @@ Monorepo that produces and ships the design tokens, foundations and machine-read
 A single source of truth — `foundations.ts` per product — feeds two outputs:
 
 - **Per-product npm packages** (`@zyte/ds-web`, `@zyte/ds-core`, `@zyte/ds-scrapy`, `@zyte/ds-extract-summit`) that downstream apps install and consume as **CSS / SCSS / Tailwind preset / TypeScript / Markdown spec**.
-- **A live DesignOps dashboard** (`apps/dashboard`) where designers and engineers explore the tokens, palettes, typography, and the agent-readable `design.md` spec for each product.
+- **A live DesignOps dashboard** (`apps/dashboard`) where designers and engineers explore the tokens, palettes, typography, and the agent-readable `design.md` spec / file for each product.
 
 You're looking at the **producer** repo. If you want to **consume** the design system in another app, jump to [Consuming the design system](#consuming-the-design-system) below.
 

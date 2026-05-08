@@ -75,9 +75,3 @@ jobs:
           # GitHub Packages publishes are private/restricted; npm provenance
           # generation fails there (EUSAGE), so keep this disabled.
           NPM_CONFIG_PROVENANCE: "false"
-
-      - name: Trigger Vercel production deploy hook
-        if: success() && steps.changesets.outputs.published == 'true'
-        run: curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"
-        env:
-          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}

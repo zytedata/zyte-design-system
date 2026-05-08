@@ -39,11 +39,11 @@ Phase 2 ships every product as its own publishable package on **GitHub Packages*
 | ----------------------- | --------- | ----------------------------------------------------------------------------------------------------------- |
 | `GITHUB_TOKEN`          | both      | Auto-provided. Reads from / publishes to GitHub Packages within this repo.                                  |
 | `PERSONAL_GITHUB_TOKEN` | `release` | _Optional._ Fine-grained PAT (contents/pull-requests/packages write). Required if you want the release PR's commit to trigger downstream workflows (the default `GITHUB_TOKEN` will not). |
-| `VERCEL_DEPLOY_HOOK_URL` | `release` | Deploy Hook URL for the dashboard project. Called only when `changesets/action` reports `published == true`. |
+| `VERCEL_DEPLOY_HOOK_URL` | `deploy-vercel` | Deploy Hook URL for the dashboard project. Called on every push to `main` and every PR targeting `main`. |
 
 `apps/dashboard/vercel.json` sets `git.deploymentEnabled: false`, so Vercel
 does not auto-deploy on Git pushes. Production deploys are triggered by the
-release workflow via `VERCEL_DEPLOY_HOOK_URL` after a successful publish.
+`deploy-vercel.yml` workflow via `VERCEL_DEPLOY_HOOK_URL`.
 
 `release.yml` also disables `NPM_CONFIG_PROVENANCE` for the publish step.
 GitHub Packages publishes are restricted/private, and provenance generation

@@ -1,8 +1,7 @@
 name: release
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 # changesets/action needs write access to the repo (to open the release PR
 # and tag the release commit) and to GitHub Packages (to publish the

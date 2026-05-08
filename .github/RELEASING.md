@@ -19,12 +19,12 @@ Phase 2 ships every product as its own publishable package on **GitHub Packages*
 3. **Changeset**: author runs `pnpm changeset`, picks the bumped
    package(s) and the bump level (patch / minor / major), commits the
    resulting `.changeset/*.md` to the same PR.
-4. **Merge to main** → the `release` workflow opens (or updates) a
-   `chore(release): version packages` PR. That PR contains the version
-   bumps + per-package `CHANGELOG.md` updates.
-5. **Merge the release PR** → the same workflow runs again and this time
-   publishes the bumped packages to `https://npm.pkg.github.com` under
-   the `@zyte` scope.
+4. **Manual trigger** → run the `release` workflow from GitHub Actions to
+   open (or update) a `chore(release): version packages` PR. That PR
+   contains version bumps + per-package `CHANGELOG.md` updates.
+5. **Manual trigger after merge** → run the same `release` workflow again
+   to publish bumped packages to `https://npm.pkg.github.com` under the
+   `@zyte` scope.
 6. **Consumers** (e.g. `zyte-website-nextjs`) bump their dep with
    Renovate / Dependabot or `pnpm up @zyte/ds-web`. They never need to
    know about `foundations.ts`; they consume `tokens.css`,

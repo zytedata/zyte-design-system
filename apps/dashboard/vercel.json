@@ -1,5 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": false
+  },
   "buildCommand": "cd ../.. && pnpm -r --filter \"./packages/*\" run build && pnpm --filter dashboard run build",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile"
 }

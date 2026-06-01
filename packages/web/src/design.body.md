@@ -25,33 +25,62 @@ The YAML front matter is the **machine-readable token layer** for agents. The pr
 
 Canonical palettes live in:
 
-- `src/data/products/web/foundations.ts` (the full product snapshot used in Foundations + agentic bundle — includes every palette, scale and typography token)
+- `packages/web/src/foundations.ts` (the full product snapshot used in Foundations + agentic bundle — includes every palette, scale and typography token)
 
 Use the palette names as your mental model:
 
-- **brand**: `primary` (e.g. `primary.500` = `#DB005F`)
-- **accent**: `accentPrimary` (e.g. `accentPrimary.600` = `#3F4FED`)
-- **supporting accents**: `accentSecondary`, `accentSecondaryPurple`
-- **surfaces/text**: `neutral.*`
+- **surface layers (chrome)**: `surfaceDark.*` / `surfaceLight.*` — four-step stacks (background → page sections → secondary → cards) for dark and light app shells
+- **surfaces/text (neutral ramp)**: `neutral.*` for borders, text, and legacy neutral fills
+- **brand**: `primary` — **Zyte Fuchsia** (base `primary.600` = `#c026d3`)
+- **accent (links / cool emphasis)**: `accentPrimary` (e.g. `accentPrimary.600` = `#3F4FED`)
+- **secondary (stats, icons)**: `accentSecondary` — **Orange** (base `accentSecondary.500` = `#e8520a`)
+- **orange on dark**: `accentSecondaryOnDark` (`#ff6b2b`) — brighter orange for icons/text on dark surfaces
+- **headline gradient**: `headlineGradient` — linear **orange → fuchsia**; **headline highlights only**
+- **supporting accent**: `accentSecondaryPurple`
 
 ### Runtime Semantic Values
 
-- **Primary CTA**: brand (`primary.500`) with accessible contrast
-- **Links / emphasis**: accent primary (`accentPrimary.600`)
-- **Negative/destructive**: accent secondary (`accentSecondary.600`–`700` range)
-- **Backgrounds/surfaces**: neutrals (`neutral.0`–`100`), borders in `neutral.200`–`300`, text in `neutral.700`–`900`
+- **Primary CTA / active brand**: `primary.600` (canonical fuchsia) with accessible contrast; lighter/darker steps for hover and pressed states
+- **Links / technical emphasis**: `accentPrimary.600` (unchanged)
+- **Secondary stats / icons**: `accentSecondary.500`–`600` range; use `accentSecondaryOnDark` on dark backgrounds where extra luminance is needed
+- **Headline highlight**: `headlineGradient` only where editorial treatment calls for orange-to-fuchsia; not for UI chrome
+- **Negative/destructive**: do **not** map to `accentSecondary` (it is now orange for marketing secondary). Prefer explicit destructive patterns or neutral emphasis until a dedicated destructive ramp exists.
+- **Page chrome (dark UI)**: `surfaceDark.background` → `surfaceDark.pageSections` → `surfaceDark.secondary` → `surfaceDark.cards` for nested elevation
+- **Page chrome (light UI)**: same layer names under `surfaceLight.*`
+- **Backgrounds / text / borders (neutral ramp)**: `neutral.0`–`1000` for typography, borders (`neutral.200`–`300`), text (`neutral.700`–`900`); prefer **`surfaceLight` / `surfaceDark`** for app shell backgrounds instead of reusing arbitrary neutral stops for chrome
 
 ### Colour Usage Rules
 
-- Use **brand** for CTAs and high-salience highlights; don’t “paint the UI” with it.
-- Use **accent primary** for links and secondary emphasis.
+- Use **brand (fuchsia)** for CTAs and high-salience highlights; don’t “paint the UI” with it.
+- Use **accent primary** for links and cool secondary emphasis.
+- Reserve **headline gradient** for display headlines, not buttons or form controls.
 - Ensure **accessible contrast** on text, icons, and interactive states.
 
 ## Typography
 
 ### Font Loading
 
-Web uses **Yellix** as the primary sans family. In the preview environment, the font may be approximated via fallbacks; in the website it is loaded via the existing font pipeline.
+Web uses **Geist Sans** for UI/body and **Geist Mono** for code, via the [`geist`](https://www.npmjs.com/package/geist) package (Vercel). Token stacks in `foundations.ts` reference:
+
+- `var(--font-geist-sans)` for `typography.family.sans`
+- `var(--font-geist-mono)` for `typography.family.mono`
+
+**Next.js (App Router):** install `geist`, then in the root layout attach the font variables (same names the tokens expect):
+
+```tsx
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+Map your global `font-family` / Tailwind `font-sans` / `font-mono` to those CSS variables so components pick up the loaded faces. Without these variables, the stack falls back to system UI fonts.
 
 ### Type Scale
 
@@ -59,7 +88,7 @@ Use tokenized sizes/weights (see front matter). Keep headings tight and body cop
 
 - Headings: semibold/bold, tighter line-height
 - Body: regular, normal/relaxed line-height
-- Mono: for code, snippets, token names, and technical metadata
+- Mono: **Geist Mono** for code, snippets, token names, and technical metadata
 
 ## Layout
 
@@ -111,5 +140,6 @@ Use tokenized sizes/weights (see front matter). Keep headings tight and body cop
 
 - Hardcode colors or spacing values when token equivalents exist.
 - Overuse shadows, gradients, or decorative patterns that compete with content.
+- Use `headlineGradient` or `accentSecondaryOnDark` outside their documented roles (headlines / dark surfaces).
 - Introduce new “one-off” components when composition of existing ones works.
 

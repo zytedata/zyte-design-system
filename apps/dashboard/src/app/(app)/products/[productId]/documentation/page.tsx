@@ -1,47 +1,25 @@
 import { notFound } from "next/navigation";
 
 import type { ProductDocumentation } from "@zyte/ds-types";
-import { CORE_DOCUMENTATION } from "@zyte/ds-core";
-import { EXTRACT_SUMMIT_DOCUMENTATION } from "@zyte/ds-extract-summit";
-import { SCRAPY_DOCUMENTATION } from "@zyte/ds-scrapy";
-import { WEB_DOCUMENTATION } from "@zyte/ds-web";
 
+import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
 import { DevOnboarding } from "@/components/products/dev-onboarding";
 import {
   DocumentationSidenav,
   type DocNavGroup,
 } from "@/components/products/documentation-sidenav";
+import {
+  buildProductDocLinks,
+  getPackageName,
+  getProductDocumentation,
+} from "@/data/documentation";
 import { readPackageVersion } from "@/data/foundations/docs";
-import { type ProductId, PRODUCT_LIST, getProductBySlug } from "@/data/products";
+import { PRODUCT_LIST, getProductBySlug } from "@/data/products";
 
 const GET_STARTED_ANCHOR = "get-started";
 
 type RouteParams = { productId: string };
-
-const DOCS_BY_PRODUCT: Record<ProductId, ProductDocumentation> = {
-  web: WEB_DOCUMENTATION,
-  core: CORE_DOCUMENTATION,
-  scrapy: SCRAPY_DOCUMENTATION,
-  extractSummit: EXTRACT_SUMMIT_DOCUMENTATION,
-};
-
-// Placeholder URLs — wired to the live monorepo path. Update when we move
-// to a public-facing repo or a registry web UI different from GitHub
-// Packages. The dashboard surfaces these so newcomers can deep-link from
-// the docs to the actual source/spec/registry.
-const REPO_URL = "https://github.com/zytedata/zyte-design-system";
-
-function buildLinks(productSlug: string) {
-  return {
-    source: `${REPO_URL}/tree/main/packages/${productSlug}`,
-    registry: `${REPO_URL}/pkgs/npm/ds-${productSlug}`,
-    foundations: `/products/${productSlug}/foundations`,
-    changelog: `/products/${productSlug}/changelog`,
-    designMd: `/products/${productSlug}/foundations/design-md`,
-    releasing: `${REPO_URL}/blob/main/.github/RELEASING.md`,
-  };
-}
 
 export function generateStaticParams() {
   return PRODUCT_LIST.filter((p) => p.capabilities.documentation.enabled).map(
@@ -69,10 +47,10 @@ export default async function ProductDocumentationPage({
   if (!product) notFound();
   if (!product.capabilities.documentation.enabled) notFound();
 
-  const doc = DOCS_BY_PRODUCT[product.id];
+  const doc = getProductDocumentation(product.id);
   const version = await readPackageVersion(product.id);
-  const packageName = `@zyte/ds-${product.slug}`;
-  const links = buildLinks(product.slug);
+  const packageName = getPackageName(product.slug);
+  const links = buildProductDocLinks(product.slug);
 
   const navGroups: DocNavGroup[] = [
     {
@@ -89,7 +67,7 @@ export default async function ProductDocumentationPage({
   ];
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 pt-10 pb-20 md:px-10">
+    <AppPageShell>
       <div className="grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)]">
         <aside className="lg:sticky lg:top-20 lg:self-start">
           <DocumentationSidenav groups={navGroups} />
@@ -139,7 +117,7 @@ export default async function ProductDocumentationPage({
           </div>
         </div>
       </div>
-    </div>
+    </AppPageShell>
   );
 }
 

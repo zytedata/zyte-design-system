@@ -11,6 +11,7 @@ import { TAILWIND_COLOR_FAMILIES } from "@/data/tailwind-palette";
 import { AgenticDoc } from "@/components/foundations/agentic-doc";
 import { GeneratedArtefacts } from "@/components/foundations/generated-artefacts";
 import { LucideIconsCatalog } from "@/components/foundations/lucide-icons-catalog";
+import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
 import { Badge } from "@/components/ui/badge";
 
 // ─── Color palette section ─────────────────────────────────────────────────
@@ -211,23 +212,37 @@ export function TypographySection({ bundle }: { bundle: ProductFoundations }) {
       utility: token.startsWith("text-") ? token : `text-[${px}px]`,
     };
   });
-  const families = Object.entries(bundle.typography.family);
+
+  const families: ScaleRow[] = Object.entries(bundle.typography.family).map(
+    ([token, stack]) => ({
+      token,
+      value: stack,
+      utility: `typography.family.${token}`,
+    }),
+  );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
+      <p className="text-muted-foreground text-sm leading-relaxed">
+        Same live specimens as the agentic{" "}
+        <span className="text-foreground font-medium">Token surface</span> tab
+        (LLM Design.md): editorial + mono cards, type ladder, weights, leading lab,
+        and letter-spacing samples — all driven by the current foundations bundle.
+      </p>
+      <TypographyLivePreview bundle={bundle} />
       <section className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wide uppercase">Families</h3>
-        <ul className="grid gap-3 md:grid-cols-2">
-          {families.map(([role, stack]) => (
-            <li key={role} className="bg-card rounded-xl border p-4">
-              <p className="text-muted-foreground text-xs tracking-wide uppercase">{role}</p>
-              <p className="mt-1 truncate font-mono text-xs">{stack}</p>
-            </li>
-          ))}
-        </ul>
+        <h3 className="text-sm font-semibold tracking-wide uppercase">
+          Reference · font stacks
+        </h3>
+        <ScaleTable rows={families} />
       </section>
       <section className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wide uppercase">Type scale</h3>
+        <h3 className="text-sm font-semibold tracking-wide uppercase">
+          Reference · type scale
+        </h3>
+        <p className="text-muted-foreground text-xs leading-relaxed">
+          Machine-readable rem/px and a suggested utility hint per step (Tailwind-style).
+        </p>
         <ScaleTable rows={sizes} />
       </section>
     </div>
@@ -459,7 +474,7 @@ export function ChangelogSection({
             <header className="flex items-baseline justify-between gap-3">
               <h3 className="font-mono text-sm font-medium">{file.file}</h3>
               <p className="text-muted-foreground font-mono text-[11px]">
-                src/data/foundations/{productSlug}/{file.file}
+                packages/{productSlug}/src/{file.file}
               </p>
             </header>
             <ol className="mt-4 space-y-3">

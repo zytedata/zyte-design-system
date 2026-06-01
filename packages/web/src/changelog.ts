@@ -2,6 +2,18 @@ import type { FileChangelog } from "@zyte/ds-types";
 
 export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
   {
+    file: "documentation.ts",
+    entries: [
+      {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Consumer stack: note Geist (`geist` package) wiring for Next.js root layout vs typography tokens.",
+      },
+    ],
+  },
+  {
     file: "components.ts",
     entries: [
       {
@@ -24,6 +36,27 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     file: "foundations.ts",
     entries: [
       {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "Surface layer palettes: `colors.surfaceDark` and `colors.surfaceLight` (background, pageSections, secondary, cards) per UI spec. Canonical doc v1.3.",
+      },
+      {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Typography: `typography.family.sans` / `mono` use Geist via `var(--font-geist-sans)` and `var(--font-geist-mono)`; Next apps add `geist` and `GeistSans` / `GeistMono` on `<html>`. Canonical doc v1.2.",
+      },
+      {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Brand colour reset: primary → Zyte Fuchsia (600 = #c026d3), accentSecondary → orange (500 = #e8520a), plus accentSecondaryOnDark (#ff6b2b) and headlineGradient (orange → fuchsia). See DESIGN_TOKEN_DELTA.md.",
+      },
+      {
         date: "2026-04-22",
         author: "arkadiusz",
         kind: "fixed",
@@ -38,8 +71,41 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     ],
   },
   {
+    file: "design.body.md",
+    entries: [
+      {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Typography: document Geist (`geist` package), `--font-geist-sans` / `--font-geist-mono`, and Next.js root layout snippet.",
+      },
+      {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Synced colour narrative with fuchsia primary, orange secondary, headline gradient, and on-dark orange; fixed foundations path; clarified destructive vs orange secondary.",
+      },
+    ],
+  },
+  {
     file: "design.md",
     entries: [
+      {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Regenerated from design.body.md after Geist typography (canonical doc v1.2).",
+      },
+      {
+        date: "2026-05-14",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Regenerated from design.body.md after brand colour reset (canonical doc v1.1).",
+      },
       {
         date: "2026-04-26",
         author: "maja",

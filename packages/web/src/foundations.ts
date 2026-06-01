@@ -4,18 +4,32 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
   label: "Web",
   description: "zyte-website-nextjs — marketing site, blog, pricing.",
   colors: {
+    /** Dark UI shell — background → page sections → secondary → cards. */
+    surfaceDark: {
+      background: "#000000",
+      pageSections: "#060608",
+      secondary: "#0a0a0e",
+      cards: "#0d0d14",
+    },
+    /** Light UI shell — same layer model as `surfaceDark`. */
+    surfaceLight: {
+      background: "#f7f7f8",
+      pageSections: "#f0f0f2",
+      secondary: "#e8e8ec",
+      cards: "#ffffff",
+    },
     primary: {
-      "50": "#FDF2F6",
-      "100": "#F7CCDF",
-      "200": "#E9669F",
-      "300": "#FF7AB4",
-      "400": "#E2337E",
-      "500": "#DB005F",
-      "600": "#B5004F",
-      "700": "#7B0036",
-      "800": "#7A0035",
-      "900": "#3F0D23",
-      "950": "#260815",
+      "50": "#fdf4ff",
+      "100": "#fae8ff",
+      "200": "#f5d0fe",
+      "300": "#f0abfc",
+      "400": "#e879f9",
+      "500": "#d946ef",
+      "600": "#c026d3",
+      "700": "#a21caf",
+      "800": "#86198f",
+      "900": "#701a75",
+      "950": "#4a044e",
     },
     accentPrimary: {
       "50": "#F4F5FA",
@@ -29,13 +43,22 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
       "900": "#0D0E2C",
     },
     accentSecondary: {
-      "100": "#F9DAD9",
-      "200": "#F9C2C0",
-      "300": "#F97D78",
-      "500": "#F9433B",
-      "600": "#DE271F",
-      "700": "#BD2C26",
-      "800": "#801813",
+      "50": "#fff7ed",
+      "100": "#ffedd5",
+      "200": "#fed7aa",
+      "300": "#fdba74",
+      "400": "#fb923c",
+      "500": "#e8520a",
+      "600": "#ea580c",
+      "700": "#c2410c",
+      "800": "#9a3412",
+      "900": "#431407",
+    },
+    accentSecondaryOnDark: {
+      DEFAULT: "#ff6b2b",
+    },
+    headlineGradient: {
+      DEFAULT: "linear-gradient(90deg, #e8520a 0%, #c026d3 100%)",
     },
     accentSecondaryPurple: {
       "50": "#F5DEFA",
@@ -68,8 +91,8 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
   },
   typography: {
     family: {
-      sans: "'Yellix', 'Yellix Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      mono: "ui-monospace, SFMono-Regular, Menlo, Monaco, monospace",
+      sans: 'var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      mono: "var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, monospace",
     },
     size: {
       xs: 12,
@@ -168,6 +191,6 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
   canonicalDoc: {
     assetPath: "packages/web/src/design.body.md",
     title: "Web — Design System",
-    version: "1.0",
+    version: "1.3",
   },
 };

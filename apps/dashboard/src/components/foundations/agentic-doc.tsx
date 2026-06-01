@@ -232,6 +232,11 @@ export function AgenticDoc({
         </div>
 
         <TabsContent value="tokens" className="mt-6">
+          <p className="text-muted-foreground mb-4 max-w-2xl text-xs leading-relaxed">
+            Live specimens: colours first, then typography with editorial + code
+            previews, a full type ladder, and leading/tracking labs — all driven
+            by the current <code className="text-foreground font-mono text-[11px]">WEB_FOUNDATIONS</code> bundle.
+          </p>
           <TokenSurface bundle={bundle} />
         </TabsContent>
 

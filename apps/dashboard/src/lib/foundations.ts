@@ -18,13 +18,15 @@ export function slugToPaletteId(slug: string, paletteIds: string[]): string | nu
 const PALETTE_LABELS: Record<string, string> = {
   primary: "Primary",
   accentPrimary: "Accent Primary",
-  accentSecondary: "Accent Secondary (Warm)",
+  accentSecondary: "Accent Secondary (Orange)",
   accentSecondaryPurple: "Accent Secondary (Cold)",
   surface: "Surface",
   ink: "Ink",
   ghost: "Ghost Letterforms",
   status: "Status",
   neutral: "Neutral",
+  surfaceDark: "Surface (dark)",
+  surfaceLight: "Surface (light)",
 };
 
 function titleCasePaletteId(id: string): string {
@@ -66,8 +68,42 @@ const CORE_SECTIONS: FoundationSection[] = [
   { id: "opacityZindex", slug: "opacity-z-index", label: "Opacity & Z-Index", group: "core" },
 ];
 
+/** Sidebar: `surfaceDark` / `surfaceLight` immediately after `neutral` when present. */
+export function orderedPaletteIds(bundle: ProductFoundations): string[] {
+  const keys = Object.keys(bundle.colors);
+  const surfacePaletteIds = (["surfaceDark", "surfaceLight"] as const).filter((id) =>
+    keys.includes(id),
+  );
+  if (surfacePaletteIds.length === 0) {
+    return keys;
+  }
+  const rest = keys.filter((id) => id !== "surfaceDark" && id !== "surfaceLight");
+  const neutralIdx = rest.indexOf("neutral");
+  if (neutralIdx === -1) {
+    return [...rest, ...surfacePaletteIds];
+  }
+  return [
+    ...rest.slice(0, neutralIdx + 1),
+    ...surfacePaletteIds,
+    ...rest.slice(neutralIdx + 1),
+  ];
+}
+
+/** Token surface Colors: same as foundations key order but `surfaceDark` / `surfaceLight` always last. */
+export function orderedPaletteIdsSurfacesLast(bundle: ProductFoundations): string[] {
+  const keys = Object.keys(bundle.colors);
+  const surfacePaletteIds = (["surfaceDark", "surfaceLight"] as const).filter((id) =>
+    keys.includes(id),
+  );
+  if (surfacePaletteIds.length === 0) {
+    return keys;
+  }
+  const rest = keys.filter((id) => id !== "surfaceDark" && id !== "surfaceLight");
+  return [...rest, ...surfacePaletteIds];
+}
+
 export function buildFoundationSections(bundle: ProductFoundations): FoundationSection[] {
-  const paletteSections: FoundationSection[] = Object.keys(bundle.colors).map((id) => ({
+  const paletteSections: FoundationSection[] = orderedPaletteIds(bundle).map((id) => ({
     id,
     slug: paletteIdToSlug(id),
     label: paletteLabelFor(id),

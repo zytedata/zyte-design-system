@@ -1,6 +1,8 @@
-import { Badge } from "@/components/ui/badge";
 import { CORE_COMPONENT_CATEGORIES } from "@zyte/ds-core";
 import { WEB_COMPONENT_CATEGORIES } from "@zyte/ds-web";
+
+import { AppPageShell } from "@/components/layout/app-page-shell";
+import { Badge } from "@/components/ui/badge";
 
 type RouteParams = { slug: string };
 
@@ -32,7 +34,7 @@ export default async function ComponentPage({ params }: { params: Promise<RouteP
   const isWip = !item || slug.startsWith("wip");
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-6 pt-12 pb-20 md:px-10">
+    <AppPageShell>
       {isWip ? (
         <div className="max-w-2xl space-y-3">
           <Badge variant="secondary">Work in progress</Badge>
@@ -66,6 +68,6 @@ export default async function ComponentPage({ params }: { params: Promise<RouteP
           ) : null}
         </div>
       )}
-    </div>
+    </AppPageShell>
   );
 }

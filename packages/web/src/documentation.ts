@@ -101,6 +101,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
         "Next.js App Router + React 19.",
         "TypeScript across app, util and component layers.",
         "Tailwind CSS v4 loaded globally from styles/tailwind.css.",
+        "Geist Sans / Geist Mono via the `geist` package: `GeistSans` / `GeistMono` from `geist/font/sans` and `geist/font/mono` on the root `<html>` so `--font-geist-sans` / `--font-geist-mono` match `WEB_FOUNDATIONS.typography.family`.",
         "SCSS modules + global SCSS (reset, theme, primereact overrides).",
         "Contento CMS as content source with local module/template rendering.",
         "PrimeReact in selected flows with custom SCSS overrides tied to design tokens.",

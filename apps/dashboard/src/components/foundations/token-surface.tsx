@@ -3,7 +3,8 @@
 import * as React from "react";
 
 import type { ProductFoundations } from "@zyte/ds-types";
-import { paletteLabelFor } from "@/lib/foundations";
+import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
+import { orderedPaletteIdsSurfacesLast, paletteLabelFor } from "@/lib/foundations";
 import { cn } from "@/lib/utils";
 
 function isLightHex(hex: string): boolean {
@@ -28,7 +29,7 @@ type Section = { id: string; label: string; description?: string };
 
 const SECTIONS: Section[] = [
   { id: "colors", label: "Colors", description: "Brand palettes + semantic mappings." },
-  { id: "typography", label: "Typography", description: "Family, sizes, weights, leading and tracking." },
+  { id: "typography", label: "Typography", description: "Live specimens: families, scale ladder, weights, leading and tracking." },
   { id: "spacing", label: "Spacing", description: "Linear scale used for padding, gaps and offsets." },
   { id: "radius", label: "Radius", description: "Corner-radius scale, applied to surfaces and inputs." },
   { id: "shadow", label: "Elevation", description: "Layered shadows for depth and focus." },
@@ -49,7 +50,9 @@ function SectionHeading({ section }: { section: Section }) {
 }
 
 function ColorsBlock({ bundle }: { bundle: ProductFoundations }) {
-  const palettes = Object.entries(bundle.colors);
+  const palettes = orderedPaletteIdsSurfacesLast(bundle).map(
+    (paletteId) => [paletteId, bundle.colors[paletteId]!] as const,
+  );
   const semantic = Object.entries(bundle.semanticColors);
 
   return (
@@ -130,130 +133,11 @@ function ColorsBlock({ bundle }: { bundle: ProductFoundations }) {
 }
 
 function TypographyBlock({ bundle }: { bundle: ProductFoundations }) {
-  const fontFamily = bundle.typography.family.sans ?? "var(--font-sans)";
-  const monoFamily = bundle.typography.family.mono ?? "var(--font-mono)";
-  const sizes = Object.entries(bundle.typography.size);
-  const weights = Object.entries(bundle.typography.weight);
-  const lineHeights = Object.entries(bundle.typography.lineHeight);
-  const tracking = Object.entries(bundle.typography.letterSpacing);
-
   return (
     <section>
       <SectionHeading section={SECTIONS[1]!} />
-
-      <div className="grid gap-3 md:grid-cols-2">
-        <div className="bg-card rounded-xl border p-4">
-          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-            Family · sans
-          </p>
-          <p
-            className="mt-1.5 truncate text-2xl font-medium"
-            style={{ fontFamily }}
-            title={fontFamily}
-          >
-            The quick brown fox
-          </p>
-          <code className="text-muted-foreground mt-2 line-clamp-1 block font-mono text-[11px]">
-            {fontFamily}
-          </code>
-        </div>
-        <div className="bg-card rounded-xl border p-4">
-          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-            Family · mono
-          </p>
-          <p
-            className="mt-1.5 truncate text-xl"
-            style={{ fontFamily: monoFamily }}
-            title={monoFamily}
-          >
-            const tokens = await load();
-          </p>
-          <code className="text-muted-foreground mt-2 line-clamp-1 block font-mono text-[11px]">
-            {monoFamily}
-          </code>
-        </div>
-      </div>
-
-      <div className="bg-card mt-4 rounded-xl border">
-        <header className="border-b px-4 py-2.5 text-sm font-semibold">
-          Type scale
-        </header>
-        <ul className="divide-y">
-          {sizes.map(([key, value]) => (
-            <li
-              key={key}
-              className="flex items-baseline gap-4 px-4 py-2.5"
-            >
-              <span className="text-muted-foreground w-16 shrink-0 font-mono text-[11px]">
-                {key}
-              </span>
-              <span
-                className="flex-1 truncate font-medium"
-                style={{ fontFamily, fontSize: `${value}px`, lineHeight: 1.1 }}
-              >
-                Aa — Designing tokens
-              </span>
-              <span className="text-muted-foreground shrink-0 font-mono text-[11px]">
-                {value}px
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-4 grid gap-3 lg:grid-cols-3">
-        <div className="bg-card rounded-xl border p-4">
-          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-            Weights
-          </p>
-          <ul className="mt-3 space-y-2.5">
-            {weights.map(([key, value]) => (
-              <li key={key} className="flex items-center justify-between gap-3">
-                <span
-                  className="truncate text-base"
-                  style={{ fontFamily, fontWeight: value }}
-                >
-                  Foundation
-                </span>
-                <span className="text-muted-foreground shrink-0 font-mono text-[11px]">
-                  {key} · {value}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-card rounded-xl border p-4">
-          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-            Line heights
-          </p>
-          <ul className="mt-3 space-y-2">
-            {lineHeights.map(([key, value]) => (
-              <li
-                key={key}
-                className="flex items-center justify-between gap-3 font-mono text-[11px]"
-              >
-                <span className="text-foreground">{key}</span>
-                <span className="text-muted-foreground">{value}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="bg-card rounded-xl border p-4">
-          <p className="text-muted-foreground text-[10px] tracking-wide uppercase">
-            Letter spacing
-          </p>
-          <ul className="mt-3 space-y-2">
-            {tracking.map(([key, value]) => (
-              <li
-                key={key}
-                className="flex items-center justify-between gap-3 font-mono text-[11px]"
-              >
-                <span className="text-foreground">{key}</span>
-                <span className="text-muted-foreground">{value}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="mt-1">
+        <TypographyLivePreview bundle={bundle} />
       </div>
     </section>
   );

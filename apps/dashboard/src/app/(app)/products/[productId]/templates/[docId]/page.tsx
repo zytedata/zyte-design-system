@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getProductBySlug } from "@/data/products";
+import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
 
 type RouteParams = { productId: string; docId: string };
@@ -23,7 +24,7 @@ export default async function ProductTemplateDocPage({
   if (!product) notFound();
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-6 pt-12 pb-20 md:px-10">
+    <AppPageShell>
       <Badge variant="secondary">{product.label} · Template</Badge>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">{docId}</h1>
       <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
@@ -34,6 +35,6 @@ export default async function ProductTemplateDocPage({
         template inside the {product.label} scope. Recreate the prototype viewer
         here as the renderer is ported.
       </p>
-    </div>
+    </AppPageShell>
   );
 }

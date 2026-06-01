@@ -159,3 +159,101 @@
       "cv11" on;
   }
 }
+
+/* -----------------------------------------------------------------------------
+ * Landing hero backdrop tokens — sourced from `@zyte/ds-web`
+ * `WEB_FOUNDATIONS.colors` so the snakes / grid / glow stay aligned with
+ * the brand: orange→fuchsia headline gradient, fuchsia primary, indigo
+ * accent. Anchors are exposed as CSS variables so the SVG paint server
+ * inside the hero (which can't read TS values directly) can reference
+ * them via `var(...)`.
+ * --------------------------------------------------------------------------- */
+:root {
+  --color-zyte-primary-600: #c026d3;
+  --color-zyte-ai-to: #3f4fed;
+  --gradient-headline-from: #e8520a;
+  --gradient-headline-to: #c026d3;
+}
+
+/* -----------------------------------------------------------------------------
+ * Hero backdrop utilities — 48 px grid + radial brand glow, light + dark.
+ * Drawn by `HeroBackdrop`; the snake SVG layered on top uses the same
+ * 48 px modulus so its path coordinates land on grid intersections.
+ * --------------------------------------------------------------------------- */
+@utility bg-zyte-grid {
+  background-image:
+    linear-gradient(to right, rgb(0 0 0 / 4%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(0 0 0 / 4%) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@utility bg-zyte-grid-dark {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 5%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 5%) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@utility bg-zyte-glow {
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgb(232 82 10 / 14%) 0%, transparent 70%),
+    radial-gradient(40% 30% at 85% 18%, rgb(192 38 211 / 10%) 0%, transparent 70%);
+}
+
+@utility bg-zyte-glow-dark {
+  background:
+    radial-gradient(55% 45% at 50% 0%, rgb(232 82 10 / 22%) 0%, transparent 72%),
+    radial-gradient(35% 28% at 86% 14%, rgb(192 38 211 / 18%) 0%, transparent 68%),
+    radial-gradient(40% 30% at 10% 25%, rgb(232 82 10 / 8%) 0%, transparent 65%);
+}
+
+/* -----------------------------------------------------------------------------
+ * Snake travel + corner-blip keyframes. The blip's pre-glow → peak →
+ * fade-out window mirrors the original onboarding-prototype hero so the
+ * dot reads as "anticipating" the snake reaching the corner.
+ * --------------------------------------------------------------------------- */
+.zyte-snake-path {
+  animation: zyte-snake-travel var(--snake-duration) linear infinite;
+  animation-delay: var(--snake-delay);
+}
+
+@keyframes zyte-snake-travel {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: var(--snake-offset);
+  }
+}
+
+.zyte-snake-blip {
+  opacity: 0;
+  animation-name: zyte-snake-blip;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
+}
+
+@keyframes zyte-snake-blip {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.12;
+  }
+  15% {
+    opacity: 0.6;
+  }
+  28% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zyte-snake-path,
+  .zyte-snake-blip {
+    animation: none !important;
+  }
+}

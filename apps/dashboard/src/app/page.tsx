@@ -1,48 +1,32 @@
 import Link from "next/link";
-import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
+import type { CSSProperties } from "react";
+import { ArrowRight, ArrowUpRight, ExternalLink } from "lucide-react";
+
+import { WEB_FOUNDATIONS } from "@zyte/ds-web";
 
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { PRODUCT_LIST, type Product } from "@/data/products";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { HeroBackdrop } from "@/components/landing/hero-backdrop";
 import { MarketingTopbar } from "@/components/layout/marketing-topbar";
 
-const ACCENT_CLASSES: Record<Product["accent"], string> = {
-  pink: "bg-pink-100 text-pink-700 dark:bg-pink-500/15 dark:text-pink-300",
-  indigo: "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300",
-  amber: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
-  lime: "bg-lime-100 text-lime-700 dark:bg-lime-500/15 dark:text-lime-300",
+const HEADLINE_GRADIENT = WEB_FOUNDATIONS.colors.headlineGradient.DEFAULT;
+const BRAND = WEB_FOUNDATIONS.colors.primary["600"];
+const BRAND_HOVER = WEB_FOUNDATIONS.colors.primary["700"];
+const CANONICAL_DOC_VERSION = WEB_FOUNDATIONS.canonicalDoc?.version ?? "0.1";
+
+const brandCssVars: CSSProperties = {
+  ["--brand" as string]: BRAND,
+  ["--brand-hover" as string]: BRAND_HOVER,
 };
 
-const ACCENT_RING: Record<Product["accent"], string> = {
-  pink: "group-hover:border-pink-300 dark:group-hover:border-pink-500/40",
-  indigo: "group-hover:border-indigo-300 dark:group-hover:border-indigo-500/40",
-  amber: "group-hover:border-amber-300 dark:group-hover:border-amber-500/40",
-  lime: "group-hover:border-lime-300 dark:group-hover:border-lime-500/40",
+const ACCENT_CHIP: Record<Product["accent"], string> = {
+  pink: "bg-pink-50 text-pink-700 dark:bg-pink-500/15 dark:text-pink-300",
+  indigo: "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300",
+  amber: "bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
+  lime: "bg-lime-50 text-lime-700 dark:bg-lime-500/15 dark:text-lime-300",
 };
-
-const FEATURE_HIGHLIGHTS = [
-  {
-    title: "One source of tokens",
-    body: "Foundations, palettes and type scales rendered live from the same data agents consume.",
-  },
-  {
-    title: "Per-product workspaces",
-    body: "Web, Core, Scrapy and Extract Summit each get a tailored set of foundations and components.",
-  },
-  {
-    title: "Agentic by default",
-    body: "Every product ships a canonical DESIGN.md — copy, download, or feed it straight to a coding agent.",
-  },
-];
-
-function productHighlights(product: Product): string[] {
-  return product.nav
-    .filter((item) => item.label.toLowerCase() !== "dashboard")
-    .slice(0, 4)
-    .map((item) => item.label);
-}
 
 function productSummary(product: Product): string {
   switch (product.id) {
@@ -57,52 +41,77 @@ function productSummary(product: Product): string {
   }
 }
 
+const HERO_META: { label: string; value: string }[] = [
+  { label: "Products", value: String(PRODUCT_LIST.length).padStart(2, "0") },
+  { label: "Spec format", value: "DESIGN.md" },
+  { label: "Tokens", value: "Live" },
+  { label: "Edition", value: `v${CANONICAL_DOC_VERSION}` },
+];
+
 export default function LandingPage() {
   return (
     <>
       <MarketingTopbar />
 
       <main>
-        <section className="from-background via-background to-muted/40 relative overflow-hidden border-b bg-gradient-to-b">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in oklab, var(--foreground) 5%, transparent), transparent 70%)",
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent"
-          />
+        <section
+          className="relative isolate overflow-hidden border-b"
+          style={brandCssVars}
+        >
+          <HeroBackdrop />
 
-          <div className="relative mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-6 pt-20 pb-24 text-center md:pt-28">
-            <Badge
-              variant="secondary"
-              className="rounded-full px-3 py-1 text-[11px] font-medium tracking-wide uppercase"
-            >
-              <Sparkles className="size-3" /> DesignOps workspace
-            </Badge>
+          <div className="relative mx-auto w-full max-w-6xl px-6 pt-20 pb-24 md:pt-28 md:pb-32">
+            {/* Readability scrim — a soft fade of the page background sitting
+              * underneath the headline + subtitle + CTAs + meta so the
+              * animated snakes and grid lines stop competing with the copy
+              * for contrast. Edge-faded by a radial mask so it blends back
+              * into the hero on every side; `-z-10` keeps it BELOW the
+              * content (which sits at `relative`'s default z=0) but still
+              * ABOVE the section's `-z-10` backdrop layer. */}
+            <div
+              aria-hidden="true"
+              className="dark:bg-background/60 bg-background/55 pointer-events-none absolute -inset-x-8 -inset-y-12 -z-10 backdrop-blur-[2px] [mask-image:radial-gradient(ellipse_70%_75%_at_30%_50%,black,transparent_85%)]"
+            />
 
-            <h1 className="text-balance text-5xl font-semibold tracking-tight md:text-6xl">
-              {siteConfig.name}
+            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.18em] uppercase">
+              {siteConfig.shortName}
+              <span className="text-border mx-2" aria-hidden="true">
+                /
+              </span>
+              DesignOps workspace
+              <span className="text-border mx-2" aria-hidden="true">
+                /
+              </span>
+              alpha
+            </p>
+
+            <h1 className="mt-6 max-w-4xl text-balance text-5xl leading-[1.05] font-semibold tracking-tight md:text-7xl">
+              The Zyte{" "}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: HEADLINE_GRADIENT }}
+              >
+                design system
+              </span>
+              .
             </h1>
 
-            <p className="text-muted-foreground max-w-2xl text-pretty text-base leading-relaxed md:text-lg">
+            <p className="text-muted-foreground mt-6 max-w-2xl text-pretty text-base leading-relaxed md:text-lg">
               {siteConfig.tagline}
             </p>
 
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-              <Button size="lg" asChild>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <Button
+                size="lg"
+                asChild
+                className="bg-[var(--brand)] text-white hover:bg-[var(--brand-hover)] [a]:hover:bg-[var(--brand-hover)]"
+              >
                 <Link href="/products/web">
                   Open Web workspace
                   <ArrowRight className="size-4" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/sign-in">Sign in</Link>
-              </Button>
+        
               <Button variant="ghost" size="lg" asChild>
                 <a
                   href={siteConfig.links.github}
@@ -115,120 +124,91 @@ export default function LandingPage() {
               </Button>
             </div>
 
-            <ul className="text-muted-foreground mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs">
-              {siteConfig.meta.map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <span
-                    aria-hidden="true"
-                    className="bg-muted-foreground/40 size-1 rounded-full"
-                  />
-                  {item}
-                </li>
+            <dl className="mt-14 grid max-w-3xl grid-cols-2 gap-x-10 gap-y-6 border-t pt-8 md:grid-cols-4">
+              {HERO_META.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="text-muted-foreground font-mono text-[10px] tracking-[0.18em] uppercase">
+                    {stat.label}
+                  </dt>
+                  <dd className="mt-1.5 text-2xl font-semibold tracking-tight">
+                    {stat.value}
+                  </dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-6xl px-6 py-16 md:py-20">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-muted-foreground text-xs tracking-wide uppercase">
-              Workspaces
-            </p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-              Pick a product workspace
-            </h2>
-            <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-              Each scope ships its own foundations, components catalog, and
-              canonical agentic spec. Pick where you want to land — switch
-              anytime from the workspace sidebar.
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
-            {PRODUCT_LIST.map((product) => {
-              const Icon = product.icon;
-              return (
-                <Link
-                  key={product.id}
-                  href={`/products/${product.slug}`}
-                  className={cn(
-                    "group bg-card hover:bg-accent/40 relative flex flex-col rounded-2xl border p-6 transition-colors",
-                    ACCENT_RING[product.accent],
-                  )}
-                >
-                  <header className="flex items-center justify-between">
-                    <span
-                      className={cn(
-                        "inline-flex size-10 items-center justify-center rounded-xl",
-                        ACCENT_CLASSES[product.accent],
-                      )}
-                      aria-hidden="true"
-                    >
-                      <Icon className="size-5" />
-                    </span>
-                    <Badge variant="outline" className="text-[10px]">
-                      Product
-                    </Badge>
-                  </header>
-
-                  <h3 className="mt-5 text-2xl font-semibold tracking-tight">
-                    {product.label}
-                  </h3>
-                  <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-                    {productSummary(product)}
-                  </p>
-
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {productHighlights(product).map((highlight) => (
-                      <li key={highlight}>
-                        <span className="bg-muted text-muted-foreground inline-flex rounded-full px-2.5 py-1 text-[11px] font-medium">
-                          {highlight}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <span className="text-foreground mt-6 inline-flex items-center gap-1.5 text-sm font-medium">
-                    Open {product.label}
-                    <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="bg-muted/30 border-t">
-          <div className="mx-auto w-full max-w-6xl px-6 py-16 md:py-20">
-            <div className="mx-auto max-w-2xl text-center">
-              <p className="text-muted-foreground text-xs tracking-wide uppercase">
-                Why this exists
+        <section className="bg-muted/20 border-b">
+          <div className="mx-auto w-full max-w-6xl px-6 py-20 md:py-24">
+            <header className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
+              <div>
+                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.18em] uppercase">
+                  01 — Workspaces
+                </p>
+                <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
+                  Pick a product workspace.
+                </h2>
+              </div>
+              <p className="text-muted-foreground text-sm leading-relaxed md:text-base">
+                Each scope ships its own foundations, components catalog, and
+                canonical agentic spec. Pick where you want to land — switch
+                anytime from the workspace sidebar.
               </p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-                Built for designers, engineers and agents
-              </h2>
-            </div>
+            </header>
 
-            <div className="mt-10 grid gap-4 md:grid-cols-3">
-              {FEATURE_HIGHLIGHTS.map((feature) => (
-                <article
-                  key={feature.title}
-                  className="bg-card rounded-2xl border p-6"
-                >
-                  <h3 className="text-base font-semibold">{feature.title}</h3>
-                  <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-                    {feature.body}
-                  </p>
-                </article>
-              ))}
+            <div className="bg-border mt-12 grid gap-px overflow-hidden rounded-2xl border md:grid-cols-2">
+              {PRODUCT_LIST.map((product) => {
+                const Icon = product.icon;
+                return (
+                  <Link
+                    key={product.id}
+                    href={`/products/${product.slug}`}
+                    className={cn(
+                      "group bg-card hover:bg-card/60 flex flex-col p-8 transition-colors md:p-10",
+                    )}
+                  >
+                    <header className="flex items-center justify-between gap-4">
+                      <span
+                        className={cn(
+                          "inline-flex size-11 items-center justify-center rounded-xl",
+                          ACCENT_CHIP[product.accent],
+                        )}
+                        aria-hidden="true"
+                      >
+                        <Icon className="size-5" />
+                      </span>
+                      <code className="text-muted-foreground font-mono text-[11px] tracking-tight">
+                        /products/{product.slug}
+                      </code>
+                    </header>
+
+                    <h3 className="mt-8 text-3xl font-semibold tracking-tight md:text-4xl">
+                      {product.label}
+                    </h3>
+                    <p className="text-muted-foreground mt-3 max-w-md text-sm leading-relaxed">
+                      {productSummary(product)}
+                    </p>
+
+                    <span className="text-foreground mt-auto inline-flex items-center gap-2 pt-10 text-sm font-medium">
+                      Open workspace
+                      <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
 
         <footer className="border-t">
           <div className="text-muted-foreground mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-3 px-6 py-8 text-xs md:flex-row">
-            <span>
-              © {new Date().getFullYear()} Zyte. {siteConfig.shortName} alpha.
+            <span className="font-mono tracking-tight">
+              © {new Date().getFullYear()} Zyte
+              <span className="text-border mx-2" aria-hidden="true">
+                /
+              </span>
+              {siteConfig.shortName} alpha
             </span>
             <nav aria-label="Footer">
               <ul className="flex flex-wrap items-center gap-x-5 gap-y-1">
@@ -243,7 +223,10 @@ export default function LandingPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/products/scrapy" className="hover:text-foreground">
+                  <Link
+                    href="/products/scrapy"
+                    className="hover:text-foreground"
+                  >
                     Scrapy
                   </Link>
                 </li>

@@ -4,7 +4,7 @@ export const siteConfig = {
   description:
     "A product workspace for the Zyte design system — foundations, tokens, components, templates and documentation across Web, Core, Scrapy and Extract Summit.",
   tagline:
-    "A product workspace is used to load matching navigation and documentation experiences, improve both developer and product designer workflows, and strengthen collaboration with other parts of the organization.",
+    "Product workspaces help teams access the right design documentation, and guidance, foundations, tokens, components, templates for each Zyte product area, improving developer and designer workflows while creating a shared collaboration layer across the organization.",
   meta: ["Open source docs shell", "Built for Zyte teams", "DesignOps workspace"],
   url: "https://design.zyte.com",
   links: {

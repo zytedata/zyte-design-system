@@ -213,13 +213,13 @@ type NavItemProps = {
 };
 
 function PlainNavItem({ item, pathname }: NavItemProps) {
-  const Icon = navIconFor(item);
+  const icon = navIconFor(item);
 
   if (item.externalUrl) {
     return (
       <SidebarMenuButton asChild tooltip={item.label}>
         <a href={item.externalUrl} target="_blank" rel="noopener noreferrer">
-          <Icon />
+          {React.createElement(icon)}
           <span>{item.label}</span>
         </a>
       </SidebarMenuButton>
@@ -233,7 +233,7 @@ function PlainNavItem({ item, pathname }: NavItemProps) {
       tooltip={item.label}
     >
       <Link href={item.href}>
-        <Icon />
+        {React.createElement(icon)}
         <span>{item.label}</span>
       </Link>
     </SidebarMenuButton>
@@ -245,16 +245,19 @@ function CollapsibleNavItem({
   pathname,
   groups,
 }: NavItemProps & { groups: SubNavGroup[] }) {
-  const Icon = navIconFor(item);
+  const icon = navIconFor(item);
   const sectionActive = isItemActive(pathname, item);
 
   // Auto-open the section when the user navigates into it; let users manually
   // toggle it otherwise. We don't force-close on leave so the section stays in
-  // the state the user last set it to.
+  // the state the user last set it to. Syncing during render (React's "adjust
+  // state on change" pattern) avoids a setState-in-effect.
   const [open, setOpen] = React.useState(sectionActive);
-  React.useEffect(() => {
+  const [prevActive, setPrevActive] = React.useState(sectionActive);
+  if (sectionActive !== prevActive) {
+    setPrevActive(sectionActive);
     if (sectionActive) setOpen(true);
-  }, [sectionActive]);
+  }
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="group/collapsible">
@@ -265,7 +268,7 @@ function CollapsibleNavItem({
             tooltip={item.label}
             aria-expanded={open}
           >
-            <Icon />
+            {React.createElement(icon)}
             <span>{item.label}</span>
             <ChevronRight className="ml-auto size-3.5 transition-transform group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>

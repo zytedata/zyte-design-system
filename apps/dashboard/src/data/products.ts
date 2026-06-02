@@ -41,6 +41,7 @@ export type ProductCapabilities = {
   components: ComponentsCapability;
   templates: { enabled: boolean };
   prototyping: { enabled: boolean };
+  studio: { enabled: boolean };
   documentation: { enabled: boolean; href?: string };
   assets: { enabled: boolean; href?: string };
 };
@@ -63,6 +64,7 @@ const WEB_NAV: ProductNavItem[] = [
   { group: "library", label: "Foundations", href: "/products/web/foundations" },
   { group: "library", label: "Templates", href: "/products/web/templates" },
   { group: "library", label: "Assets", href: "/products/web/assets" },
+  { group: "workflow", label: "Markdown Studio", href: "/products/web/studio" },
   { group: "workflow", label: "Prototyping", href: "/products/web/prototyping" },
   {
     group: "reference",
@@ -81,6 +83,11 @@ const WEB_NAV: ProductNavItem[] = [
 const CORE_NAV: ProductNavItem[] = [
   { group: "overview", label: "Dashboard", href: "/products/core", matchExact: true },
   { group: "library", label: "Foundations", href: "/products/core/foundations" },
+  {
+    group: "workflow",
+    label: "Markdown Studio",
+    href: "/products/core/studio",
+  },
   {
     group: "workflow",
     label: "Protozyte",
@@ -152,6 +159,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       },
       templates: { enabled: true },
       prototyping: { enabled: true },
+      studio: { enabled: true },
       documentation: { enabled: true, href: "/products/web/documentation" },
       assets: { enabled: true, href: "/products/web/assets" },
     },
@@ -174,6 +182,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       },
       templates: { enabled: false },
       prototyping: { enabled: false },
+      studio: { enabled: true },
       documentation: { enabled: true, href: "/products/core/documentation" },
       assets: { enabled: false },
     },
@@ -192,6 +201,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       components: { enabled: false },
       templates: { enabled: false },
       prototyping: { enabled: false },
+      studio: { enabled: false },
       documentation: { enabled: true, href: "/products/scrapy/documentation" },
       assets: { enabled: false },
     },
@@ -210,6 +220,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       components: { enabled: false },
       templates: { enabled: false },
       prototyping: { enabled: false },
+      studio: { enabled: false },
       documentation: { enabled: true, href: "/products/extract-summit/documentation" },
       assets: { enabled: false },
     },

@@ -52,7 +52,7 @@ export function buildProductDocLinks(productSlug: string): ProductDocLinks {
     registry: `${REPO_URL}/pkgs/npm/ds-${productSlug}`,
     foundations: `/products/${productSlug}/foundations`,
     changelog: `/products/${productSlug}/changelog`,
-    designMd: `/products/${productSlug}/foundations/design-md`,
+    designMd: `/products/${productSlug}/agentic`,
     releasing: `${REPO_URL}/blob/main/.github/RELEASING.md`,
   };
 }

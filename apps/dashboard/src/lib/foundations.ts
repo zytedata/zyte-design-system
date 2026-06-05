@@ -53,10 +53,6 @@ export type FoundationSection = {
   group: FoundationSectionGroup;
 };
 
-const AGENTIC_SECTIONS: FoundationSection[] = [
-  { id: "agent", slug: "design-md", label: "LLM (Design.md)", group: "agentic" },
-];
-
 const CORE_SECTIONS: FoundationSection[] = [
   { id: "tailwindColors", slug: "tailwind-colors", label: "Tailwind Colors", group: "core" },
   { id: "icons", slug: "icons-lucide", label: "Icons (Lucide)", group: "core" },
@@ -110,10 +106,11 @@ export function buildFoundationSections(bundle: ProductFoundations): FoundationS
     group: "palette",
   }));
 
-  // Order must match the sidebar's GROUP_ORDER (agentic → palette → core) so that
+  // Order must match the sidebar's GROUP_ORDER (palette → core) so that
   // `defaultSectionFor` (which returns index 0) lands on the same section the user
-  // sees at the top of the sidebar.
-  return [...AGENTIC_SECTIONS, ...paletteSections, ...CORE_SECTIONS];
+  // sees at the top of the sidebar. The agentic/design.md view is now a
+  // top-level nav item (`/products/<slug>/agentic`), not a foundations section.
+  return [...paletteSections, ...CORE_SECTIONS];
 }
 
 export function findSectionBySlug(

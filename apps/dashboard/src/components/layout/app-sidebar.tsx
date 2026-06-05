@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import {
   BookOpen,
+  Bot,
   Box,
   ChevronRight,
   ChevronsUpDown,
@@ -16,6 +17,7 @@ import {
   Layers,
   LayoutDashboard,
   LayoutTemplate,
+  Sparkles,
   Wand2,
   type LucideIcon,
 } from "lucide-react";
@@ -35,6 +37,7 @@ import {
   type FoundationSection,
   type FoundationSectionGroup,
 } from "@/lib/foundations";
+import { BRAND_SECTIONS } from "@/lib/brand";
 import { ZyteLogo } from "@/components/common/zyte-logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import {
@@ -72,6 +75,8 @@ function navIconFor(item: ProductNavItem): LucideIcon {
   if (label.includes("dashboard")) return LayoutDashboard;
   if (label.includes("changelog")) return History;
   if (label.includes("foundation")) return Layers;
+  if (label.includes("agentic")) return Bot;
+  if (label.includes("brand")) return Sparkles;
   if (label.includes("component")) return Box;
   if (label.includes("template")) return LayoutTemplate;
   if (label.includes("prototyp")) return Wand2;
@@ -132,6 +137,17 @@ function foundationsSubGroups(
     .filter((g): g is SubNavGroup => g !== null);
 }
 
+function brandSubGroups(productSlug: string): SubNavGroup[] {
+  return [
+    {
+      items: BRAND_SECTIONS.map((section) => ({
+        href: `/products/${productSlug}/brand/${section.slug}`,
+        label: section.label,
+      })),
+    },
+  ];
+}
+
 function subGroupsForNavItem(
   item: ProductNavItem,
   product: Product,
@@ -140,6 +156,9 @@ function subGroupsForNavItem(
   const label = item.label.toLowerCase();
   if (label.includes("foundation")) {
     return foundationsSubGroups(product.slug, product);
+  }
+  if (label.includes("brand")) {
+    return brandSubGroups(product.slug);
   }
   return null;
 }

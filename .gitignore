@@ -24,6 +24,7 @@ build/
 # misc
 .DS_Store
 *.pem
+zyteworkspace.code-workspace
 
 # debug
 npm-debug.log*

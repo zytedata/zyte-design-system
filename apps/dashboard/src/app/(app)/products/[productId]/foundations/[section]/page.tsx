@@ -2,12 +2,10 @@ import { notFound, redirect } from "next/navigation";
 
 import { PRODUCT_LIST, getProductBySlug } from "@/data/products";
 import { getFoundations } from "@/data/foundations";
-import { readCanonicalDoc, readGeneratedArtefacts } from "@/data/foundations/docs";
 import { buildFoundationSections, findSectionBySlug, paletteLabelFor } from "@/lib/foundations";
 import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
 import {
-  AgenticSection,
   BreakpointsSection,
   LucideIconsSection,
   OpacityZIndexSection,
@@ -54,17 +52,15 @@ export default async function FoundationsSectionPage({ params }: { params: Promi
     redirect(`/products/${product.slug}/changelog`);
   }
 
+  // The agentic/design.md view was promoted to a top-level nav item; keep old
+  // `foundations/design-md` links working.
+  if (sectionSlug === "design-md") {
+    redirect(`/products/${product.slug}/agentic`);
+  }
+
   const bundle = getFoundations(product.id);
   const section = findSectionBySlug(bundle, sectionSlug);
   if (!section) notFound();
-
-  const isAgentSection = section.id === "agent" && bundle.canonicalDoc;
-  const [canonicalDoc, generatedArtefacts] = isAgentSection
-    ? await Promise.all([
-        readCanonicalDoc(product.id),
-        readGeneratedArtefacts(product.id),
-      ])
-    : [null, []];
 
   return (
     <AppPageShell>
@@ -83,14 +79,6 @@ export default async function FoundationsSectionPage({ params }: { params: Promi
       <div className="space-y-8">
         {section.group === "palette" ? (
           <PaletteSection bundle={bundle} paletteId={section.id} productId={product.id} />
-        ) : section.id === "agent" ? (
-          <AgenticSection
-            bundle={bundle}
-            productLabel={product.label}
-            productSlug={product.slug}
-            doc={canonicalDoc}
-            artefacts={generatedArtefacts}
-          />
         ) : section.id === "tailwindColors" ? (
           <TailwindColorsSection />
         ) : section.id === "icons" ? (

@@ -104,7 +104,8 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 asChild
-                className="bg-[var(--brand)] text-white hover:bg-[var(--brand-hover)] [a]:hover:bg-[var(--brand-hover)]"
+                className="text-white shadow-none [background:var(--btn-gradient)] hover:opacity-90 transition-opacity"
+                style={{ ["--btn-gradient" as string]: HEADLINE_GRADIENT } as CSSProperties}
               >
                 <Link href="/products/web">
                   Open Web workspace

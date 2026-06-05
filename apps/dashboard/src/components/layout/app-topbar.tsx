@@ -8,6 +8,7 @@ import { siteConfig } from "@/config/site";
 import { useActiveProduct } from "@/hooks/use-active-product";
 import { getFoundations } from "@/data/foundations";
 import { findSectionBySlug } from "@/lib/foundations";
+import { findBrandSectionBySlug } from "@/lib/brand";
 import { HeaderSearch } from "@/components/layout/header-search";
 import { SyncStatus } from "@/components/layout/sync-status";
 import { Separator } from "@/components/ui/separator";
@@ -61,6 +62,16 @@ function useBreadcrumbs(): Crumb[] {
           crumbs.push({
             label: match ? match.label : titleCase(sectionSlug),
           });
+        }
+      } else if (subRoute === "brand") {
+        const sectionSlug = segments[3];
+        crumbs.push({
+          label: "Brand",
+          href: sectionSlug ? `/products/${activeProduct.slug}/brand` : undefined,
+        });
+        if (sectionSlug) {
+          const match = findBrandSectionBySlug(sectionSlug);
+          crumbs.push({ label: match ? match.label : titleCase(sectionSlug) });
         }
       } else if (subRoute === "documentation") {
         crumbs.push({ label: "Documentation" });

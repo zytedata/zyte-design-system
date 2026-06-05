@@ -2,6 +2,25 @@ import type { FileChangelog } from "@zyte/ds-types";
 
 export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
   {
+    file: "branding.ts",
+    entries: [
+      {
+        date: "2026-06-03",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "New WEB_BRANDING export: editorial brand guidance (Overview, Logo, Voice & Tone, Visual Language, Product Expression, AI / Agentic Expression, Asset Usage) with taglines, summaries, principles and do/don't pairs. Surfaced by the dashboard's Brand pages.",
+      },
+      {
+        date: "2026-06-03",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Logo section: expanded principles with explicit rules for when to use each variant (primary, reversed, hero gradient, monochrome, brand fuchsia) and a one-logo-per-surface rule.",
+      },
+    ],
+  },
+  {
     file: "documentation.ts",
     entries: [
       {
@@ -74,6 +93,13 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     file: "design.body.md",
     entries: [
       {
+        date: "2026-06-04",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "Added Logo, Voice & Tone, AI / Agentic Expression and Asset Usage sections to align design.body.md with all seven branding sections defined in WEB_BRANDING (branding.ts).",
+      },
+      {
         date: "2026-05-14",
         author: "arkadiusz",
         kind: "changed",
@@ -92,6 +118,13 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
   {
     file: "design.md",
     entries: [
+      {
+        date: "2026-06-03",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "Frontmatter now carries the full branding block (intro + all sections) so agents/LLMs reading design.md get the editorial brand brief alongside the tokens. Emitted by tokens-build from the new WEB_BRANDING export; required a YAML-dumper fix for block sequences of maps (arrays of objects).",
+      },
       {
         date: "2026-05-14",
         author: "arkadiusz",

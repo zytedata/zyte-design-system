@@ -128,7 +128,99 @@ Use tokenized sizes/weights (see front matter). Keep headings tight and body cop
 - Keep states explicit: hover/focus/active/disabled.
 - Prefer consistent button/link patterns across pages.
 
-## Do's and Don'ts
+## Logo
+
+The Zyte logo is our most recognisable, most protected asset.
+
+### Variants
+
+- **Primary (ink wordmark)** — default for product UI, documents, slides and light surfaces.
+- **Reversed (white)** — use on dark or photographic backgrounds where the ink variant would fail contrast.
+- **Hero (orange → fuchsia gradient)** — reserved for marketing hero sections, campaign key art and launch moments. Never use in product UI, body copy or anywhere it repeats.
+- **Monochrome (single ink or single white)** — one-colour print, embroidery, engraving or any context restricted to a single colour.
+- **Brand fuchsia** — limited accent variant; only on neutral light surfaces where a touch of brand colour helps.
+
+### Rules
+
+- One logo per surface — never combine the hero gradient variant with another variant in the same view.
+- The standalone mark is reserved for avatars, favicons and tight UI slots where the full lockup would fall below minimum size.
+- Minimum clear space equals the height of the ‘Z’ on all sides.
+- Minimum size: 24 px tall for the mark, 96 px wide for the full lockup on screen.
+
+**Do**
+
+- Use the supplied SVGs at their native proportions.
+- Place the logo on backgrounds that pass contrast requirements.
+
+**Don’t**
+
+- Stretch, rotate, recolour or add effects to the logo.
+- Recreate the wordmark in a different typeface.
+
+## Voice & Tone
+
+Our voice is the constant; our tone flexes with context. Marketing can be bold and energetic; product and errors stay calm, precise and reassuring. We write for busy engineers who value their time.
+
+### Principles
+
+- Lead with the value, then the detail — front-load the point.
+- Short sentences. Active voice. Concrete nouns over buzzwords.
+- Confident, not boastful — show results instead of claiming greatness.
+- Helpful in failure — errors explain what happened and what to do next.
+
+**Do**
+
+- Say “extract data from any website” rather than “leverage synergistic data solutions”.
+- Use “you” and “we”; keep it conversational.
+
+**Don’t**
+
+- Use hype words: revolutionary, game-changing, next-gen.
+- Hide meaning behind jargon or acronyms.
+
+## AI / Agentic Expression
+
+As Zyte becomes more agentic, the brand extends to how AI speaks and behaves. The assistant is competent and candid — it shows its reasoning, flags uncertainty, and never pretends to be human.
+
+### Principles
+
+- Be transparent — distinguish generated output from verified data.
+- Show confidence levels and sources; admit when unsure.
+- Keep the assistant voice consistent with Voice & Tone — calm and precise.
+- Use a consistent visual signal (e.g. accent shimmer) for AI-generated content.
+
+**Do**
+
+- Surface citations and let users verify agent output.
+- Offer a clear way to undo or correct agent actions.
+
+**Don’t**
+
+- Imply certainty the model does not have.
+- Anthropomorphise the assistant or give it a fake persona.
+
+## Asset Usage
+
+Brand assets — logos, icons, illustrations, templates — live in one place and ship in approved formats.
+
+### Principles
+
+- Pull assets from the central brand library, not from screenshots or old decks.
+- Prefer SVG for logos and icons; use optimised raster only when required.
+- Co-branding keeps equal clear space between Zyte and partner marks.
+- Partner and press usage follows the published brand guidelines and licence.
+
+**Do**
+
+- Check the asset’s intended surface (light/dark) before placing it.
+- Request new assets through the brand team rather than improvising.
+
+**Don’t**
+
+- Re-export or recolour assets to fit a one-off need.
+- Distribute brand assets externally without approval.
+
+## Do’s and Don’ts
 
 **Do**
 

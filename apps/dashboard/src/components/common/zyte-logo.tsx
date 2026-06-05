@@ -2,6 +2,11 @@
 
 import { useId } from "react";
 
+import {
+  ZYTE_LOGO_PATHS,
+  ZYTE_LOGO_VIEWBOX,
+} from "@/lib/zyte-logo-svg";
+
 type ZyteLogoProps = {
   className?: string;
   width?: number;
@@ -29,7 +34,7 @@ export function ZyteLogo({
       className={className}
       width={width}
       height={height}
-      viewBox="0 0 972 420"
+      viewBox={ZYTE_LOGO_VIEWBOX}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
@@ -49,24 +54,15 @@ export function ZyteLogo({
           </linearGradient>
         </defs>
       ) : null}
-      <path
-        d="M572.476 0V69.468H523.199V125.685H572.476V231.21C572.476 296.961 610.63 331.968 667.882 331.968C677.41 331.968 690.673 330.897 699.677 328.776V274.155C693.842 275.751 686.959 276.276 680.6 276.276C651.973 276.276 631.848 263.025 631.848 230.139V125.685H699.677V69.468H631.848V0H572.476Z"
-        fill={fill}
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M845.345 64.155C915.294 64.155 972 117.726 972 193.557C972 200.445 971.454 213.717 970.405 218.484H771.661C779.09 256.683 805.575 280.539 847.444 280.539C879.26 280.539 904.171 265.692 909.459 243.411H968.81C959.282 298.032 909.984 334.089 846.394 334.089C770.611 334.089 711.786 273.105 711.786 197.799C711.786 122.493 770.611 64.155 845.345 64.155ZM842.155 117.726C807.17 117.726 781.735 136.29 773.256 168.105H907.864C902.576 138.411 877.14 117.726 842.155 117.726Z"
-        fill={fill}
-      />
-      <path
-        d="M308.127 69.468L377.551 246.057L446.975 69.468H510.565L364.309 420H300.698L347.351 315L244.537 69.468H308.127Z"
-        fill={fill}
-      />
-      <path
-        d="M159.058 126.21H0V69.468H231.589V126.21L72.0896 272.055H231.589V328.797H0V272.055L159.058 126.21Z"
-        fill={fill}
-      />
+      {ZYTE_LOGO_PATHS.map((path, index) => (
+        <path
+          key={index}
+          d={path.d}
+          fill={fill}
+          fillRule={path.evenOdd ? "evenodd" : undefined}
+          clipRule={path.evenOdd ? "evenodd" : undefined}
+        />
+      ))}
     </svg>
   );
 }

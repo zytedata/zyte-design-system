@@ -29,7 +29,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
       steps: [
         {
           heading: "1. Edit foundations.ts",
-          text: "Open packages/web/src/foundations.ts and bump the relevant entry (e.g. colors.accentPrimary['600']). Keep changes scoped — colors that are about brand voice should land here; layout/density tokens probably want @zyte/ds-core instead.",
+          text: "Open packages/web/src/foundations.ts and bump the relevant entry (e.g. colors.accent['600']). Keep changes scoped — colors that are about brand voice should land here; layout/density tokens probably want @zyte/ds-core instead.",
         },
         {
           heading: "2. Edit design.body.md if needed",
@@ -70,7 +70,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
 .hero-title {
   font-family: web.$web-font-display;
   font-size: web.$web-text-3xl;
-  color: web.$web-accent-primary-700;
+  color: web.$web-accent-700;
   margin-bottom: web.$web-spacing-6;
 }`,
       },

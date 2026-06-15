@@ -17,9 +17,8 @@ export function slugToPaletteId(slug: string, paletteIds: string[]): string | nu
 
 const PALETTE_LABELS: Record<string, string> = {
   primary: "Primary",
-  accentPrimary: "Accent Primary",
-  accentSecondary: "Accent Secondary (Orange)",
-  accentSecondaryPurple: "Accent Secondary (Cold)",
+  secondary: "Secondary",
+  accent: "Accent",
   surface: "Surface",
   ink: "Ink",
   ghost: "Ghost Letterforms",

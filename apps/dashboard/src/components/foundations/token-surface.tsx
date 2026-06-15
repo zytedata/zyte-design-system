@@ -5,6 +5,7 @@ import * as React from "react";
 import type { ProductFoundations } from "@zyte/ds-types";
 import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
 import { orderedPaletteIdsSurfacesLast, paletteLabelFor } from "@/lib/foundations";
+import { CopyableSwatch } from "@/components/foundations/copyable-swatch";
 import { cn } from "@/lib/utils";
 
 function isLightHex(hex: string): boolean {
@@ -96,9 +97,12 @@ function ColorsBlock({ bundle }: { bundle: ProductFoundations }) {
               </header>
               <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                 {entries.map(([shade, hex]) => (
-                  <div
+                  <CopyableSwatch
                     key={shade}
+                    value={hex}
+                    label={`${paletteId}/${shade} (${hex})`}
                     className="bg-card flex items-center gap-3 px-3 py-2"
+                    badgeClassName="top-1/2 right-2 -translate-y-1/2"
                   >
                     <span
                       aria-hidden="true"
@@ -116,12 +120,12 @@ function ColorsBlock({ bundle }: { bundle: ProductFoundations }) {
                     {isLightHex(hex) ? (
                       <span
                         aria-hidden="true"
-                        className="text-muted-foreground/60 ml-auto text-[10px]"
+                        className="text-muted-foreground/60 ml-auto text-[10px] transition-opacity group-hover/copy:opacity-0"
                       >
                         light
                       </span>
                     ) : null}
-                  </div>
+                  </CopyableSwatch>
                 ))}
               </div>
             </article>

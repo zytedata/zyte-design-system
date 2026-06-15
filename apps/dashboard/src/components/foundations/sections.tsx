@@ -9,6 +9,7 @@ import { paletteRowsFor } from "@/lib/foundations";
 import { TAILWIND_COLOR_FAMILIES } from "@/data/tailwind-palette";
 
 import { AgenticDoc } from "@/components/foundations/agentic-doc";
+import { CopyableSwatch } from "@/components/foundations/copyable-swatch";
 import { GeneratedArtefacts } from "@/components/foundations/generated-artefacts";
 import { LucideIconsCatalog } from "@/components/foundations/lucide-icons-catalog";
 import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
@@ -42,7 +43,12 @@ export function PaletteSection({
       </p>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {rows.map((color) => (
-          <article key={color.name} className="bg-card overflow-hidden rounded-xl border">
+          <CopyableSwatch
+            key={color.name}
+            value={color.hex}
+            label={color.hex}
+            className="bg-card overflow-hidden rounded-xl border"
+          >
             <div aria-hidden="true" className="h-20" style={{ background: color.hex }} />
             <div className="space-y-1 p-3">
               <h3 className="font-mono text-sm font-medium">{color.name}</h3>
@@ -51,7 +57,7 @@ export function PaletteSection({
                 {color.utility}
               </p>
             </div>
-          </article>
+          </CopyableSwatch>
         ))}
       </div>
     </section>
@@ -389,9 +395,12 @@ export function TailwindColorsSection() {
               {family.shades.map((shade) => {
                 const lighter = Number(shade.shade) <= 400;
                 return (
-                  <div
+                  <CopyableSwatch
                     key={shade.shade}
-                    className="group relative flex h-20 flex-col justify-end p-2"
+                    value={shade.hex}
+                    label={`${family.name}-${shade.shade} (${shade.hex})`}
+                    className="group flex h-20 flex-col justify-end p-2"
+                    badgeClassName="top-1.5 right-1.5"
                     style={{ background: shade.hex }}
                   >
                     <span
@@ -410,7 +419,7 @@ export function TailwindColorsSection() {
                     >
                       {shade.hex}
                     </span>
-                  </div>
+                  </CopyableSwatch>
                 );
               })}
             </div>

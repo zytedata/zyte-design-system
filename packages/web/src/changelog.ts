@@ -55,6 +55,48 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     file: "foundations.ts",
     entries: [
       {
+        date: "2026-06-15",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "New `colors.headlineGradient.subtle` version: linear pink → white (#f5d0fe → #ffffff). `headlineGradient.DEFAULT` (orange → fuchsia) unchanged.",
+      },
+      {
+        date: "2026-06-15",
+        author: "arkadiusz",
+        kind: "removed",
+        message:
+          "Removed `colors.accentSecondaryPurple` (the \"Accent Secondary (Cold)\" purple ramp).",
+      },
+      {
+        date: "2026-06-15",
+        author: "arkadiusz",
+        kind: "removed",
+        message:
+          "Removed `colors.accentPrimary`, `colors.accentSecondary` and `colors.accentSecondaryOnDark`. `semanticColors.accent` now points at the new `colors.accent` palette.",
+      },
+      {
+        date: "2026-06-15",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "New `colors.accent` palette: an 11-step pink/crimson ramp (50 #e3d3da → 950 #330016). Distinct from the existing `accentSecondaryPurple`.",
+      },
+      {
+        date: "2026-06-15",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "New `colors.secondary` palette: an 11-step indigo/navy ramp (50 #eeeff3 → 950 #070917) for secondary surfaces and accents.",
+      },
+      {
+        date: "2026-06-15",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Primary palette: `primary/500` → #b02cce (was #d946ef) and `primary/900` → #4a044e (was #701a75), matching the design source of truth. Note `primary/900` now equals `primary/950`.",
+      },
+      {
         date: "2026-05-14",
         author: "arkadiusz",
         kind: "added",

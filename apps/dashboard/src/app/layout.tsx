@@ -29,6 +29,10 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async />
+      </head>
       <body className="bg-background text-foreground min-h-full">
         <AppProviders>{children}</AppProviders>
       </body>

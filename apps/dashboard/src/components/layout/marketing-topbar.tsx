@@ -11,9 +11,13 @@ import { ZyteLogo } from "@/components/common/zyte-logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Button } from "@/components/ui/button";
 
+// Mirror the headline gradient (orange → fuchsia): derive the two stops from
+// the `headlineGradient` token so the logo tracks any future gradient change.
+const HEADLINE_STOPS =
+  WEB_FOUNDATIONS.colors.headlineGradient.DEFAULT.match(/#[0-9a-fA-F]{3,8}/g) ?? [];
 const LOGO_GRADIENT = {
-  from: WEB_FOUNDATIONS.colors.accentSecondary["500"],
-  to: WEB_FOUNDATIONS.colors.primary["600"],
+  from: HEADLINE_STOPS[0] ?? WEB_FOUNDATIONS.colors.primary["600"],
+  to: HEADLINE_STOPS[1] ?? WEB_FOUNDATIONS.colors.primary["600"],
 };
 import {
   DropdownMenu,

@@ -32,11 +32,9 @@ Use the palette names as your mental model:
 - **surface layers (chrome)**: `surfaceDark.*` / `surfaceLight.*` — four-step stacks (background → page sections → secondary → cards) for dark and light app shells
 - **surfaces/text (neutral ramp)**: `neutral.*` for borders, text, and legacy neutral fills
 - **brand**: `primary` — **Zyte Fuchsia** (base `primary.600` = `#c026d3`)
-- **accent (links / cool emphasis)**: `accentPrimary` (e.g. `accentPrimary.600` = `#3F4FED`)
-- **secondary (stats, icons)**: `accentSecondary` — **Orange** (base `accentSecondary.500` = `#e8520a`)
-- **orange on dark**: `accentSecondaryOnDark` (`#ff6b2b`) — brighter orange for icons/text on dark surfaces
+- **secondary**: `secondary` — **Indigo / Navy** (base `secondary.500` = `#181e5a`)
+- **accent**: `accent` — **Pink / Crimson** (base `accent.500` = `#db005f`); semantic `accent` role maps here
 - **headline gradient**: `headlineGradient` — linear **orange → fuchsia**; **headline highlights only**
-- **supporting accent**: `accentSecondaryPurple`
 
 ### Runtime Semantic Values
 

@@ -22,6 +22,13 @@ export const CORE_FILE_CHANGELOGS: FileChangelog[] = [
     file: "foundations.ts",
     entries: [
       {
+        date: "2026-06-17",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Replaced the Web-aliased palette with the live Dash foundation 1:1 (actionPrimary, accentPrimary, accentSecondaryCold/Warm, colorGray, surface, text, status ramps + legacy colors); brand now maps to accentSecondaryCold.",
+      },
+      {
         date: "2026-04-19",
         author: "arkadiusz",
         kind: "added",

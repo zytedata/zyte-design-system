@@ -24,28 +24,36 @@ The YAML front matter is the **machine-readable token layer** for agents. The pr
 
 ### Colour Tokens
 
-Canonical palette aliases live in:
+Core's palette mirrors the **live Dash foundation** (`dash-frontend-4rk/src/styles/colors/palette.scss`) — same names and hex values, 1:1. Tokens are owned by `foundations.ts` and emitted as `--core-*` CSS variables by `tokens-build`.
 
-- `src/data/products/core/foundations.ts` (the full product snapshot — Core today duplicates Web's accent-primary and neutral hexes as its own; values are owned by this file and free to diverge)
+Primitive palettes:
 
-Use the palette names as your mental model:
-
-- **brand**: `primary` (e.g. `primary.600` = `#3F4FED`) — Core re-exports Web's accent primary
-- **supporting accents**: `accentSecondary`, `accentSecondaryPurple`
-- **surfaces/text**: `neutral.*`
+- **actionPrimary** — magenta action ramp, base `actionPrimary.500` = `#db005f`
+- **accentPrimary** — indigo ramp, base `accentPrimary.400` = `#3f4fed`
+- **accentSecondaryCold** — purple, base `accentSecondaryCold.500` = `#b02cce` (the brand/primary semantic)
+- **accentSecondaryWarm** — coral/red, base `accentSecondaryWarm.500` = `#f9433b`
+- **colorGray** — cool blue-grey neutrals (`darker` `#33525f` → `lighter` `#f3f4f5`, plus `icon`)
+- **surface** (`white`, `grey`, `lightBlue`) and **colorBorder** (`grey`)
+- **text** — `text.700` `#050c4d` → `text.50` `#fefefe`
+- **status ramps** — `info`, `success`, `warning`, `error` (steps 100–800)
+- **legacy named brand colors** — `parakeet`, `yolk`, `peachy`, `orange`, `blue`, `lime`, `indigo`, `cobalt`, `pink`, plus `lightGreen` and `syntaxHighlight` (`keyword`/`string`/`number`)
 
 ### Runtime Semantic Values
 
-- **Primary CTA / focus ring**: brand (`primary.500`–`600`)
-- **Negative / destructive**: accent secondary warm (`accentSecondary.500`–`700`)
-- **Highlights**: accent secondary purple (`accentSecondaryPurple.500`)
-- **Backgrounds**: `neutral.0`–`50` (light) and `neutral.700`–`900` (dark)
-- **Borders / dividers**: `neutral.100`–`200` (light) and `neutral.700`–`800` (dark)
+`semanticColors` maps each role onto a primitive palette:
+
+- **brand / primary CTA**: `accentSecondaryCold` (e.g. `.500` = `#b02cce`)
+- **success**: `success.*` (base `#00b388`)
+- **danger / destructive**: `error.*` (base `#db0004`)
+- **warning**: `warning.*` (base `#ff9e1b`)
+- **info**: `info.*` (base `#41b6e6`)
+- **surface / backgrounds**: `surface.*`
 
 ### Colour Usage Rules
 
-- Reserve **brand** for the primary action in any flow. One per screen.
-- Use **destructive** with `accentSecondary` only — never recolor warnings as `brand`.
+- Reserve **brand** (`accentSecondaryCold`) for the primary action in any flow. One per screen.
+- Use status ramps for their meaning — `error` for destructive, `warning` / `success` / `info` for state; never recolor a warning as `brand`.
+- Prefer `text.*` for foreground and `colorGray.*` for muted text / dividers over raw hex.
 - Never tint disabled controls — use opacity from the shared opacity scale instead.
 
 ## Typography

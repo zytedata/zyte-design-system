@@ -54,7 +54,7 @@ export const CORE_FOUNDATIONS: ProductFoundations = {
   },
   typography: {
     family: {
-      sans: "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      sans: "var(--font-montserrat), 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       mono: "ui-monospace, SFMono-Regular, Menlo, Monaco, monospace",
     },
     size: {

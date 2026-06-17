@@ -15,6 +15,35 @@ function letterSpacingToCss(value: number): string {
   return `${value}px`;
 }
 
+const GENERIC_FAMILIES = new Set([
+  "ui-sans-serif",
+  "ui-serif",
+  "ui-monospace",
+  "system-ui",
+  "-apple-system",
+  "blinkmacsystemfont",
+  "sans-serif",
+  "serif",
+  "monospace",
+]);
+
+/** First real family in a CSS font stack, as a human label (e.g. "Montserrat", "Geist Sans"). */
+function primaryFamilyName(stack: string, fallback: string): string {
+  for (const raw of stack.split(",")) {
+    const token = raw.trim();
+    const varMatch = token.match(/var\(--font-([a-z0-9-]+)\)/i);
+    if (varMatch) {
+      return varMatch[1]
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+    const cleaned = token.replace(/['"]/g, "").trim();
+    if (cleaned && !GENERIC_FAMILIES.has(cleaned.toLowerCase())) return cleaned;
+  }
+  return fallback;
+}
+
 export type TypographyLivePreviewProps = {
   bundle: ProductFoundations;
 };
@@ -27,6 +56,9 @@ export type TypographyLivePreviewProps = {
 export function TypographyLivePreview({ bundle }: TypographyLivePreviewProps) {
   const fontFamily = bundle.typography.family.sans ?? "var(--font-sans)";
   const monoFamily = bundle.typography.family.mono ?? "var(--font-mono)";
+  const sansName = primaryFamilyName(fontFamily, "Sans");
+  const monoName = primaryFamilyName(monoFamily, "Mono");
+  const sansToken = fontFamily.split(",")[0]?.trim() ?? fontFamily;
   const sizes = Object.entries(bundle.typography.size);
   const weights = Object.entries(bundle.typography.weight);
   const lineHeights = Object.entries(bundle.typography.lineHeight);
@@ -44,19 +76,20 @@ export function TypographyLivePreview({ bundle }: TypographyLivePreviewProps) {
           Fonts in use
         </span>
         <Badge variant="secondary" className="text-xs font-semibold">
-          Geist Sans
+          {sansName}
         </Badge>
         <Badge variant="outline" className="font-mono text-xs font-medium">
-          Geist Mono
+          {monoName}
         </Badge>
       </div>
 
       <p className="text-muted-foreground max-w-2xl text-xs leading-relaxed">
-        Specimens use the foundation stacks verbatim. When sans references{" "}
+        Specimens use the foundation stacks verbatim. Sans resolves to{" "}
+        {sansName} via{" "}
         <code className="text-foreground bg-muted rounded px-1 py-0.5 font-mono text-[10px]">
-          var(--font-geist-sans)
+          {sansToken}
         </code>
-        , wire Geist on the root layout so previews match production.
+        {" "}— wire it on the root layout so previews match production.
       </p>
 
       <div className="grid gap-4 lg:grid-cols-5">
@@ -70,7 +103,7 @@ export function TypographyLivePreview({ bundle }: TypographyLivePreviewProps) {
               Editorial · sans
             </p>
             <Badge variant="secondary" className="shrink-0 text-[10px]">
-              Geist Sans
+              {sansName}
             </Badge>
           </div>
           <p
@@ -108,13 +141,12 @@ export function TypographyLivePreview({ bundle }: TypographyLivePreviewProps) {
               Mono · code
             </p>
             <Badge variant="outline" className="shrink-0 font-mono text-[10px]">
-              Geist Mono
+              {monoName}
             </Badge>
           </div>
           <pre className="text-foreground mt-3 flex-1 overflow-x-auto text-[12px] leading-relaxed">
-            <code>{`import { WEB_FOUNDATIONS } from "@zyte/ds-web";
-
-const { typography } = WEB_FOUNDATIONS;
+            <code>{`// ${bundle.label} foundations
+const { typography } = foundations;
 // typography.family.sans → CSS stack`}</code>
           </pre>
         </div>
@@ -127,7 +159,7 @@ const { typography } = WEB_FOUNDATIONS;
               Family · sans
             </p>
             <Badge variant="secondary" className="text-[10px]">
-              Geist Sans
+              {sansName}
             </Badge>
           </div>
           <p
@@ -146,7 +178,7 @@ const { typography } = WEB_FOUNDATIONS;
               Family · mono
             </p>
             <Badge variant="outline" className="font-mono text-[10px]">
-              Geist Mono
+              {monoName}
             </Badge>
           </div>
           <pre

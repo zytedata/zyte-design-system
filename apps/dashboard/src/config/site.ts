@@ -9,7 +9,12 @@ export const siteConfig = {
   url: "https://design.zyte.com",
   links: {
     github: "https://github.com/zytedata/zyte-design-system",
-    figma: "https://www.figma.com/",
+    figma:
+      "https://www.figma.com/design/UzBE4joH5SCAQl4CGRlbTk/Design-System-2.0?node-id=71-168",
+    // Importable Figma plugin bundle (manifest.json + code.js + ui.html),
+    // served from apps/dashboard/public. Import via Figma desktop →
+    // Plugins → Development → Import plugin from manifest.
+    figmaPlugin: "/zyte-figma-plugin.zip",
   },
 } as const;
 

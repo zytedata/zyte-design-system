@@ -1,6 +1,6 @@
 "use client";
 
-import { GitBranch, Palette } from "lucide-react";
+import { Download, GitBranch, Palette } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,20 @@ type SyncStatusProps = {
   lastUpdate: string;
   href: string;
   label: string;
+  /** Optional file to download (e.g. the Figma plugin bundle). */
+  downloadHref?: string;
+  downloadLabel?: string;
 };
 
-export function SyncStatus({ source, status, lastUpdate, href, label }: SyncStatusProps) {
+export function SyncStatus({
+  source,
+  status,
+  lastUpdate,
+  href,
+  label,
+  downloadHref,
+  downloadLabel = "Download plugin",
+}: SyncStatusProps) {
   const Icon = source === "github" ? GitBranch : Palette;
 
   return (
@@ -56,7 +67,15 @@ export function SyncStatus({ source, status, lastUpdate, href, label }: SyncStat
           </div>
         </div>
         <p className="text-muted-foreground mt-3 text-xs">Last update: {lastUpdate}</p>
-        <div className="mt-3 flex justify-end">
+        <div className="mt-3 flex justify-end gap-2">
+          {downloadHref ? (
+            <Button asChild size="sm" variant="outline">
+              <a href={downloadHref} download>
+                <Download className="size-4" />
+                {downloadLabel}
+              </a>
+            </Button>
+          ) : null}
           <Button asChild size="sm" variant="outline">
             <a href={href} target="_blank" rel="noopener noreferrer">
               Open {label.split(" ")[0]}

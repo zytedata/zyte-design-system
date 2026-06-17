@@ -163,6 +163,8 @@ export function AppTopbar() {
           lastUpdate="2026-04-23 10:40 UTC (mock)"
           href={siteConfig.links.figma}
           label="Figma Sync"
+          downloadHref={siteConfig.links.figmaPlugin}
+          downloadLabel="Download plugin"
         />
       </div>
     </header>

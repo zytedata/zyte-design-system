@@ -1,4 +1,4 @@
-import type { ProductFoundations } from "@zyte/ds-types";
+import type { ProductFoundations } from "@zytedata/ds-types";
 
 export const SCRAPY_FOUNDATIONS: ProductFoundations = {
   label: "Scrapy",

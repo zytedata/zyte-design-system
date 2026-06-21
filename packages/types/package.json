@@ -1,5 +1,5 @@
 {
-  "name": "@zyte/ds-types",
+  "name": "@zytedata/ds-types",
   "version": "0.1.0",
   "description": "Shared TypeScript contract for Zyte design-system foundations.",
   "license": "UNLICENSED",
@@ -22,8 +22,8 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "lint": "echo \"@zyte/ds-types: no lint configured\"",
-    "lint:fix": "echo \"@zyte/ds-types: no lint configured\"",
+    "lint": "echo \"@zytedata/ds-types: no lint configured\"",
+    "lint:fix": "echo \"@zytedata/ds-types: no lint configured\"",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 {
-  "name": "@zyte/ds-web",
+  "name": "@zytedata/ds-web",
   "version": "0.2.0",
   "description": "Zyte Web design system tokens, foundations and design.md spec.",
   "license": "UNLICENSED",
@@ -36,15 +36,15 @@
     "build:tokens": "node ../tokens-build/dist/bin/build.js",
     "check:tokens": "node ../tokens-build/dist/bin/check.js",
     "build": "pnpm run build:js && pnpm run build:tokens",
-    "lint": "echo \"@zyte/ds-web: no lint configured\"",
-    "lint:fix": "echo \"@zyte/ds-web: no lint configured\"",
+    "lint": "echo \"@zytedata/ds-web: no lint configured\"",
+    "lint:fix": "echo \"@zytedata/ds-web: no lint configured\"",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@zyte/ds-types": "workspace:*"
+    "@zytedata/ds-types": "workspace:*"
   },
   "devDependencies": {
-    "@zyte/tokens-build": "workspace:*",
+    "@zytedata/tokens-build": "workspace:*",
     "typescript": "^6.0.3"
   }
 }

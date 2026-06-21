@@ -1,4 +1,4 @@
-import type { DsCategory } from "@zyte/ds-types";
+import type { DsCategory } from "@zytedata/ds-types";
 
 export const WEB_COMPONENT_CATEGORIES: DsCategory[] = [
   {

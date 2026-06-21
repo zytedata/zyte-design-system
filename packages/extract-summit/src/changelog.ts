@@ -1,4 +1,4 @@
-import type { FileChangelog } from "@zyte/ds-types";
+import type { FileChangelog } from "@zytedata/ds-types";
 
 export const EXTRACT_SUMMIT_FILE_CHANGELOGS: FileChangelog[] = [
   {

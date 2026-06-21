@@ -1,4 +1,4 @@
-import type { FileChangelog } from "@zyte/ds-types";
+import type { FileChangelog } from "@zytedata/ds-types";
 
 export const CORE_FILE_CHANGELOGS: FileChangelog[] = [
   {

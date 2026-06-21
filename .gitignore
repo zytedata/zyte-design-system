@@ -43,8 +43,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# generated design-system artefacts: each @zyte/ds-* package re-runs
+# generated design-system artefacts: each @zytedata/ds-* package re-runs
 # `pnpm run build` (tsc + tokens-build) on install/dev/CI, so dist/ is
-# never committed. Same for @zyte/tokens-build and @zyte/ds-types.
+# never committed. Same for @zytedata/tokens-build and @zytedata/ds-types.
 packages/*/dist/
 packages/*/src/dist/

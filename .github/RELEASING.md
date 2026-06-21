@@ -2,9 +2,9 @@
 
 Phase 2 ships every product as its own publishable package on **GitHub Packages**:
 
-- `@zyte/ds-types` (shared TypeScript contract)
-- `@zyte/tokens-build` (codegen used at build-time only)
-- `@zyte/ds-web`, `@zyte/ds-core`, `@zyte/ds-scrapy`, `@zyte/ds-extract-summit`
+- `@zytedata/ds-types` (shared TypeScript contract)
+- `@zytedata/tokens-build` (codegen used at build-time only)
+- `@zytedata/ds-web`, `@zytedata/ds-core`, `@zytedata/ds-scrapy`, `@zytedata/ds-extract-summit`
 
 `apps/dashboard` is a private workspace consumer; it is never published.
 
@@ -24,9 +24,9 @@ Phase 2 ships every product as its own publishable package on **GitHub Packages*
    contains version bumps + per-package `CHANGELOG.md` updates.
 5. **Manual trigger after merge** → run the same `release` workflow again
    to publish bumped packages to `https://npm.pkg.github.com` under the
-   `@zyte` scope.
+   `@zytedata` scope.
 6. **Consumers** (e.g. `zyte-website-nextjs`) bump their dep with
-   Renovate / Dependabot or `pnpm up @zyte/ds-web`. They never need to
+   Renovate / Dependabot or `pnpm up @zytedata/ds-web`. They never need to
    know about `foundations.ts`; they consume `tokens.css`,
    `tokens.scss`, `tailwind` and `design.md` via the package's
    `exports` map.
@@ -78,7 +78,7 @@ pnpm release
 
 1. `mkdir -p packages/<slug>/src && cd packages/<slug>`
 2. Copy a sibling's `package.json` + `tsconfig*.json`, rename to
-   `@zyte/ds-<slug>`.
+   `@zytedata/ds-<slug>`.
 3. Drop `foundations.ts`, `design.body.md`, `index.ts`, `changelog.ts`
    and (optionally) `components.ts` / `content.ts` into `src/`.
 4. `pnpm install` (re-link bins) → `pnpm -r --filter ./packages/<slug>

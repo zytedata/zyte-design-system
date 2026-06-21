@@ -1,14 +1,14 @@
-import type { ProductDocumentation } from "@zyte/ds-types";
+import type { ProductDocumentation } from "@zytedata/ds-types";
 
 /**
  * "How the Scrapy design system works" — the operating manual for
- * `@zyte/ds-scrapy`. Surfaced by the dashboard's Documentation page and
+ * `@zytedata/ds-scrapy`. Surfaced by the dashboard's Documentation page and
  * read verbatim by agents/LLMs through the package's `./design.md` export.
  */
 export const SCRAPY_DOCUMENTATION: ProductDocumentation = {
   productSlug: "scrapy",
   intro:
-    "@zyte/ds-scrapy is the design system used by Scrapy-adjacent product surfaces (Scrapy Cloud, Scrapyd UI, spider job consoles). It optimises for code-adjacency and observability — terminal-friendly typography, log-level semantic colors, dark-mode-first contrast. The audience is developers monitoring crawls, not end-users buying a product.",
+    "@zytedata/ds-scrapy is the design system used by Scrapy-adjacent product surfaces (Scrapy Cloud, Scrapyd UI, spider job consoles). It optimises for code-adjacency and observability — terminal-friendly typography, log-level semantic colors, dark-mode-first contrast. The audience is developers monitoring crawls, not end-users buying a product.",
   audience: ["Designers", "Backend / fullstack developers", "Agents / LLMs"],
   sections: [
     {
@@ -35,7 +35,7 @@ export const SCRAPY_DOCUMENTATION: ProductDocumentation = {
         },
         {
           heading: "3. Build and validate",
-          text: "`pnpm --filter @zyte/ds-scrapy build && pnpm --filter @zyte/ds-scrapy check:tokens`. The latter ensures dist/design.md frontmatter still declares product: \"scrapy\" and that tokens.css carries `--scrapy-*` variables.",
+          text: "`pnpm --filter @zytedata/ds-scrapy build && pnpm --filter @zytedata/ds-scrapy check:tokens`. The latter ensures dist/design.md frontmatter still declares product: \"scrapy\" and that tokens.css carries `--scrapy-*` variables.",
         },
         {
           heading: "4. Changeset → PR → release",
@@ -45,11 +45,11 @@ export const SCRAPY_DOCUMENTATION: ProductDocumentation = {
     },
     {
       id: "consume",
-      title: "Consuming @zyte/ds-scrapy in a Scrapy UI",
+      title: "Consuming @zytedata/ds-scrapy in a Scrapy UI",
       body: "Scrapy UIs typically run dark-first. Inject tokens.css once at the app shell and treat each `--scrapy-status-*` variable as the canonical mapping for that severity.",
       code: {
         language: "tsx",
-        content: `import "@zyte/ds-scrapy/tokens.css";
+        content: `import "@zytedata/ds-scrapy/tokens.css";
 
 const STATUS_VAR = {
   debug:    "var(--scrapy-status-debug)",
@@ -83,7 +83,7 @@ function LogLine({ level, msg }) {
     {
       id: "agents",
       title: "What agents / LLMs read",
-      body: "When generating Scrapy UI snippets, agents pull `@zyte/ds-scrapy/design.md`. The status-color contract there is especially important — getting log-severity colors wrong creates real operational risk for users tailing crawls.",
+      body: "When generating Scrapy UI snippets, agents pull `@zytedata/ds-scrapy/design.md`. The status-color contract there is especially important — getting log-severity colors wrong creates real operational risk for users tailing crawls.",
     },
   ],
 };

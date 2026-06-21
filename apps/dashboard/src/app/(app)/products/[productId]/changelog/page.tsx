@@ -7,6 +7,7 @@ import {
   changesInLast30Days,
   lastUpdatedDate,
 } from "@/lib/product-stats";
+import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
 import { ChangelogSection } from "@/components/foundations/sections";
 
@@ -41,7 +42,7 @@ export default async function ProductChangelogPage({
   const lastUpdated = lastUpdatedDate(changelogs);
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 pt-10 pb-20 md:px-10">
+    <AppPageShell>
       <header className="border-border/60 mb-8 border-b pb-6">
         <Badge variant="secondary" className="mb-3">
           {product.label} workspace
@@ -92,6 +93,6 @@ export default async function ProductChangelogPage({
       </header>
 
       <ChangelogSection changelogs={changelogs} productSlug={product.slug} />
-    </div>
+    </AppPageShell>
   );
 }

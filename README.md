@@ -67,6 +67,7 @@ There are two kinds of work that happen in this repo, and the rest of the README
 | Audience | Goal | Section |
 |---|---|---|
 | **Design system author / token maintainer** | Add or change a token, ship it as a new version | [Updating a token](#updating-a-token) |
+| **Claude Code user** | Run the whole token-change loop from a prompt | [Automating changes with skills](#automating-changes-with-skills) |
 | **Downstream developer** | Install the design system in your app and use the tokens | [Consuming the design system](#consuming-the-design-system) |
 
 ---
@@ -156,6 +157,43 @@ The full release pipeline lives in [`.github/RELEASING.md`](.github/RELEASING.md
 edit foundations.ts → pnpm tokens:build → pnpm dev (verify)
 → pnpm tokens:check → pnpm changeset → commit + push → PR
 ```
+
+---
+
+## Automating changes with skills
+
+The [Updating a token](#updating-a-token) loop is also packaged as a **Claude Code skill** so you can run it from a single prompt instead of by hand. It lives in the repo at:
+
+```
+.claude/skills/change-foundation/SKILL.md
+```
+
+### How to use it
+
+Open this repo in Claude Code and either invoke the slash command or just describe the change in plain language:
+
+```
+/change-foundation set Core brand to #7A0035
+/change-foundation add a warning ramp to Web
+# …or simply: "change Scrapy's primary to a deeper green"
+```
+
+> Skills are loaded when a Claude Code session starts. If you just added or pulled the skill, start a fresh session (or `/clear`) for `/change-foundation` to appear.
+
+### What it does
+
+Per target package, it runs the same sequence a maintainer would:
+
+1. Edit `packages/<pkg>/src/foundations.ts` (only the requested tokens; keeps the `ProductFoundations` shape; never touches generated `dist/`).
+2. Update `design.body.md` prose when the change is semantic (front-matter stays generated).
+3. Build the package to `dist/` and verify with `check:tokens` + `typecheck`, confirming the new `--<slug>-*` vars emitted.
+4. Record the change in **both** the dashboard release log (`changelog.ts`) **and** a `.changeset/*.md`.
+5. Offer to mirror colour changes into the Figma plugin (asks first).
+
+### Boundaries
+
+- **Stops after verification** — it leaves everything staged for your review and does **not** commit, branch, or push. Ask separately when you want a branch/PR.
+- `dist/` is generated and git-ignored, so the committable artefacts are `foundations.ts`, `design.body.md`, `changelog.ts`, and the changeset.
 
 ---
 

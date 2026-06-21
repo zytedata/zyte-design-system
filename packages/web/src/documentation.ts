@@ -29,7 +29,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
       steps: [
         {
           heading: "1. Edit foundations.ts",
-          text: "Open packages/web/src/foundations.ts and bump the relevant entry (e.g. colors.accentPrimary['600']). Keep changes scoped — colors that are about brand voice should land here; layout/density tokens probably want @zytedata/ds-core instead.",
+          text: "Open packages/web/src/foundations.ts and bump the relevant entry (e.g. colors.accent['600']). Keep changes scoped — colors that are about brand voice should land here; layout/density tokens probably want @zytedata/ds-core instead.",
         },
         {
           heading: "2. Edit design.body.md if needed",
@@ -70,7 +70,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
 .hero-title {
   font-family: web.$web-font-display;
   font-size: web.$web-text-3xl;
-  color: web.$web-accent-primary-700;
+  color: web.$web-accent-700;
   margin-bottom: web.$web-spacing-6;
 }`,
       },
@@ -101,6 +101,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
         "Next.js App Router + React 19.",
         "TypeScript across app, util and component layers.",
         "Tailwind CSS v4 loaded globally from styles/tailwind.css.",
+        "Geist Sans / Geist Mono via the `geist` package: `GeistSans` / `GeistMono` from `geist/font/sans` and `geist/font/mono` on the root `<html>` so `--font-geist-sans` / `--font-geist-mono` match `WEB_FOUNDATIONS.typography.family`.",
         "SCSS modules + global SCSS (reset, theme, primereact overrides).",
         "Contento CMS as content source with local module/template rendering.",
         "PrimeReact in selected flows with custom SCSS overrides tied to design tokens.",

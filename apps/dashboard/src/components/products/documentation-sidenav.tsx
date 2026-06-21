@@ -21,11 +21,9 @@ type DocumentationSidenavProps = {
 /**
  * Sticky left-rail navigation for the per-product documentation page.
  *
- * Visually mirrors `FoundationsSidenav` (see foundations-sidenav.tsx) so
- * documentation feels like a sibling surface, but anchors to in-page
- * sections instead of routing because each documentation section is short
- * enough that splitting it into separate pages would add navigation
- * friction without information density.
+ * Anchors to in-page sections rather than routing because each
+ * documentation section is short enough that splitting it into separate
+ * pages would add navigation friction without information density.
  *
  * Active highlighting uses an IntersectionObserver scroll-spy with a top
  * offset (the app topbar is ~64px tall and the section padding adds ~16px,

@@ -17,14 +17,15 @@ export function slugToPaletteId(slug: string, paletteIds: string[]): string | nu
 
 const PALETTE_LABELS: Record<string, string> = {
   primary: "Primary",
-  accentPrimary: "Accent Primary",
-  accentSecondary: "Accent Secondary (Warm)",
-  accentSecondaryPurple: "Accent Secondary (Cold)",
+  secondary: "Secondary",
+  accent: "Accent",
   surface: "Surface",
   ink: "Ink",
   ghost: "Ghost Letterforms",
   status: "Status",
   neutral: "Neutral",
+  surfaceDark: "Surface (dark)",
+  surfaceLight: "Surface (light)",
 };
 
 function titleCasePaletteId(id: string): string {
@@ -51,8 +52,7 @@ export type FoundationSection = {
   group: FoundationSectionGroup;
 };
 
-const STATIC_SECTIONS: FoundationSection[] = [
-  { id: "agent", slug: "design-md", label: "LLM (Design.md)", group: "agentic" },
+const CORE_SECTIONS: FoundationSection[] = [
   { id: "tailwindColors", slug: "tailwind-colors", label: "Tailwind Colors", group: "core" },
   { id: "icons", slug: "icons-lucide", label: "Icons (Lucide)", group: "core" },
   { id: "spacing", slug: "spacing", label: "Spacing", group: "core" },
@@ -63,15 +63,53 @@ const STATIC_SECTIONS: FoundationSection[] = [
   { id: "opacityZindex", slug: "opacity-z-index", label: "Opacity & Z-Index", group: "core" },
 ];
 
+/** Sidebar: `surfaceDark` / `surfaceLight` immediately after `neutral` when present. */
+export function orderedPaletteIds(bundle: ProductFoundations): string[] {
+  const keys = Object.keys(bundle.colors);
+  const surfacePaletteIds = (["surfaceDark", "surfaceLight"] as const).filter((id) =>
+    keys.includes(id),
+  );
+  if (surfacePaletteIds.length === 0) {
+    return keys;
+  }
+  const rest = keys.filter((id) => id !== "surfaceDark" && id !== "surfaceLight");
+  const neutralIdx = rest.indexOf("neutral");
+  if (neutralIdx === -1) {
+    return [...rest, ...surfacePaletteIds];
+  }
+  return [
+    ...rest.slice(0, neutralIdx + 1),
+    ...surfacePaletteIds,
+    ...rest.slice(neutralIdx + 1),
+  ];
+}
+
+/** Token surface Colors: same as foundations key order but `surfaceDark` / `surfaceLight` always last. */
+export function orderedPaletteIdsSurfacesLast(bundle: ProductFoundations): string[] {
+  const keys = Object.keys(bundle.colors);
+  const surfacePaletteIds = (["surfaceDark", "surfaceLight"] as const).filter((id) =>
+    keys.includes(id),
+  );
+  if (surfacePaletteIds.length === 0) {
+    return keys;
+  }
+  const rest = keys.filter((id) => id !== "surfaceDark" && id !== "surfaceLight");
+  return [...rest, ...surfacePaletteIds];
+}
+
 export function buildFoundationSections(bundle: ProductFoundations): FoundationSection[] {
-  const paletteSections: FoundationSection[] = Object.keys(bundle.colors).map((id) => ({
+  const paletteSections: FoundationSection[] = orderedPaletteIds(bundle).map((id) => ({
     id,
     slug: paletteIdToSlug(id),
     label: paletteLabelFor(id),
     group: "palette",
   }));
 
-  return [...paletteSections, ...STATIC_SECTIONS];
+  // Order must match the sidebar's GROUP_ORDER (palette → core) so that
+  // `defaultSectionFor` (which returns index 0) lands on the same section the user
+  // sees at the top of the sidebar. The agentic/design.md view is now a
+  // top-level nav item (`/products/<slug>/agentic`), not a foundations section.
+  return [...paletteSections, ...CORE_SECTIONS];
 }
 
 export function findSectionBySlug(

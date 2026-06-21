@@ -41,6 +41,7 @@ export type ProductCapabilities = {
   components: ComponentsCapability;
   templates: { enabled: boolean };
   prototyping: { enabled: boolean };
+  studio: { enabled: boolean };
   documentation: { enabled: boolean; href?: string };
   assets: { enabled: boolean; href?: string };
 };
@@ -61,8 +62,11 @@ export type Product = {
 const WEB_NAV: ProductNavItem[] = [
   { group: "overview", label: "Dashboard", href: "/products/web", matchExact: true },
   { group: "library", label: "Foundations", href: "/products/web/foundations" },
+  { group: "library", label: "Brand", href: "/products/web/brand" },
   { group: "library", label: "Templates", href: "/products/web/templates" },
   { group: "library", label: "Assets", href: "/products/web/assets" },
+  { group: "workflow", label: "Agentic", href: "/products/web/agentic", matchExact: true },
+  { group: "workflow", label: "Markdown Studio", href: "/products/web/studio" },
   { group: "workflow", label: "Prototyping", href: "/products/web/prototyping" },
   {
     group: "reference",
@@ -81,6 +85,12 @@ const WEB_NAV: ProductNavItem[] = [
 const CORE_NAV: ProductNavItem[] = [
   { group: "overview", label: "Dashboard", href: "/products/core", matchExact: true },
   { group: "library", label: "Foundations", href: "/products/core/foundations" },
+  { group: "workflow", label: "Agentic", href: "/products/core/agentic", matchExact: true },
+  {
+    group: "workflow",
+    label: "Markdown Studio",
+    href: "/products/core/studio",
+  },
   {
     group: "workflow",
     label: "Protozyte",
@@ -103,6 +113,7 @@ const CORE_NAV: ProductNavItem[] = [
 const SCRAPY_NAV: ProductNavItem[] = [
   { group: "overview", label: "Dashboard", href: "/products/scrapy", matchExact: true },
   { group: "library", label: "Foundations", href: "/products/scrapy/foundations" },
+  { group: "workflow", label: "Agentic", href: "/products/scrapy/agentic", matchExact: true },
   {
     group: "reference",
     label: "Documentation",
@@ -120,6 +131,12 @@ const SCRAPY_NAV: ProductNavItem[] = [
 const EXTRACT_SUMMIT_NAV: ProductNavItem[] = [
   { group: "overview", label: "Dashboard", href: "/products/extract-summit", matchExact: true },
   { group: "library", label: "Foundations", href: "/products/extract-summit/foundations" },
+  {
+    group: "workflow",
+    label: "Agentic",
+    href: "/products/extract-summit/agentic",
+    matchExact: true,
+  },
   {
     group: "reference",
     label: "Documentation",
@@ -152,6 +169,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       },
       templates: { enabled: true },
       prototyping: { enabled: true },
+      studio: { enabled: true },
       documentation: { enabled: true, href: "/products/web/documentation" },
       assets: { enabled: true, href: "/products/web/assets" },
     },
@@ -174,6 +192,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       },
       templates: { enabled: false },
       prototyping: { enabled: false },
+      studio: { enabled: true },
       documentation: { enabled: true, href: "/products/core/documentation" },
       assets: { enabled: false },
     },
@@ -192,6 +211,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       components: { enabled: false },
       templates: { enabled: false },
       prototyping: { enabled: false },
+      studio: { enabled: false },
       documentation: { enabled: true, href: "/products/scrapy/documentation" },
       assets: { enabled: false },
     },
@@ -210,6 +230,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
       components: { enabled: false },
       templates: { enabled: false },
       prototyping: { enabled: false },
+      studio: { enabled: false },
       documentation: { enabled: true, href: "/products/extract-summit/documentation" },
       assets: { enabled: false },
     },

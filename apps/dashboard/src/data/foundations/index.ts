@@ -28,5 +28,6 @@ export function getFoundations(id: ProductId): ProductFoundations {
 }
 
 export function getChangelogs(id: ProductId): FileChangelog[] {
-  return PRODUCT_CHANGELOGS[id];
+  const rows = PRODUCT_CHANGELOGS[id];
+  return Array.isArray(rows) ? rows : [];
 }

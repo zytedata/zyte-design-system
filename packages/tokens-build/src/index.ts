@@ -13,7 +13,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import type { ProductFoundations } from "@zytedata/ds-types";
+import type { ProductBranding, ProductFoundations } from "@zytedata/ds-types";
 
 // ---------------------------------------------------------------------------
 // Slug + export-name conventions
@@ -32,6 +32,10 @@ export function slugFromPackageName(name: string): string {
 
 export function exportNameForSlug(slug: string): string {
   return `${slug.replace(/-/g, "_").toUpperCase()}_FOUNDATIONS`;
+}
+
+export function brandingExportNameForSlug(slug: string): string {
+  return `${slug.replace(/-/g, "_").toUpperCase()}_BRANDING`;
 }
 
 // ---------------------------------------------------------------------------
@@ -376,22 +380,37 @@ function dumpYaml(value: unknown, indent = 0): string {
   if (Array.isArray(value)) {
     if (value.length === 0) return `${pad}[]`;
     return value
-      .map((item) => `${pad}- ${dumpYaml(item, 0).trimStart()}`)
+      .map((item) => {
+        if (isPlainObject(item) || Array.isArray(item)) {
+          // Render the item one level deeper, then hoist its first line onto
+          // the `- ` marker so block sequences of maps indent correctly.
+          const dumped = dumpYaml(item, indent + 1);
+          const lines = dumped.split("\n");
+          lines[0] = `${pad}- ${lines[0]!.slice((indent + 1) * 2)}`;
+          return lines.join("\n");
+        }
+        return `${pad}- ${dumpYaml(item, 0).trimStart()}`;
+      })
       .join("\n");
   }
   if (isPlainObject(value)) {
-    const entries = Object.entries(value);
+    const entries = Object.entries(value).filter(([, v]) => v !== undefined);
     if (entries.length === 0) return `${pad}{}`;
     return entries
       .map(([k, v]) => {
         const safeKey = /^[a-zA-Z_][a-zA-Z0-9_-]*$/.test(k)
           ? k
           : JSON.stringify(k);
-        if (
-          isPlainObject(v) ||
-          (Array.isArray(v) && v.some((it) => typeof it === "object"))
-        ) {
-          return `${pad}${safeKey}:\n${dumpYaml(v, indent + 1)}`;
+        if (v === null) return `${pad}${safeKey}: null`;
+        if (isPlainObject(v)) {
+          return Object.keys(v).length === 0
+            ? `${pad}${safeKey}: {}`
+            : `${pad}${safeKey}:\n${dumpYaml(v, indent + 1)}`;
+        }
+        if (Array.isArray(v)) {
+          return v.length === 0
+            ? `${pad}${safeKey}: []`
+            : `${pad}${safeKey}:\n${dumpYaml(v, indent + 1)}`;
         }
         return `${pad}${safeKey}: ${dumpYaml(v, 0).trimStart()}`;
       })
@@ -403,6 +422,7 @@ function dumpYaml(value: unknown, indent = 0): string {
 function buildFrontmatter(
   foundations: ProductFoundations,
   slug: string,
+  branding?: ProductBranding,
 ): string {
   const yaml = dumpYaml({
     product: slug,
@@ -419,6 +439,12 @@ function buildFrontmatter(
     opacity: foundations.opacity,
     zIndex: foundations.zIndex,
     components: foundations.components,
+    // Brand guidance (logo, voice, visual language, …) so agents reading
+    // design.md get the full editorial brief alongside the tokens. Emitted
+    // only when the package ships a `<SLUG>_BRANDING` export.
+    branding: branding
+      ? { intro: branding.intro, sections: branding.sections }
+      : undefined,
   });
   return ["---", yaml, "---"].join("\n");
 }
@@ -427,6 +453,7 @@ export function composeDesignMd(
   foundations: ProductFoundations,
   slug: string,
   body: string,
+  branding?: ProductBranding,
 ): string {
   const banner = [
     "<!--",
@@ -435,9 +462,13 @@ export function composeDesignMd(
     "  the YAML frontmatter is regenerated on every `pnpm tokens:build`.",
     "-->",
   ].join("\n");
-  return [banner, buildFrontmatter(foundations, slug), "", body.trim(), ""].join(
-    "\n",
-  );
+  return [
+    banner,
+    buildFrontmatter(foundations, slug, branding),
+    "",
+    body.trim(),
+    "",
+  ].join("\n");
 }
 
 // ---------------------------------------------------------------------------
@@ -460,6 +491,32 @@ async function readBody(srcDir: string): Promise<string> {
     const raw = await fs.readFile(designMd, "utf-8");
     return stripFrontmatter(raw);
   }
+}
+
+/**
+ * Optionally load the package's `<SLUG>_BRANDING` export from the compiled
+ * `dist/branding.js`. Branding is opt-in — packages without it simply omit the
+ * `branding` block from design.md. Returns undefined when the module or export
+ * is absent.
+ */
+async function readBranding(
+  distDir: string,
+  slug: string,
+): Promise<ProductBranding | undefined> {
+  const brandingPath = path.join(distDir, "branding.js");
+  try {
+    await fs.access(brandingPath);
+  } catch {
+    return undefined;
+  }
+  const mod = (await import(pathToFileURL(brandingPath).href)) as Record<
+    string,
+    unknown
+  >;
+  const branding = mod[brandingExportNameForSlug(slug)] as
+    | ProductBranding
+    | undefined;
+  return branding;
 }
 
 async function readPackageJson(
@@ -515,6 +572,8 @@ export async function buildPackage(
     );
   }
 
+  const branding = await readBranding(distDir, slug);
+
   const body = await readBody(srcDir);
   await fs.mkdir(distDir, { recursive: true });
 
@@ -523,7 +582,7 @@ export async function buildPackage(
     ["tokens.css", buildTokensCss(foundations, slug)],
     ["tokens.scss", buildTokensScss(foundations, slug)],
     ["tokens.tailwind.cjs", buildTokensTailwind(foundations, slug)],
-    ["design.md", composeDesignMd(foundations, slug, body)],
+    ["design.md", composeDesignMd(foundations, slug, body, branding)],
   ];
 
   await Promise.all(

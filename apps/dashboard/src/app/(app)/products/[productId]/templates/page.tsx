@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { PRODUCT_LIST, getProductBySlug } from "@/data/products";
+import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
 
 type RouteParams = { productId: string };
@@ -30,7 +31,7 @@ export default async function ProductTemplatesPage({
   const enabled = product.capabilities.templates.enabled;
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-6 pt-12 pb-20 md:px-10">
+    <AppPageShell>
       <Badge variant="secondary">
         {product.label} · {enabled ? "Templates" : "Not yet wired"}
       </Badge>
@@ -67,6 +68,6 @@ export default async function ProductTemplatesPage({
           .
         </p>
       )}
-    </div>
+    </AppPageShell>
   );
 }

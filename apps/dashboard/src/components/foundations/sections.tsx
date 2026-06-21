@@ -9,8 +9,11 @@ import { paletteRowsFor } from "@/lib/foundations";
 import { TAILWIND_COLOR_FAMILIES } from "@/data/tailwind-palette";
 
 import { AgenticDoc } from "@/components/foundations/agentic-doc";
+import { ChangelogView } from "@/components/foundations/changelog-view";
+import { CopyableSwatch } from "@/components/foundations/copyable-swatch";
 import { GeneratedArtefacts } from "@/components/foundations/generated-artefacts";
 import { LucideIconsCatalog } from "@/components/foundations/lucide-icons-catalog";
+import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
 import { Badge } from "@/components/ui/badge";
 
 // ─── Color palette section ─────────────────────────────────────────────────
@@ -41,7 +44,12 @@ export function PaletteSection({
       </p>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {rows.map((color) => (
-          <article key={color.name} className="bg-card overflow-hidden rounded-xl border">
+          <CopyableSwatch
+            key={color.name}
+            value={color.hex}
+            label={color.hex}
+            className="bg-card overflow-hidden rounded-xl border"
+          >
             <div aria-hidden="true" className="h-20" style={{ background: color.hex }} />
             <div className="space-y-1 p-3">
               <h3 className="font-mono text-sm font-medium">{color.name}</h3>
@@ -50,7 +58,7 @@ export function PaletteSection({
                 {color.utility}
               </p>
             </div>
-          </article>
+          </CopyableSwatch>
         ))}
       </div>
     </section>
@@ -211,23 +219,37 @@ export function TypographySection({ bundle }: { bundle: ProductFoundations }) {
       utility: token.startsWith("text-") ? token : `text-[${px}px]`,
     };
   });
-  const families = Object.entries(bundle.typography.family);
+
+  const families: ScaleRow[] = Object.entries(bundle.typography.family).map(
+    ([token, stack]) => ({
+      token,
+      value: stack,
+      utility: `typography.family.${token}`,
+    }),
+  );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
+      <p className="text-muted-foreground text-sm leading-relaxed">
+        Same live specimens as the agentic{" "}
+        <span className="text-foreground font-medium">Token surface</span> tab
+        (LLM Design.md): editorial + mono cards, type ladder, weights, leading lab,
+        and letter-spacing samples — all driven by the current foundations bundle.
+      </p>
+      <TypographyLivePreview bundle={bundle} />
       <section className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wide uppercase">Families</h3>
-        <ul className="grid gap-3 md:grid-cols-2">
-          {families.map(([role, stack]) => (
-            <li key={role} className="bg-card rounded-xl border p-4">
-              <p className="text-muted-foreground text-xs tracking-wide uppercase">{role}</p>
-              <p className="mt-1 truncate font-mono text-xs">{stack}</p>
-            </li>
-          ))}
-        </ul>
+        <h3 className="text-sm font-semibold tracking-wide uppercase">
+          Reference · font stacks
+        </h3>
+        <ScaleTable rows={families} />
       </section>
       <section className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wide uppercase">Type scale</h3>
+        <h3 className="text-sm font-semibold tracking-wide uppercase">
+          Reference · type scale
+        </h3>
+        <p className="text-muted-foreground text-xs leading-relaxed">
+          Machine-readable rem/px and a suggested utility hint per step (Tailwind-style).
+        </p>
         <ScaleTable rows={sizes} />
       </section>
     </div>
@@ -374,9 +396,12 @@ export function TailwindColorsSection() {
               {family.shades.map((shade) => {
                 const lighter = Number(shade.shade) <= 400;
                 return (
-                  <div
+                  <CopyableSwatch
                     key={shade.shade}
-                    className="group relative flex h-20 flex-col justify-end p-2"
+                    value={shade.hex}
+                    label={`${family.name}-${shade.shade} (${shade.hex})`}
+                    className="group flex h-20 flex-col justify-end p-2"
+                    badgeClassName="top-1.5 right-1.5"
                     style={{ background: shade.hex }}
                   >
                     <span
@@ -395,7 +420,7 @@ export function TailwindColorsSection() {
                     >
                       {shade.hex}
                     </span>
-                  </div>
+                  </CopyableSwatch>
                 );
               })}
             </div>
@@ -414,28 +439,6 @@ export function LucideIconsSection() {
 
 // ─── Changelog ─────────────────────────────────────────────────────────────
 
-const KIND_VARIANT: Record<
-  FileChangelog["entries"][number]["kind"],
-  { label: string; className: string }
-> = {
-  added: {
-    label: "Added",
-    className: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
-  },
-  changed: {
-    label: "Changed",
-    className: "bg-blue-500/15 text-blue-700 dark:text-blue-300",
-  },
-  fixed: {
-    label: "Fixed",
-    className: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
-  },
-  removed: {
-    label: "Removed",
-    className: "bg-rose-500/15 text-rose-700 dark:text-rose-300",
-  },
-};
-
 export function ChangelogSection({
   changelogs,
   productSlug,
@@ -443,51 +446,5 @@ export function ChangelogSection({
   changelogs: FileChangelog[];
   productSlug: string;
 }) {
-  if (changelogs.length === 0) {
-    return <p className="text-muted-foreground text-sm">No changes logged for this product yet.</p>;
-  }
-
-  return (
-    <div className="space-y-6">
-      {changelogs.map((file) => {
-        const sortedEntries = [...file.entries].sort((a, b) =>
-          a.date < b.date ? 1 : a.date > b.date ? -1 : 0,
-        );
-
-        return (
-          <article key={file.file} className="bg-card rounded-xl border p-5">
-            <header className="flex items-baseline justify-between gap-3">
-              <h3 className="font-mono text-sm font-medium">{file.file}</h3>
-              <p className="text-muted-foreground font-mono text-[11px]">
-                src/data/foundations/{productSlug}/{file.file}
-              </p>
-            </header>
-            <ol className="mt-4 space-y-3">
-              {sortedEntries.map((entry) => {
-                const variant = KIND_VARIANT[entry.kind];
-                return (
-                  <li
-                    key={`${entry.date}-${entry.author}-${entry.message}`}
-                    className="flex items-start gap-3"
-                  >
-                    <span
-                      className={`inline-flex shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase ${variant.className}`}
-                    >
-                      {variant.label}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm">{entry.message}</p>
-                      <p className="text-muted-foreground mt-0.5 font-mono text-[11px]">
-                        {entry.date} · {entry.author}
-                      </p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </article>
-        );
-      })}
-    </div>
-  );
+  return <ChangelogView changelogs={changelogs} productSlug={productSlug} />;
 }

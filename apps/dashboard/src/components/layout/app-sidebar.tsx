@@ -5,7 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import * as React from "react";
 import {
   BookOpen,
+  Bot,
   Box,
+  ChevronRight,
   ChevronsUpDown,
   ExternalLink,
   FlaskConical,
@@ -15,6 +17,7 @@ import {
   Layers,
   LayoutDashboard,
   LayoutTemplate,
+  Sparkles,
   Wand2,
   type LucideIcon,
 } from "lucide-react";
@@ -29,8 +32,19 @@ import {
   type ProductNavItem,
 } from "@/data/products";
 import { useActiveProduct } from "@/hooks/use-active-product";
+import {
+  buildFoundationSections,
+  type FoundationSection,
+  type FoundationSectionGroup,
+} from "@/lib/foundations";
+import { BRAND_SECTIONS } from "@/lib/brand";
 import { ZyteLogo } from "@/components/common/zyte-logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,6 +63,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 
@@ -58,6 +75,8 @@ function navIconFor(item: ProductNavItem): LucideIcon {
   if (label.includes("dashboard")) return LayoutDashboard;
   if (label.includes("changelog")) return History;
   if (label.includes("foundation")) return Layers;
+  if (label.includes("agentic")) return Bot;
+  if (label.includes("brand")) return Sparkles;
   if (label.includes("component")) return Box;
   if (label.includes("template")) return LayoutTemplate;
   if (label.includes("prototyp")) return Wand2;
@@ -81,6 +100,67 @@ function groupNavItems(
     label: group.label,
     items: items.filter((item) => item.group === group.id),
   })).filter((group) => group.items.length > 0);
+}
+
+type SubNavGroup = {
+  /** Optional small label rendered above the items. */
+  label?: string;
+  items: { href: string; label: string }[];
+};
+
+const FOUNDATION_GROUP_LABEL: Record<FoundationSectionGroup, string> = {
+  agentic: "Agentic",
+  palette: "Color",
+  core: "Tokens",
+};
+
+function foundationsSubGroups(
+  productSlug: string,
+  product: Product,
+): SubNavGroup[] {
+  const bundle = product.capabilities.foundations.bundle;
+  const sections = buildFoundationSections(bundle);
+  const order: FoundationSectionGroup[] = ["agentic", "palette", "core"];
+
+  return order
+    .map((groupId): SubNavGroup | null => {
+      const inGroup = sections.filter((s) => s.group === groupId);
+      if (inGroup.length === 0) return null;
+      return {
+        label: FOUNDATION_GROUP_LABEL[groupId],
+        items: inGroup.map((section: FoundationSection) => ({
+          href: `/products/${productSlug}/foundations/${section.slug}`,
+          label: section.label,
+        })),
+      };
+    })
+    .filter((g): g is SubNavGroup => g !== null);
+}
+
+function brandSubGroups(productSlug: string): SubNavGroup[] {
+  return [
+    {
+      items: BRAND_SECTIONS.map((section) => ({
+        href: `/products/${productSlug}/brand/${section.slug}`,
+        label: section.label,
+      })),
+    },
+  ];
+}
+
+function subGroupsForNavItem(
+  item: ProductNavItem,
+  product: Product,
+): SubNavGroup[] | null {
+  if (item.externalUrl) return null;
+  const label = item.label.toLowerCase();
+  if (label.includes("foundation")) {
+    return foundationsSubGroups(product.slug, product);
+  }
+  if (label.includes("brand")) {
+    return brandSubGroups(product.slug);
+  }
+  return null;
 }
 
 function ProductSwitcherButton({ active }: { active: Product | null }) {
@@ -145,14 +225,20 @@ function ProductSwitcherButton({ active }: { active: Product | null }) {
   );
 }
 
-function renderNavItem(item: ProductNavItem, pathname: string): React.ReactElement {
-  const Icon = navIconFor(item);
+type NavItemProps = {
+  item: ProductNavItem;
+  pathname: string;
+  product: Product | null;
+};
+
+function PlainNavItem({ item, pathname }: NavItemProps) {
+  const icon = navIconFor(item);
 
   if (item.externalUrl) {
     return (
       <SidebarMenuButton asChild tooltip={item.label}>
         <a href={item.externalUrl} target="_blank" rel="noopener noreferrer">
-          <Icon />
+          {React.createElement(icon)}
           <span>{item.label}</span>
         </a>
       </SidebarMenuButton>
@@ -166,10 +252,92 @@ function renderNavItem(item: ProductNavItem, pathname: string): React.ReactEleme
       tooltip={item.label}
     >
       <Link href={item.href}>
-        <Icon />
+        {React.createElement(icon)}
         <span>{item.label}</span>
       </Link>
     </SidebarMenuButton>
+  );
+}
+
+function CollapsibleNavItem({
+  item,
+  pathname,
+  groups,
+}: NavItemProps & { groups: SubNavGroup[] }) {
+  const icon = navIconFor(item);
+  const sectionActive = isItemActive(pathname, item);
+
+  // Auto-open the section when the user navigates into it; let users manually
+  // toggle it otherwise. We don't force-close on leave so the section stays in
+  // the state the user last set it to. Syncing during render (React's "adjust
+  // state on change" pattern) avoids a setState-in-effect.
+  const [open, setOpen] = React.useState(sectionActive);
+  const [prevActive, setPrevActive] = React.useState(sectionActive);
+  if (sectionActive !== prevActive) {
+    setPrevActive(sectionActive);
+    if (sectionActive) setOpen(true);
+  }
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen} className="group/collapsible">
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton
+            isActive={sectionActive}
+            tooltip={item.label}
+            aria-expanded={open}
+          >
+            {React.createElement(icon)}
+            <span>{item.label}</span>
+            <ChevronRight className="ml-auto size-3.5 transition-transform group-data-[state=open]/collapsible:rotate-90" />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+
+        <CollapsibleContent>
+          <SidebarMenuSub className="gap-2 py-1">
+            {groups.map((group, groupIndex) => (
+              <React.Fragment key={`${group.label ?? "group"}-${groupIndex}`}>
+                {group.label ? (
+                  <li
+                    aria-hidden="true"
+                    className="text-muted-foreground/70 px-2 pt-1.5 pb-0.5 font-mono text-[10px] tracking-[0.16em] uppercase first:pt-0"
+                  >
+                    {group.label}
+                  </li>
+                ) : null}
+                {group.items.map((sub) => {
+                  const isActive = pathname === sub.href;
+                  return (
+                    <SidebarMenuSubItem key={sub.href}>
+                      <SidebarMenuSubButton asChild isActive={isActive}>
+                        <Link href={sub.href}>
+                          <span>{sub.label}</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  );
+                })}
+              </React.Fragment>
+            ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
+  );
+}
+
+function NavItem(props: NavItemProps) {
+  const { item, product } = props;
+  const groups = product ? subGroupsForNavItem(item, product) : null;
+
+  if (groups && groups.length > 0) {
+    return <CollapsibleNavItem {...props} groups={groups} />;
+  }
+
+  return (
+    <SidebarMenuItem>
+      <PlainNavItem {...props} />
+    </SidebarMenuItem>
   );
 }
 
@@ -200,9 +368,12 @@ export function AppSidebar() {
               )}
               <SidebarMenu className="gap-0.5">
                 {group.items.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    {renderNavItem(item, pathname)}
-                  </SidebarMenuItem>
+                  <NavItem
+                    key={item.href}
+                    item={item}
+                    pathname={pathname}
+                    product={activeProduct}
+                  />
                 ))}
               </SidebarMenu>
             </SidebarGroup>

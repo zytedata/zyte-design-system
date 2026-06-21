@@ -17,7 +17,7 @@ import {
   EXTRACT_SUMMIT_DESIGN_LAYERS,
   EXTRACT_SUMMIT_DIRECTION,
   EXTRACT_SUMMIT_GUARDRAILS,
-} from "@zyte/ds-extract-summit";
+} from "@zytedata/ds-extract-summit";
 import {
   buildProductStats,
   kindLabel,
@@ -32,7 +32,7 @@ import {
   accentForIndex,
   descriptionForLabel,
 } from "@/components/products/journey-card";
-import type { FileChangeKind } from "@zyte/ds-types";
+import type { FileChangeKind } from "@zytedata/ds-types";
 
 type RouteParams = { productId: string };
 

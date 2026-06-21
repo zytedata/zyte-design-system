@@ -1,4 +1,4 @@
-import type { FoundationColorRow, ProductFoundations } from "@zyte/ds-types";
+import type { FoundationColorRow, ProductFoundations } from "@zytedata/ds-types";
 
 /** kebab-case a camelCase palette key for use in URLs. */
 export function paletteIdToSlug(paletteId: string): string {

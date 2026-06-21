@@ -15,7 +15,7 @@ import remarkGfm from "remark-gfm";
 
 import { cn } from "@/lib/utils";
 import type { CanonicalDocPayload } from "@/data/foundations/docs";
-import type { ProductFoundations } from "@zyte/ds-types";
+import type { ProductFoundations } from "@zytedata/ds-types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {

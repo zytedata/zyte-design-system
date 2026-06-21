@@ -8,7 +8,7 @@ import type { ProductId } from "@/data/products";
 // We deliberately avoid `createRequire(import.meta.url)` here: Turbopack's
 // server runtime rewrites `import.meta.url` to a bundle-internal path
 // that no longer sees the workspace's `node_modules`, which makes
-// `@zyte/*` specifiers fail to resolve.
+// `@zytedata/*` specifiers fail to resolve.
 //
 // Anchoring at `process.cwd()` (which is `apps/dashboard` for both
 // `next dev` and `next build`) and walking to the sibling
@@ -77,7 +77,7 @@ function distPath(productId: ProductId, filename: string): string | null {
 }
 
 /**
- * Read the version field from `@zyte/ds-<slug>/package.json` so the
+ * Read the version field from `@zytedata/ds-<slug>/package.json` so the
  * dashboard can surface "npm-installable today" version strings without
  * hard-coding them.
  */

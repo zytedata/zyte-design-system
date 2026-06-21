@@ -13,11 +13,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@zyte/ds-core": "workspace:*",
-    "@zyte/ds-extract-summit": "workspace:*",
-    "@zyte/ds-scrapy": "workspace:*",
-    "@zyte/ds-types": "workspace:*",
-    "@zyte/ds-web": "workspace:*",
+    "@zytedata/ds-core": "workspace:*",
+    "@zytedata/ds-extract-summit": "workspace:*",
+    "@zytedata/ds-scrapy": "workspace:*",
+    "@zytedata/ds-types": "workspace:*",
+    "@zytedata/ds-web": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.14.0",

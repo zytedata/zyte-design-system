@@ -1,21 +1,21 @@
-import type { ProductDocumentation } from "@zyte/ds-types";
+import type { ProductDocumentation } from "@zytedata/ds-types";
 
 /**
  * "How the Web design system works" — the operating manual for
- * `@zyte/ds-web`. Surfaced by the dashboard's Documentation page and read
+ * `@zytedata/ds-web`. Surfaced by the dashboard's Documentation page and read
  * verbatim by agents/LLMs through the package's `./design.md` export plus
  * this constant.
  */
 export const WEB_DOCUMENTATION: ProductDocumentation = {
   productSlug: "web",
   intro:
-    "@zyte/ds-web is the design system used by the public Zyte website (zyte-website-nextjs). It optimises for trust, scannability and SEO — sober palette, generous typography, content-first layouts. Tokens are tuned to drive marketing pages, product overviews and the blog; rich app UI lives under @zyte/ds-core instead.",
+    "@zytedata/ds-web is the design system used by the public Zyte website (zyte-website-nextjs). It optimises for trust, scannability and SEO — sober palette, generous typography, content-first layouts. Tokens are tuned to drive marketing pages, product overviews and the blog; rich app UI lives under @zytedata/ds-core instead.",
   audience: ["Designers", "Frontend developers", "Agents / LLMs"],
   sections: [
     {
       id: "scope",
       title: "What this scope is for",
-      body: "The Web package powers the marketing surface — the public website, the blog, landing pages and product overviews. It is intentionally narrow: heavy app UI patterns (data tables, forms, toolbars) belong in @zyte/ds-core because the Web brand prioritises legibility and pace, not density.",
+      body: "The Web package powers the marketing surface — the public website, the blog, landing pages and product overviews. It is intentionally narrow: heavy app UI patterns (data tables, forms, toolbars) belong in @zytedata/ds-core because the Web brand prioritises legibility and pace, not density.",
       bullets: [
         "Used by: zyte-website-nextjs (and any future marketing landing).",
         "NOT used by: internal dashboards, Scrapy Cloud, Extract Summit's event site.",
@@ -29,7 +29,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
       steps: [
         {
           heading: "1. Edit foundations.ts",
-          text: "Open packages/web/src/foundations.ts and bump the relevant entry (e.g. colors.accentPrimary['600']). Keep changes scoped — colors that are about brand voice should land here; layout/density tokens probably want @zyte/ds-core instead.",
+          text: "Open packages/web/src/foundations.ts and bump the relevant entry (e.g. colors.accentPrimary['600']). Keep changes scoped — colors that are about brand voice should land here; layout/density tokens probably want @zytedata/ds-core instead.",
         },
         {
           heading: "2. Edit design.body.md if needed",
@@ -37,11 +37,11 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
         },
         {
           heading: "3. Run the codegen locally",
-          text: "`pnpm --filter @zyte/ds-web build` rebuilds dist/{tokens.json,tokens.css,tokens.scss,tokens.tailwind.cjs,design.md,index.js,...}. The dashboard's predev/prebuild hook does this for you on `pnpm dev`.",
+          text: "`pnpm --filter @zytedata/ds-web build` rebuilds dist/{tokens.json,tokens.css,tokens.scss,tokens.tailwind.cjs,design.md,index.js,...}. The dashboard's predev/prebuild hook does this for you on `pnpm dev`.",
         },
         {
           heading: "4. Queue a changeset",
-          text: "Run `pnpm changeset`, pick @zyte/ds-web and the bump level (patch for fixes, minor for additive changes, major for breaking renames or removals). Commit the resulting .changeset/*.md alongside your foundations.ts diff.",
+          text: "Run `pnpm changeset`, pick @zytedata/ds-web and the bump level (patch for fixes, minor for additive changes, major for breaking renames or removals). Commit the resulting .changeset/*.md alongside your foundations.ts diff.",
         },
         {
           heading: "5. Open a PR",
@@ -49,7 +49,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
         },
         {
           heading: "6. Merge → release.yml publishes",
-          text: "On merge, the release workflow opens a `chore(release): version packages` PR. Merging that PR publishes the bumped @zyte/ds-web to GitHub Packages. zyte-website-nextjs picks it up via Renovate (or `pnpm up @zyte/ds-web`).",
+          text: "On merge, the release workflow opens a `chore(release): version packages` PR. Merging that PR publishes the bumped @zytedata/ds-web to GitHub Packages. zyte-website-nextjs picks it up via Renovate (or `pnpm up @zytedata/ds-web`).",
         },
       ],
       callout: {
@@ -60,12 +60,12 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
     },
     {
       id: "consume",
-      title: "Consuming @zyte/ds-web in the website",
+      title: "Consuming @zytedata/ds-web in the website",
       body: "The package ships every artefact through its exports map. Pick the surface that matches your toolchain — they all carry the same tokens, just in different file formats.",
       code: {
         language: "scss",
         content: `// styles/_tokens.scss
-@use "@zyte/ds-web/tokens.scss" as web;
+@use "@zytedata/ds-web/tokens.scss" as web;
 
 .hero-title {
   font-family: web.$web-font-display;
@@ -75,12 +75,12 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
 }`,
       },
       bullets: [
-        '`@zyte/ds-web/tokens.scss` — SCSS variables namespaced as `$web-*`.',
-        '`@zyte/ds-web/tokens.css` — CSS custom properties on `:root` namespaced as `--web-*`.',
-        '`@zyte/ds-web/tailwind` — a Tailwind v3 preset for `tailwind.config.js#presets`.',
-        '`@zyte/ds-web/tokens.json` — DTCG token JSON for Style Dictionary / Figma Tokens.',
-        '`@zyte/ds-web/design.md` — the agent-readable spec (prose + YAML frontmatter).',
-        '`@zyte/ds-web` (default) — programmatic access: `import { WEB_FOUNDATIONS } from "@zyte/ds-web"`.',
+        '`@zytedata/ds-web/tokens.scss` — SCSS variables namespaced as `$web-*`.',
+        '`@zytedata/ds-web/tokens.css` — CSS custom properties on `:root` namespaced as `--web-*`.',
+        '`@zytedata/ds-web/tailwind` — a Tailwind v3 preset for `tailwind.config.js#presets`.',
+        '`@zytedata/ds-web/tokens.json` — DTCG token JSON for Style Dictionary / Figma Tokens.',
+        '`@zytedata/ds-web/design.md` — the agent-readable spec (prose + YAML frontmatter).',
+        '`@zytedata/ds-web` (default) — programmatic access: `import { WEB_FOUNDATIONS } from "@zytedata/ds-web"`.',
       ],
     },
     {
@@ -111,7 +111,7 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
       title: "Migration & alignment priorities",
       body: "Open work items the design system is actively driving toward in zyte-website-nextjs.",
       bullets: [
-        "Replace the legacy `styles/_colors.scss` with `@use \"@zyte/ds-web/tokens.scss\"` and remove the duplicate Tailwind hex map.",
+        "Replace the legacy `styles/_colors.scss` with `@use \"@zytedata/ds-web/tokens.scss\"` and remove the duplicate Tailwind hex map.",
         "Document when to use Tailwind utilities vs SCSS modules for new Web UI work.",
         "Track migration from legacy module rendering to template-based page sections.",
         "Keep PrimeReact / third-party overrides tied to design tokens, not ad-hoc values.",
@@ -122,9 +122,9 @@ export const WEB_DOCUMENTATION: ProductDocumentation = {
       title: "Anti-patterns",
       bullets: [
         "Don't add a new color without auditing semanticColors first — most needs are covered.",
-        "Don't introduce decorative animations here (Web is content-first); experiment in @zyte/ds-extract-summit instead.",
+        "Don't introduce decorative animations here (Web is content-first); experiment in @zytedata/ds-extract-summit instead.",
         "Don't import `tokens.tailwind.cjs` directly into a non-Tailwind project — use tokens.css instead.",
-        "Don't fork @zyte/ds-web for a sub-page; make a new product scope (talk to the team) or add a semantic token here.",
+        "Don't fork @zytedata/ds-web for a sub-page; make a new product scope (talk to the team) or add a semantic token here.",
       ],
     },
   ],

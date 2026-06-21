@@ -5,7 +5,7 @@ on:
 
 # changesets/action needs write access to the repo (to open the release PR
 # and tag the release commit) and to GitHub Packages (to publish the
-# bumped @zyte/* packages).
+# bumped @zytedata/* packages).
 permissions:
   contents: write
   pull-requests: write
@@ -47,7 +47,7 @@ jobs:
           node-version: 20
           cache: pnpm
           registry-url: https://npm.pkg.github.com
-          scope: "@zyte"
+          scope: "@zytedata"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

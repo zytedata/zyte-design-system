@@ -1,14 +1,14 @@
-import type { ProductDocumentation } from "@zyte/ds-types";
+import type { ProductDocumentation } from "@zytedata/ds-types";
 
 /**
  * "How the Core design system works" — the operating manual for
- * `@zyte/ds-core`. Surfaced by the dashboard's Documentation page and read
+ * `@zytedata/ds-core`. Surfaced by the dashboard's Documentation page and read
  * verbatim by agents/LLMs through the package's `./design.md` export.
  */
 export const CORE_DOCUMENTATION: ProductDocumentation = {
   productSlug: "core",
   intro:
-    "@zyte/ds-core is the design system used by Zyte's internal apps and dashboards. It optimises for density, scannability and accessibility — neutral palette, tight rhythm, predictable component behaviour. Tokens are tuned for data-heavy UIs (tables, forms, toolbars, log views); marketing surfaces use @zyte/ds-web instead.",
+    "@zytedata/ds-core is the design system used by Zyte's internal apps and dashboards. It optimises for density, scannability and accessibility — neutral palette, tight rhythm, predictable component behaviour. Tokens are tuned for data-heavy UIs (tables, forms, toolbars, log views); marketing surfaces use @zytedata/ds-web instead.",
   audience: ["Designers", "Frontend developers", "Agents / LLMs"],
   sections: [
     {
@@ -36,11 +36,11 @@ export const CORE_DOCUMENTATION: ProductDocumentation = {
         },
         {
           heading: "3. Run the codegen locally",
-          text: "`pnpm --filter @zyte/ds-core build` rebuilds dist/. The dashboard regenerates this for you on `pnpm dev` via the workspace predev hook.",
+          text: "`pnpm --filter @zytedata/ds-core build` rebuilds dist/. The dashboard regenerates this for you on `pnpm dev` via the workspace predev hook.",
         },
         {
           heading: "4. Queue a changeset",
-          text: "`pnpm changeset` → pick @zyte/ds-core, choose the bump level, commit the .changeset/*.md alongside your foundations.ts diff.",
+          text: "`pnpm changeset` → pick @zytedata/ds-core, choose the bump level, commit the .changeset/*.md alongside your foundations.ts diff.",
         },
         {
           heading: "5. PR → merge → release",
@@ -50,12 +50,12 @@ export const CORE_DOCUMENTATION: ProductDocumentation = {
     },
     {
       id: "consume",
-      title: "Consuming @zyte/ds-core in an app",
+      title: "Consuming @zytedata/ds-core in an app",
       body: "Core is consumed exactly like Web, but namespaced under `--core-*` / `$core-*` so the two systems can sit side by side in the same bundle without clashing.",
       code: {
         language: "tsx",
         content: `// app/layout.tsx — pick the right bundle for the surface
-import "@zyte/ds-core/tokens.css";
+import "@zytedata/ds-core/tokens.css";
 
 export default function RootLayout({ children }) {
   return (
@@ -77,8 +77,8 @@ function Toolbar() {
       },
       bullets: [
         "Prefer CSS custom properties (`var(--core-*)`) over JS imports — they survive theme changes.",
-        "If you need typed access (e.g. for component props), `import { CORE_FOUNDATIONS } from \"@zyte/ds-core\"`.",
-        "The Tailwind preset `@zyte/ds-core/tailwind` lets you write `bg-core-bg-default` directly.",
+        "If you need typed access (e.g. for component props), `import { CORE_FOUNDATIONS } from \"@zytedata/ds-core\"`.",
+        "The Tailwind preset `@zytedata/ds-core/tailwind` lets you write `bg-core-bg-default` directly.",
       ],
     },
     {
@@ -95,7 +95,7 @@ function Toolbar() {
     {
       id: "agents",
       title: "What agents / LLMs read",
-      body: "When generating Core UI, agents should fetch `@zyte/ds-core/design.md` first. The frontmatter declares the full token tree (machine-readable, regenerated on every build) and the body explains conventions like \"density first\" so the generated UI fits the rest of the dashboard.",
+      body: "When generating Core UI, agents should fetch `@zytedata/ds-core/design.md` first. The frontmatter declares the full token tree (machine-readable, regenerated on every build) and the body explains conventions like \"density first\" so the generated UI fits the rest of the dashboard.",
     },
   ],
 };

@@ -1,4 +1,4 @@
-import type { ProductComponentContract, ProductFoundations } from "@zyte/ds-types";
+import type { ProductComponentContract, ProductFoundations } from "@zytedata/ds-types";
 
 const EXTRACT_SUMMIT_COLORS = {
   primary: {

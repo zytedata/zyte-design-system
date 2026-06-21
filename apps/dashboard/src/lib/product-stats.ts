@@ -1,4 +1,4 @@
-import type { FileChangeEntry, FileChangelog, ProductFoundations } from "@zyte/ds-types";
+import type { FileChangeEntry, FileChangelog, ProductFoundations } from "@zytedata/ds-types";
 import type { Product } from "@/data/products";
 
 export type FlatChangeEntry = FileChangeEntry & {

@@ -1,5 +1,5 @@
-import type { ProductFoundations } from "@zyte/ds-types";
-import type { FileChangelog } from "@zyte/ds-types";
+import type { ProductFoundations } from "@zytedata/ds-types";
+import type { FileChangelog } from "@zytedata/ds-types";
 import type {
   CanonicalDocPayload,
   GeneratedArtefact,

@@ -1,15 +1,15 @@
-import type { ProductDocumentation } from "@zyte/ds-types";
+import type { ProductDocumentation } from "@zytedata/ds-types";
 
 /**
  * "How the Extract Summit design system works" — the operating manual
- * for `@zyte/ds-extract-summit`. Surfaced by the dashboard's
+ * for `@zytedata/ds-extract-summit`. Surfaced by the dashboard's
  * Documentation page and read verbatim by agents/LLMs through the
  * package's `./design.md` export.
  */
 export const EXTRACT_SUMMIT_DOCUMENTATION: ProductDocumentation = {
   productSlug: "extract-summit",
   intro:
-    "@zyte/ds-extract-summit is the design system used by the Extract Summit conference site and surrounding event marketing. It is the loudest of the four scopes: brutalist by design — high contrast, sharp corners, oversized typography, lime accent. It deliberately diverges from @zyte/ds-web because event sites need to feel like an event, not like the parent brand.",
+    "@zytedata/ds-extract-summit is the design system used by the Extract Summit conference site and surrounding event marketing. It is the loudest of the four scopes: brutalist by design — high contrast, sharp corners, oversized typography, lime accent. It deliberately diverges from @zytedata/ds-web because event sites need to feel like an event, not like the parent brand.",
   audience: ["Designers", "Event-site developers", "Agents / LLMs"],
   sections: [
     {
@@ -37,7 +37,7 @@ export const EXTRACT_SUMMIT_DOCUMENTATION: ProductDocumentation = {
         },
         {
           heading: "3. Build & check",
-          text: "`pnpm --filter @zyte/ds-extract-summit build && pnpm --filter @zyte/ds-extract-summit check:tokens`. The check ensures the codegen frontmatter still names the product correctly and that tokens.css carries `--extract-summit-*` variables.",
+          text: "`pnpm --filter @zytedata/ds-extract-summit build && pnpm --filter @zytedata/ds-extract-summit check:tokens`. The check ensures the codegen frontmatter still names the product correctly and that tokens.css carries `--extract-summit-*` variables.",
         },
         {
           heading: "4. Changeset → PR → release",
@@ -52,11 +52,11 @@ export const EXTRACT_SUMMIT_DOCUMENTATION: ProductDocumentation = {
     },
     {
       id: "consume",
-      title: "Consuming @zyte/ds-extract-summit on the event site",
+      title: "Consuming @zytedata/ds-extract-summit on the event site",
       body: "Inject tokens.css once at the app shell. Because the brutalist defaults differ so much from the other scopes, do NOT mix Extract Summit tokens with Web tokens in the same view — pick one.",
       code: {
         language: "tsx",
-        content: `import "@zyte/ds-extract-summit/tokens.css";
+        content: `import "@zytedata/ds-extract-summit/tokens.css";
 
 export default function HeroSection() {
   return (
@@ -91,7 +91,7 @@ export default function HeroSection() {
     {
       id: "agents",
       title: "What agents / LLMs read",
-      body: "Agents generating event-site UI should fetch `@zyte/ds-extract-summit/design.md` and read the body section closely — the conventions are deliberately unusual and easy to revert toward generic web-app patterns. The frontmatter (machine-readable) carries the full token tree as usual.",
+      body: "Agents generating event-site UI should fetch `@zytedata/ds-extract-summit/design.md` and read the body section closely — the conventions are deliberately unusual and easy to revert toward generic web-app patterns. The frontmatter (machine-readable) carries the full token tree as usual.",
     },
   ],
 };

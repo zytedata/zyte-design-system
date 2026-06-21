@@ -24,11 +24,11 @@ const nextConfig: NextConfig = {
   // via `fs.readFile`; bundling them would either fail (no SCSS pipeline
   // configured) or quietly produce wrong output.
   serverExternalPackages: [
-    "@zyte/ds-web",
-    "@zyte/ds-core",
-    "@zyte/ds-scrapy",
-    "@zyte/ds-extract-summit",
-    "@zyte/ds-types",
+    "@zytedata/ds-web",
+    "@zytedata/ds-core",
+    "@zytedata/ds-scrapy",
+    "@zytedata/ds-extract-summit",
+    "@zytedata/ds-types",
   ],
 
   // We're inside a pnpm workspace (`apps/dashboard` plus `packages/*`).
@@ -38,7 +38,7 @@ const nextConfig: NextConfig = {
   // for design.md / tokens.css fails at runtime.
   outputFileTracingRoot: WORKSPACE_ROOT,
 
-  // The dashboard reads each @zyte/ds-* package's `dist/{design.md,
+  // The dashboard reads each @zytedata/ds-* package's `dist/{design.md,
   // tokens.{json,css,scss,tailwind.cjs}}` and `package.json` via
   // `fs.readFile` from app/(app)/products/[productId]/{layout,foundations/
   // [section],documentation}. NFT can't trace those reads because they

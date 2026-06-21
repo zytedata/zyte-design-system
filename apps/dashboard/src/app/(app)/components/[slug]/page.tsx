@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { CORE_COMPONENT_CATEGORIES } from "@zyte/ds-core";
-import { WEB_COMPONENT_CATEGORIES } from "@zyte/ds-web";
+import { CORE_COMPONENT_CATEGORIES } from "@zytedata/ds-core";
+import { WEB_COMPONENT_CATEGORIES } from "@zytedata/ds-web";
 
 type RouteParams = { slug: string };
 

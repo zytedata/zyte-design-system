@@ -1,11 +1,11 @@
 import type { LucideIcon } from "lucide-react";
 import { Code, Cog, Globe, Zap } from "lucide-react";
 
-import type { DsCategory, ProductFoundations } from "@zyte/ds-types";
-import { WEB_FOUNDATIONS, WEB_COMPONENT_CATEGORIES } from "@zyte/ds-web";
-import { CORE_FOUNDATIONS, CORE_COMPONENT_CATEGORIES } from "@zyte/ds-core";
-import { SCRAPY_FOUNDATIONS } from "@zyte/ds-scrapy";
-import { EXTRACT_SUMMIT_FOUNDATIONS } from "@zyte/ds-extract-summit";
+import type { DsCategory, ProductFoundations } from "@zytedata/ds-types";
+import { WEB_FOUNDATIONS, WEB_COMPONENT_CATEGORIES } from "@zytedata/ds-web";
+import { CORE_FOUNDATIONS, CORE_COMPONENT_CATEGORIES } from "@zytedata/ds-core";
+import { SCRAPY_FOUNDATIONS } from "@zytedata/ds-scrapy";
+import { EXTRACT_SUMMIT_FOUNDATIONS } from "@zytedata/ds-extract-summit";
 
 export type ProductId = "web" | "core" | "scrapy" | "extractSummit";
 

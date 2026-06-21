@@ -30,19 +30,19 @@ importers:
 
   apps/dashboard:
     dependencies:
-      '@zyte/ds-core':
+      '@zytedata/ds-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@zyte/ds-extract-summit':
+      '@zytedata/ds-extract-summit':
         specifier: workspace:*
         version: link:../../packages/extract-summit
-      '@zyte/ds-scrapy':
+      '@zytedata/ds-scrapy':
         specifier: workspace:*
         version: link:../../packages/scrapy
-      '@zyte/ds-types':
+      '@zytedata/ds-types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@zyte/ds-web':
+      '@zytedata/ds-web':
         specifier: workspace:*
         version: link:../../packages/web
       class-variance-authority:
@@ -118,11 +118,11 @@ importers:
 
   packages/core:
     dependencies:
-      '@zyte/ds-types':
+      '@zytedata/ds-types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
-      '@zyte/tokens-build':
+      '@zytedata/tokens-build':
         specifier: workspace:*
         version: link:../tokens-build
       typescript:
@@ -131,11 +131,11 @@ importers:
 
   packages/extract-summit:
     dependencies:
-      '@zyte/ds-types':
+      '@zytedata/ds-types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
-      '@zyte/tokens-build':
+      '@zytedata/tokens-build':
         specifier: workspace:*
         version: link:../tokens-build
       typescript:
@@ -144,11 +144,11 @@ importers:
 
   packages/scrapy:
     dependencies:
-      '@zyte/ds-types':
+      '@zytedata/ds-types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
-      '@zyte/tokens-build':
+      '@zytedata/tokens-build':
         specifier: workspace:*
         version: link:../tokens-build
       typescript:
@@ -157,7 +157,7 @@ importers:
 
   packages/tokens-build:
     dependencies:
-      '@zyte/ds-types':
+      '@zytedata/ds-types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
@@ -176,11 +176,11 @@ importers:
 
   packages/web:
     dependencies:
-      '@zyte/ds-types':
+      '@zytedata/ds-types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
-      '@zyte/tokens-build':
+      '@zytedata/tokens-build':
         specifier: workspace:*
         version: link:../tokens-build
       typescript:

@@ -114,7 +114,7 @@ export function GeneratedArtefacts({
               </code>{" "}
               from <code>foundations.ts</code>. Copy or download these as drop-in
               consumables for downstream apps; in Phase 2 they ship as the{" "}
-              <code>@zyte/ds-*</code> npm package contents.
+              <code>@zytedata/ds-*</code> npm package contents.
             </p>
           </div>
         </div>

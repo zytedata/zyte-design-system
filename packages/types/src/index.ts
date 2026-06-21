@@ -67,7 +67,7 @@ export type ProductFoundations = {
 
 // ---------------------------------------------------------------------------
 // Product documentation: the "how this scope works" surface that the
-// dashboard's Documentation page renders. Each @zyte/ds-* package exports a
+// dashboard's Documentation page renders. Each @zytedata/ds-* package exports a
 // `<SLUG>_DOCUMENTATION: ProductDocumentation` constant so the page renders
 // uniformly across products and the same content can be machine-consumed
 // by agents/LLMs through the package's exports map.

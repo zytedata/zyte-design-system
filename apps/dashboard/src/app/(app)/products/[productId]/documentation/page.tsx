@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 
-import type { ProductDocumentation } from "@zyte/ds-types";
-import { CORE_DOCUMENTATION } from "@zyte/ds-core";
-import { EXTRACT_SUMMIT_DOCUMENTATION } from "@zyte/ds-extract-summit";
-import { SCRAPY_DOCUMENTATION } from "@zyte/ds-scrapy";
-import { WEB_DOCUMENTATION } from "@zyte/ds-web";
+import type { ProductDocumentation } from "@zytedata/ds-types";
+import { CORE_DOCUMENTATION } from "@zytedata/ds-core";
+import { EXTRACT_SUMMIT_DOCUMENTATION } from "@zytedata/ds-extract-summit";
+import { SCRAPY_DOCUMENTATION } from "@zytedata/ds-scrapy";
+import { WEB_DOCUMENTATION } from "@zytedata/ds-web";
 
 import { Badge } from "@/components/ui/badge";
 import { DevOnboarding } from "@/components/products/dev-onboarding";
@@ -71,7 +71,7 @@ export default async function ProductDocumentationPage({
 
   const doc = DOCS_BY_PRODUCT[product.id];
   const version = await readPackageVersion(product.id);
-  const packageName = `@zyte/ds-${product.slug}`;
+  const packageName = `@zytedata/ds-${product.slug}`;
   const links = buildLinks(product.slug);
 
   const navGroups: DocNavGroup[] = [

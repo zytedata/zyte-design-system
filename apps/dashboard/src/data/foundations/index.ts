@@ -1,13 +1,13 @@
-import type { FileChangelog, ProductFoundations } from "@zyte/ds-types";
+import type { FileChangelog, ProductFoundations } from "@zytedata/ds-types";
 import type { ProductId } from "@/data/products";
 
-import { WEB_FOUNDATIONS, WEB_FILE_CHANGELOGS } from "@zyte/ds-web";
-import { CORE_FOUNDATIONS, CORE_FILE_CHANGELOGS } from "@zyte/ds-core";
-import { SCRAPY_FOUNDATIONS, SCRAPY_FILE_CHANGELOGS } from "@zyte/ds-scrapy";
+import { WEB_FOUNDATIONS, WEB_FILE_CHANGELOGS } from "@zytedata/ds-web";
+import { CORE_FOUNDATIONS, CORE_FILE_CHANGELOGS } from "@zytedata/ds-core";
+import { SCRAPY_FOUNDATIONS, SCRAPY_FILE_CHANGELOGS } from "@zytedata/ds-scrapy";
 import {
   EXTRACT_SUMMIT_FOUNDATIONS,
   EXTRACT_SUMMIT_FILE_CHANGELOGS,
-} from "@zyte/ds-extract-summit";
+} from "@zytedata/ds-extract-summit";
 
 export const PRODUCT_FOUNDATIONS: Record<ProductId, ProductFoundations> = {
   web: WEB_FOUNDATIONS,

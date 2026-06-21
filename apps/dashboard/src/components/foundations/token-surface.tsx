@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import type { ProductFoundations } from "@zyte/ds-types";
+import type { ProductFoundations } from "@zytedata/ds-types";
 import { paletteLabelFor } from "@/lib/foundations";
 import { cn } from "@/lib/utils";
 

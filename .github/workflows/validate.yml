@@ -34,11 +34,11 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          # Allow `pnpm install` to read @zyte/* from GitHub Packages once we
+          # Allow `pnpm install` to read @zytedata/* from GitHub Packages once we
           # have published versions; for an unpublished workspace this is a
           # no-op since every cross-package dep is `workspace:*`.
           registry-url: https://npm.pkg.github.com
-          scope: "@zyte"
+          scope: "@zytedata"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -48,7 +48,7 @@ jobs:
         run: pnpm audit --audit-level moderate
 
       - name: Build all packages (tsc + tokens-build)
-        # @zyte/ds-* tsc emits dist/foundations.js, then tokens-build emits
+        # @zytedata/ds-* tsc emits dist/foundations.js, then tokens-build emits
         # dist/tokens.{json,css,scss,tailwind.cjs} + dist/design.md. The
         # dashboard build below depends on those artefacts being present.
         run: pnpm -r --filter "./packages/*" run build

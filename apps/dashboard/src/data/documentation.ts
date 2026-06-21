@@ -1,8 +1,8 @@
-import type { ProductDocumentation } from "@zyte/ds-types";
-import { CORE_DOCUMENTATION } from "@zyte/ds-core";
-import { EXTRACT_SUMMIT_DOCUMENTATION } from "@zyte/ds-extract-summit";
-import { SCRAPY_DOCUMENTATION } from "@zyte/ds-scrapy";
-import { WEB_DOCUMENTATION } from "@zyte/ds-web";
+import type { ProductDocumentation } from "@zytedata/ds-types";
+import { CORE_DOCUMENTATION } from "@zytedata/ds-core";
+import { EXTRACT_SUMMIT_DOCUMENTATION } from "@zytedata/ds-extract-summit";
+import { SCRAPY_DOCUMENTATION } from "@zytedata/ds-scrapy";
+import { WEB_DOCUMENTATION } from "@zytedata/ds-web";
 
 import type { ProductId } from "@/data/products";
 
@@ -58,5 +58,5 @@ export function buildProductDocLinks(productSlug: string): ProductDocLinks {
 }
 
 export function getPackageName(productSlug: string): string {
-  return `@zyte/ds-${productSlug}`;
+  return `@zytedata/ds-${productSlug}`;
 }

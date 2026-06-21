@@ -2,7 +2,7 @@
 name: change-foundation
 description: >-
   Orchestrate a design-system foundation/token change in this monorepo
-  (@zyte/ds-* packages). Use when the user wants to change, add, rename, or
+  (@zytedata/ds-* packages). Use when the user wants to change, add, rename, or
   fix a color, typography, spacing, radius, shadow, breakpoint, opacity, or
   z-index token in a product's foundations.ts — e.g. "change Core's primary
   to X", "add a warning ramp to Web", "tweak Scrapy's radius scale". Runs the
@@ -17,16 +17,16 @@ description: >-
 
 Deterministic workflow for editing tokens in this repo. The single source of
 truth is `packages/<pkg>/src/foundations.ts` (typed as `ProductFoundations`
-from `@zyte/ds-types`); `tokens-build` compiles it into `dist/` artefacts.
+from `@zytedata/ds-types`); `tokens-build` compiles it into `dist/` artefacts.
 
 ## Products (slug → package)
 
 | slug | package | filter |
 |------|---------|--------|
-| `core` | `@zyte/ds-core` | `packages/core` |
-| `web` | `@zyte/ds-web` | `packages/web` |
-| `scrapy` | `@zyte/ds-scrapy` | `packages/scrapy` |
-| `extract-summit` | `@zyte/ds-extract-summit` | `packages/extract-summit` |
+| `core` | `@zytedata/ds-core` | `packages/core` |
+| `web` | `@zytedata/ds-web` | `packages/web` |
+| `scrapy` | `@zytedata/ds-scrapy` | `packages/scrapy` |
+| `extract-summit` | `@zytedata/ds-extract-summit` | `packages/extract-summit` |
 
 Pick the product from the request. If ambiguous (the change could apply to
 several), ask which product(s). A change can target more than one — repeat the
@@ -54,13 +54,13 @@ Run every command from the repo root.
 
 ### 3. Build to `dist/`
 ```bash
-pnpm --filter "@zyte/ds-<slug>" run build      # build:js (tsc) → build:tokens
+pnpm --filter "@zytedata/ds-<slug>" run build      # build:js (tsc) → build:tokens
 ```
 
 ### 4. Verify
 ```bash
-pnpm --filter "@zyte/ds-<slug>" run check:tokens
-pnpm --filter "@zyte/ds-<slug>" run typecheck
+pnpm --filter "@zytedata/ds-<slug>" run check:tokens
+pnpm --filter "@zytedata/ds-<slug>" run typecheck
 ```
 Then confirm the change actually emitted — grep the new token in the output,
 e.g.:
@@ -84,7 +84,7 @@ If any step fails, fix and re-run before continuing.
 run the interactive `pnpm changeset`):
 ```md
 ---
-"@zyte/ds-<slug>": minor
+"@zytedata/ds-<slug>": minor
 ---
 
 <one-line summary of the change>

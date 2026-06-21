@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import type { ProductDocumentation } from "@zyte/ds-types";
+import type { ProductDocumentation } from "@zytedata/ds-types";
 
 import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";

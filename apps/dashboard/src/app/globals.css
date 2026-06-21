@@ -161,7 +161,7 @@
 }
 
 /* -----------------------------------------------------------------------------
- * Landing hero backdrop tokens — sourced from `@zyte/ds-web`
+ * Landing hero backdrop tokens — sourced from `@zytedata/ds-web`
  * `WEB_FOUNDATIONS.colors` so the snakes / grid / glow stay aligned with
  * the brand: orange→fuchsia headline gradient, fuchsia primary, indigo
  * accent. Anchors are exposed as CSS variables so the SVG paint server

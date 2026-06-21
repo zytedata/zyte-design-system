@@ -120,7 +120,7 @@ export type ProductDocumentation = {
 
 // ---------------------------------------------------------------------------
 // Product branding: the editorial brand guidance (logo, voice, visual
-// language, …) the dashboard's Brand pages render. Each @zyte/ds-* package may
+// language, …) the dashboard's Brand pages render. Each @zytedata/ds-* package may
 // export a `<SLUG>_BRANDING: ProductBranding` constant. Section `slug`s match
 // the dashboard's Brand sub-navigation so the route can look content up by URL.
 

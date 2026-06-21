@@ -21,7 +21,7 @@ Working document for **mapping deprecated or renamed tokens to their replacement
 
 ---
 
-## Web (`@zyte/ds-web`)
+## Web (`@zytedata/ds-web`)
 
 ### Brand colour direction (reference palette)
 
@@ -58,7 +58,7 @@ Structured **background → page sections → secondary → cards** for app chro
 | **Secondary** | `#e8e8ec` | Nested surfaces (e.g. rails, inset bands) |
 | **Cards** | `#ffffff` | Elevated cards, panels, modals-on-light |
 
-### Delta — surface layers (`@zyte/ds-web`)
+### Delta — surface layers (`@zytedata/ds-web`)
 
 | Old token / path | New token / path | Value or notes | Status | Date |
 |------------------|------------------|----------------|--------|------|
@@ -101,7 +101,7 @@ Sans/mono families target **Geist** through the same CSS variables the [`geist`]
 
 ---
 
-## Core (`@zyte/ds-core`)
+## Core (`@zytedata/ds-core`)
 
 | Old token / path | New token / path | Value or notes | Status | Date |
 |------------------|------------------|----------------|--------|------|
@@ -109,7 +109,7 @@ Sans/mono families target **Geist** through the same CSS variables the [`geist`]
 
 ---
 
-## Scrapy (`@zyte/ds-scrapy`)
+## Scrapy (`@zytedata/ds-scrapy`)
 
 | Old token / path | New token / path | Value or notes | Status | Date |
 |------------------|------------------|----------------|--------|------|
@@ -117,7 +117,7 @@ Sans/mono families target **Geist** through the same CSS variables the [`geist`]
 
 ---
 
-## Extract Summit (`@zyte/ds-extract-summit`)
+## Extract Summit (`@zytedata/ds-extract-summit`)
 
 | Old token / path | New token / path | Value or notes | Status | Date |
 |------------------|------------------|----------------|--------|------|

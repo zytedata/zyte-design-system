@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, ExternalLink } from "lucide-react";
 
-import { WEB_FOUNDATIONS } from "@zyte/ds-web";
+import { WEB_FOUNDATIONS } from "@zytedata/ds-web";
 
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";

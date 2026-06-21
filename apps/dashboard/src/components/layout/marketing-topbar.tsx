@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ChevronDown, LogIn } from "lucide-react";
 
-import { WEB_FOUNDATIONS } from "@zyte/ds-web";
+import { WEB_FOUNDATIONS } from "@zytedata/ds-web";
 
 import { siteConfig } from "@/config/site";
 import { PRODUCT_LIST } from "@/data/products";

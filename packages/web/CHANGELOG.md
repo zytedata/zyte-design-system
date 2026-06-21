@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `@zyte/ds-web` are documented here.
+All notable changes to `@zytedata/ds-web` are documented here.
 
 The monorepo also keeps a **per-source** machine-readable log in `src/changelog.ts` (surfaced in the DesignOps dashboard under **Web → Changelog**). This file is the **package / release** changelog; bump it when you run Changesets for a published version.
 

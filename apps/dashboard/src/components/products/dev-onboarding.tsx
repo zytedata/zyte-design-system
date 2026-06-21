@@ -136,7 +136,7 @@ export function DevOnboarding({
         </TabsList>
         <p className="text-muted-foreground text-xs">
           Requires <code className="font-mono">.npmrc</code> with the{" "}
-          <code className="font-mono">@zyte</code> scope pointed at GitHub
+          <code className="font-mono">@zytedata</code> scope pointed at GitHub
           Packages.
         </p>
       </div>

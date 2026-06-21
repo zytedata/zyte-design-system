@@ -1,4 +1,4 @@
-import type { ProductBranding } from "@zyte/ds-types";
+import type { ProductBranding } from "@zytedata/ds-types";
 
 /**
  * Editorial brand guidance for the Web scope. Surfaced by the dashboard's

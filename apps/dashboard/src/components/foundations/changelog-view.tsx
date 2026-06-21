@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import type { FileChangelog } from "@zyte/ds-types";
+import type { FileChangelog } from "@zytedata/ds-types";
 
 type ChangeKind = FileChangelog["entries"][number]["kind"];
 

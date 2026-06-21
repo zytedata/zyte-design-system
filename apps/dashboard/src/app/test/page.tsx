@@ -4,7 +4,7 @@ import type { CSSProperties } from "react";
  * Standalone demo page for the Markdown Studio export.
  *
  * IMPORTANT: this page is intentionally self-contained. It does NOT import
- * anything from the design system (no @zyte/ds-* packages, no foundations).
+ * anything from the design system (no @zytedata/ds-* packages, no foundations).
  * Every value below is transcribed directly from the YAML token block that was
  * embedded in the pasted markdown — the point is to prove that a copy/paste of
  * the studio output is enough to reproduce the look and feel elsewhere.

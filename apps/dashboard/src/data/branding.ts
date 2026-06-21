@@ -1,7 +1,7 @@
-import type { BrandingSection, ProductBranding } from "@zyte/ds-types";
+import type { BrandingSection, ProductBranding } from "@zytedata/ds-types";
 import type { ProductId } from "@/data/products";
 
-import { WEB_BRANDING } from "@zyte/ds-web";
+import { WEB_BRANDING } from "@zytedata/ds-web";
 
 /**
  * Branding bundles per product. Only the Web scope ships brand guidance today;

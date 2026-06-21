@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import type { ProductFoundations } from "@zyte/ds-types";
+import type { ProductFoundations } from "@zytedata/ds-types";
 import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
 import { orderedPaletteIdsSurfacesLast, paletteLabelFor } from "@/lib/foundations";
 import { CopyableSwatch } from "@/components/foundations/copyable-swatch";

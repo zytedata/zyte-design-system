@@ -165,22 +165,42 @@ This is the workflow for a developer in another repo (e.g. `zyte-website-nextjs`
 
 ### 1. Authenticate against GitHub Packages
 
-The `@zyte` scope is published to GitHub Packages, not to the public npm registry. You need a GitHub Personal Access Token with `read:packages`.
+The `@zyte` scope is published to GitHub Packages, not to the public npm registry. The packages are published with **Internal** visibility, so every `zytedata` org member and every internal repo's CI gets read access automatically — there is no per-package access request and no hand-minted PAT for the common cases below.
 
-In your consumer repo, add an `.npmrc`:
+**Step 1 — commit this `.npmrc` to your consumer repo** (works for pnpm, npm, and Yarn Classic v1):
 
 ```ini
 @zyte:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
 auto-install-peers=true
 ```
 
-In your machine's home directory, add the auth token to `~/.npmrc`:
+Yarn Berry (v2+) instead reads `.yarnrc.yml`:
 
-```ini
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```yaml
+npmScopes:
+  zyte:
+    npmRegistryServer: "https://npm.pkg.github.com"
+    npmAuthToken: "${NODE_AUTH_TOKEN}"
 ```
 
-In CI, expose `GITHUB_TOKEN` (or a dedicated PAT) via `NODE_AUTH_TOKEN` / `NPM_CONFIG_//npm.pkg.github.com/:_authToken`.
+**Step 2 — provide `NODE_AUTH_TOKEN`:**
+
+- **Locally** — reuse your existing GitHub CLI login, no PAT to create:
+  ```bash
+  export NODE_AUTH_TOKEN="$(gh auth token)"
+  pnpm install
+  ```
+  (Add the `export` to your shell profile so it's always set. The token only needs `read:packages`, which `gh` already has.)
+
+- **In GitHub Actions** — use the built-in token, nothing to configure as a secret:
+  ```yaml
+  - run: pnpm install --frozen-lockfile
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ```
+
+Only fall back to a hand-created PAT (with `read:packages`) for environments that have neither `gh` nor an Actions token — e.g. a third-party CI or a Docker build arg.
 
 ### 2. Install the package(s)
 
@@ -262,20 +282,35 @@ const designMd = await fs.readFile(
 
 ### 4. Stay up to date
 
-Configure Renovate or Dependabot in your consumer repo to track the `@zyte/*` scope. Each merged release in this repo bumps the published version; your consumer gets a PR a few minutes later, runs CI against the new tokens, and you merge it.
+Each merged release in this repo bumps the published version. Let Dependabot open a bump PR for the `@zyte/*` scope; you review and merge it yourself.
+
+**`.github/dependabot.yml`** in your consumer repo. The `registries` block is required: without it Dependabot can't read versions from GitHub Packages and silently never bumps `@zyte/*`.
 
 ```yaml
-# Example: .github/renovate.json
-{
-  "extends": ["config:base"],
-  "packageRules": [
-    {
-      "matchPackagePatterns": ["^@zyte/"],
-      "groupName": "Zyte design system"
-    }
-  ]
-}
+version: 2
+registries:
+  github-packages:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{ secrets.DEPENDABOT_PACKAGES_TOKEN }}
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    registries:
+      - github-packages
+    schedule:
+      interval: daily
+    groups:
+      zyte-design-system:
+        patterns: ["@zyte/*"]
+    labels: ["zyte-ds"]
 ```
+
+Add `DEPENDABOT_PACKAGES_TOKEN` under **Settings → Secrets and variables → Dependabot** — a PAT with `read:packages` (Dependabot can't use the default `GITHUB_TOKEN` for private/internal registries).
+
+That's it — when this repo publishes a new release, your consumer gets a grouped `@zyte/*` PR within a day. Review it, let CI run against the new tokens, and merge when you're happy.
+
+> Renovate works too — use `"matchPackagePatterns": ["^@zyte/"]` with a `hostRules` entry carrying the same `read:packages` token.
 
 You will **never** need to clone this repo, edit `foundations.ts`, or run the codegen yourself — that's the whole point of the package boundary.
 

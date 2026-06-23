@@ -1,15 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, RotateCcw, Sparkles } from "lucide-react";
+import { ChevronDown, LayoutTemplate, RotateCcw, Sparkles } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { composeExportMarkdown, extractMarkdownBlock } from "@/lib/markdown";
-import {
-  DEFAULT_SKILL_ID,
-  STUDIO_SKILLS,
-  getSkillById,
-} from "@/data/studio/skills";
+import { STUDIO_SKILLS } from "@/data/studio/skills";
 import {
   DEFAULT_PROVIDER,
   STUDIO_PROVIDERS,
@@ -22,6 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -33,12 +31,42 @@ import { MarkdownPreview } from "@/components/studio/markdown-preview";
 import { useStudioChat } from "@/components/studio/use-studio-chat";
 import { useStudioBuild } from "@/components/studio/use-studio-build";
 
+export type StudioTemplate = {
+  id: string;
+  title: string;
+  summary: string;
+  markdown: string;
+  html: string;
+};
+
 export type MarkdownStudioProps = {
   productSlug: string;
   productLabel: string;
   designDoc: string | null;
   availableProviders: ProviderId[];
+  templates?: StudioTemplate[];
 };
+
+/**
+ * The studio's authoring option. A "skill" IS a template: when templates exist
+ * for the scope, the selector lists them and picking one loads its spec + page.
+ * Scopes without templates fall back to the generic authoring skills.
+ */
+type AuthoringOption = {
+  id: string;
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  suggestions: string[];
+  template: StudioTemplate | null;
+};
+
+const TEMPLATE_SUGGESTIONS = [
+  "Refine the hero headline and subcopy",
+  "Tighten the section copy and CTAs",
+  "Add a new section to the page",
+  "Rewrite it for a more technical audience",
+];
 
 function pickDefaultProvider(available: ProviderId[]): ProviderId {
   if (available.includes(DEFAULT_PROVIDER)) return DEFAULT_PROVIDER;
@@ -50,9 +78,33 @@ export function MarkdownStudio({
   productLabel,
   designDoc,
   availableProviders,
+  templates = [],
 }: MarkdownStudioProps) {
-  const [skillId, setSkillId] = React.useState(DEFAULT_SKILL_ID);
-  const skill = getSkillById(skillId) ?? STUDIO_SKILLS[0];
+  const usingTemplates = templates.length > 0;
+  const options = React.useMemo<AuthoringOption[]>(
+    () =>
+      usingTemplates
+        ? templates.map((t) => ({
+            id: t.id,
+            label: t.title,
+            description: t.summary || `Start from the ${t.title} template.`,
+            icon: LayoutTemplate,
+            suggestions: TEMPLATE_SUGGESTIONS,
+            template: t,
+          }))
+        : STUDIO_SKILLS.map((s) => ({
+            id: s.id,
+            label: s.label,
+            description: s.description,
+            icon: s.icon,
+            suggestions: s.suggestions,
+            template: null,
+          })),
+    [templates, usingTemplates],
+  );
+
+  const [optionId, setOptionId] = React.useState(options[0]?.id ?? "");
+  const activeOption = options.find((o) => o.id === optionId) ?? options[0];
   const hasDesignSystem = Boolean(designDoc && designDoc.trim());
   const [embedDesignSystem, setEmbedDesignSystem] =
     React.useState(hasDesignSystem);
@@ -67,7 +119,7 @@ export function MarkdownStudio({
 
   const { messages, status, error, sendMessage, reset, stop } = useStudioChat({
     productSlug,
-    skillId,
+    skillId: optionId,
     provider,
   });
   const page = useStudioBuild({ productSlug, provider });
@@ -107,14 +159,30 @@ export function MarkdownStudio({
   const onReset = React.useCallback(() => {
     reset();
     page.reset();
+    setContent("");
+    setSyncedFrom(null);
   }, [reset, page]);
+
+  // Pick an authoring option. When it's a template (skill = template), seed the
+  // editor with its markdown spec and the page preview with its prebuilt HTML;
+  // either way it becomes the active grounding for the chat.
+  const onPickOption = React.useCallback(
+    (id: string) => {
+      setOptionId(id);
+      const template = options.find((o) => o.id === id)?.template;
+      if (!template) return;
+      setContent(template.markdown);
+      page.load(template.html, template.markdown);
+    },
+    [options, page],
+  );
 
   const onBuildPage = React.useCallback(() => {
     page.build(content);
   }, [page, content]);
 
   const streaming = status === "streaming";
-  const baseName = `${productSlug}-${skillId}`;
+  const baseName = `${productSlug}-${optionId}`;
   // A built page is stale once the markdown it came from no longer matches.
   const pageStale =
     page.builtFrom !== null && page.builtFrom.trim() !== content.trim();
@@ -125,39 +193,41 @@ export function MarkdownStudio({
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground text-xs font-medium">
-              Skill
+              {usingTemplates ? "Template" : "Skill"}
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
-                  <skill.icon className="size-4" />
-                  {skill.label}
+                  {activeOption ? (
+                    <activeOption.icon className="size-4" />
+                  ) : null}
+                  {activeOption?.label ?? "Select"}
                   <ChevronDown className="size-3.5" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-72">
-                <DropdownMenuLabel>Authoring skill</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                  {usingTemplates ? "Start from a template" : "Authoring skill"}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup
-                  value={skillId}
-                  onValueChange={setSkillId}
-                >
-                  {STUDIO_SKILLS.map((item) => (
-                    <DropdownMenuRadioItem
-                      key={item.id}
-                      value={item.id}
-                      className="flex-col items-start gap-0.5 py-2"
-                    >
-                      <span className="flex items-center gap-1.5 font-medium">
-                        <item.icon className="size-3.5" />
-                        {item.label}
-                      </span>
-                      <span className="text-muted-foreground text-xs leading-snug">
-                        {item.description}
-                      </span>
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
+                {options.map((item) => (
+                  <DropdownMenuItem
+                    key={item.id}
+                    onSelect={() => onPickOption(item.id)}
+                    className={cn(
+                      "flex-col items-start gap-0.5 py-2",
+                      item.id === optionId && "bg-accent/60",
+                    )}
+                  >
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <item.icon className="size-3.5" />
+                      {item.label}
+                    </span>
+                    <span className="text-muted-foreground line-clamp-2 text-xs leading-snug">
+                      {item.description}
+                    </span>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -269,8 +339,8 @@ export function MarkdownStudio({
               messages={messages}
               status={status}
               error={error}
-              suggestions={skill.suggestions}
-              skillLabel={skill.label}
+              suggestions={activeOption?.suggestions ?? []}
+              skillLabel={activeOption?.label ?? ""}
               onSend={sendMessage}
               onStop={stop}
               onToggleDock={toggleDock}
@@ -286,8 +356,8 @@ export function MarkdownStudio({
             messages={messages}
             status={status}
             error={error}
-            suggestions={skill.suggestions}
-            skillLabel={skill.label}
+            suggestions={activeOption?.suggestions ?? []}
+            skillLabel={activeOption?.label ?? ""}
             onSend={sendMessage}
             onStop={stop}
             onToggleDock={toggleDock}

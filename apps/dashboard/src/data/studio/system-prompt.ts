@@ -1,5 +1,3 @@
-import type { StudioSkill } from "@/data/studio/skills";
-
 // Four backticks so the document wrapper survives even when the document
 // itself contains normal triple-backtick code blocks (CommonMark: a fence is
 // only closed by a fence of at least as many backticks).
@@ -25,11 +23,11 @@ function designGuardrails(productLabel: string, designDoc: string | null): strin
  */
 export function buildSystemPrompt({
   productLabel,
-  skill,
+  instructions,
   designDoc,
 }: {
   productLabel: string;
-  skill: StudioSkill;
+  instructions: string;
   designDoc: string | null;
 }): string {
   return [
@@ -37,7 +35,7 @@ export function buildSystemPrompt({
     "The markdown you create is the source of truth: it will be rendered as-is, built into a web page, and handed to downstream tools (Claude, Cursor) or developers. Keep it clean, well-structured, and aligned with the design system.",
     "",
     "## Your task",
-    skill.instructions,
+    instructions,
     "",
     "## Design system guardrails",
     designGuardrails(productLabel, designDoc),

@@ -37,6 +37,20 @@ export function useStudioBuild({ productSlug, provider }: UseStudioBuildArgs) {
     setStatus("idle");
   }, []);
 
+  /**
+   * Seed the page preview with a prebuilt HTML page (e.g. when loading a
+   * template) instead of streaming a build. `fromMarkdown` records the source
+   * so the stale-build indicator behaves the same as a real build.
+   */
+  const load = React.useCallback((nextHtml: string, fromMarkdown: string) => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    setError(null);
+    setHtml(nextHtml);
+    setBuiltFrom(fromMarkdown);
+    setStatus("idle");
+  }, []);
+
   const build = React.useCallback(async (markdown: string) => {
     const source = markdown.trim();
     if (!source || abortRef.current) return;
@@ -93,5 +107,5 @@ export function useStudioBuild({ productSlug, provider }: UseStudioBuildArgs) {
 
   React.useEffect(() => () => abortRef.current?.abort(), []);
 
-  return { html, status, error, builtFrom, build, reset };
+  return { html, status, error, builtFrom, build, load, reset };
 }

@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Data Services — Web template preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Web design-system tokens (mirrors @zytedata/ds-web foundations) */
+      :root {
+        --bg: #ffffff;
+        --bg-alt: #f7f7f8;
+        --bg-lavender: #f3eefb;
+        --card: #ffffff;
+        --ink: #0b0d25;
+        --ink-2: #070917;
+        --brand: #c026d3;
+        --brand-hover: #a21caf;
+        --accent: #db005f;
+        --hero-gradient: linear-gradient(118deg, #1b1745 0%, #4c1d6b 52%, #7e1f88 100%);
+        --band-gradient: linear-gradient(118deg, #1b1745 0%, #5a1170 55%, #8a1f86 100%);
+        --text: #0b0d25;
+        --text-body: #525252;
+        --text-muted: #737373;
+        --on-dark: #ffffff;
+        --on-dark-muted: #c9c2d8;
+        --border: #e5e5e5;
+        --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        --radius: 12px;
+        --radius-lg: 16px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; background: var(--bg); color: var(--text-body); font-family: var(--font-sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+      .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+      section { padding: 84px 0; }
+      a { color: inherit; text-decoration: none; }
+      h1, h2, h3, h4 { margin: 0; color: var(--text); font-weight: 600; letter-spacing: -0.02em; line-height: 1.14; }
+      p { margin: 0; }
+      .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand); }
+
+      .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: var(--radius); font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease; }
+      .btn-primary { background: var(--brand); color: #fff; }
+      .btn-primary:hover { background: var(--brand-hover); }
+      .btn-outline { border: 1px solid var(--border); color: var(--text); }
+      .btn-outline:hover { border-color: var(--text-muted); }
+      .btn-white { background: #fff; color: var(--ink); }
+
+      /* Hero */
+      .hero { background: var(--hero-gradient); color: var(--on-dark); text-align: center; padding: 120px 0 108px; }
+      .hero .eyebrow { color: #e9b8f3; display: inline-flex; align-items: center; gap: 8px; }
+      .hero h1 { color: #fff; font-size: clamp(38px, 5.4vw, 60px); max-width: 14ch; margin: 18px auto 0; }
+      .hero p.lead { margin: 22px auto 0; max-width: 52ch; font-size: 19px; color: var(--on-dark-muted); }
+      .hero .actions { margin-top: 32px; }
+
+      /* Skip the struggle (split) */
+      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+      .split h2 { font-size: clamp(28px, 3.6vw, 42px); margin-top: 10px; }
+      .split > div > p { margin-top: 18px; font-size: 16px; color: var(--text-body); }
+      .checks { display: grid; gap: 22px; }
+      .check { display: grid; grid-template-columns: 24px 1fr; gap: 12px; }
+      .check .tick { color: #16a34a; font-weight: 700; }
+      .check b { color: var(--text); font-weight: 600; }
+      .check span { color: var(--text-body); font-size: 15px; }
+
+      /* Partner cards (dark) */
+      .partner { background: linear-gradient(118deg, #16132e, #2a1140 60%, #3a0f47); color: var(--on-dark); }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .partner .lead-cell h2 { color: #fff; font-size: clamp(28px, 3.4vw, 40px); }
+      .partner .lead-cell .btn { margin-top: 22px; }
+      .pcard { background: rgba(255, 255, 255, 0.96); border-radius: var(--radius-lg); padding: 26px; }
+      .pcard .ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(192, 38, 211, 0.12); color: var(--brand); display: grid; place-items: center; margin-bottom: 16px; }
+      .pcard h3 { font-size: 18px; }
+      .pcard p { margin-top: 10px; font-size: 14px; color: var(--text-body); }
+
+      /* Logo wall */
+      .logos { padding: 56px 0; }
+      .logos p { text-align: center; font-size: 13px; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 28px; }
+      .logo-row { display: flex; flex-wrap: wrap; gap: 52px; justify-content: center; align-items: center; }
+      .logo-row span { font-size: 19px; font-weight: 700; color: #9a9aa5; }
+
+      /* Working with Zyte (lavender) */
+      .working { background: var(--bg-lavender); }
+      .section-head { max-width: 720px; margin: 0 auto 48px; text-align: center; }
+      .section-head h2 { font-size: clamp(28px, 3.6vw, 42px); }
+      .section-head p { margin-top: 14px; font-size: 17px; color: var(--text-body); }
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+      .wcard { background: var(--card); border-radius: var(--radius-lg); padding: 28px; }
+      .wcard .ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(192, 38, 211, 0.1); color: var(--brand); display: grid; place-items: center; margin-bottom: 16px; }
+      .wcard h3 { font-size: 19px; }
+      .wcard p { margin: 10px 0 0; font-size: 14px; color: var(--text-body); }
+      .wcard .btn { margin-top: 18px; }
+
+      /* Pricing band */
+      .band { background: var(--band-gradient); color: #fff; text-align: center; }
+      .band h2 { color: #fff; font-size: clamp(28px, 4vw, 44px); }
+      .band p { margin: 16px auto 28px; color: rgba(255, 255, 255, 0.85); font-size: 18px; }
+
+      /* Examples / demo */
+      .pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0 auto 40px; max-width: 880px; }
+      .pill { border: 1px solid #e9d5f3; color: var(--brand); background: #fbf2fe; border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 500; }
+      .pill.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+      .demo { display: grid; grid-template-columns: 1fr 1.2fr; gap: 18px; }
+      .panel { border-radius: var(--radius-lg); border: 1px solid var(--border); overflow: hidden; }
+      .panel .head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--ink); color: #fff; font-size: 13px; }
+      .code { background: #0b1020; color: #d7def0; font-family: var(--font-mono); font-size: 13px; line-height: 1.7; padding: 18px 20px; margin: 0; overflow-x: auto; }
+      .code .k { color: #c084fc; } .code .s { color: #7dd3fc; } .code .n { color: #fca5a5; }
+      .resp { background: var(--ink); color: #cdd3e6; font-family: var(--font-mono); font-size: 12px; padding: 18px 20px; }
+      .resp .row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .resp .row span:last-child { color: #fff; }
+
+      /* Formats split */
+      .formats h2 { font-size: clamp(28px, 4vw, 40px); }
+      .formats .btn { margin-top: 24px; }
+      .fcard { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 26px; }
+      .fcard + .fcard { margin-top: 18px; }
+      .fcard h3 { font-size: 19px; }
+      .fcard p { margin: 10px 0 16px; font-size: 14px; color: var(--text-body); }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+      .chip { border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: var(--text); font-family: var(--font-mono); }
+
+      /* Testimonials */
+      .testi { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+      .testi h2 { font-size: clamp(28px, 4vw, 40px); margin-top: 10px; }
+      .testi-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; }
+      .testi-card .top { display: flex; justify-content: space-between; align-items: center; }
+      .testi-card .mark { font-size: 40px; line-height: 0.5; color: var(--brand); font-family: Georgia, serif; }
+      .testi-card .stars { color: #f59e0b; letter-spacing: 2px; }
+      .testi-card h3 { margin-top: 16px; font-size: 19px; }
+      .testi-card p { margin-top: 12px; font-size: 15px; color: var(--text-body); }
+      .testi-card .by { margin-top: 18px; font-size: 13px; }
+      .testi-card .by b { color: var(--text); } .testi-card .by span { color: var(--text-muted); }
+
+      /* Insights */
+      .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .post { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+      .post .thumb { height: 130px; background: linear-gradient(135deg, #1b1745, #c026d3); }
+      .post .body { padding: 22px; }
+      .post h3 { font-size: 17px; line-height: 1.3; }
+      .post p { margin: 10px 0 16px; font-size: 13px; color: var(--text-body); }
+      .post .meta { font-size: 12px; color: var(--text-muted); }
+
+      /* FAQ */
+      .faq { max-width: 860px; margin: 0 auto; }
+      .faq details { border-bottom: 1px solid var(--border); }
+      .faq summary { list-style: none; cursor: pointer; padding: 20px 0; font-size: 17px; font-weight: 500; color: var(--text); display: flex; justify-content: space-between; gap: 16px; }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::after { content: "+"; color: var(--brand); font-size: 22px; line-height: 1; }
+      .faq details[open] summary::after { content: "−"; }
+      .faq .ans { padding: 0 0 20px; font-size: 15px; color: var(--text-body); }
+
+      /* Footer */
+      footer { background: var(--ink-2); color: var(--on-dark-muted); padding: 64px 0 40px; }
+      .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+      .foot-grid h4 { color: #fff; font-size: 14px; margin-bottom: 14px; }
+      .foot-grid a { display: block; color: var(--on-dark-muted); padding: 5px 0; font-size: 14px; }
+      .foot-grid a:hover { color: #fff; }
+      .foot-bottom { margin-top: 44px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; }
+
+      @media (max-width: 880px) {
+        .split, .grid-3, .grid-2, .demo, .testi, .blog-grid { grid-template-columns: 1fr; }
+        section { padding: 56px 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HERO ─ module: generic_hero_v2 -->
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow">▦ Zyte Data</span>
+        <h1>Fully Managed Data Scraping Service</h1>
+        <p class="lead">
+          Custom data pipelines, built for you. We turn complex websites into dependable data
+          that drives revenue and enables faster, smarter decisions.
+        </p>
+        <div class="actions"><a class="btn btn-white" href="#">Connect with our data team</a></div>
+      </div>
+    </section>
+
+    <!-- SKIP THE STRUGGLE ─ module: rich_module_2 + module_text_bullet_list -->
+    <section>
+      <div class="container split">
+        <div>
+          <span class="eyebrow">We'll do the heavy lifting</span>
+          <h2>Skip the struggle</h2>
+          <p>
+            Sites block. Spiders break. Engineers burn time on CAPTCHAs, patches, and failed
+            runs—months lost before you see a single row of usable data. With Zyte Data, you skip
+            the pain and get clean, structured feeds from day one.
+          </p>
+        </div>
+        <div class="checks">
+          <div class="check"><span class="tick">✓</span><span><b>Fully managed service.</b> We build, run, and maintain every part of your data pipeline—no engineering required.</span></div>
+          <div class="check"><span class="tick">✓</span><span><b>Clean, structured delivery.</b> Data arrives ready to use in your preferred schema and format.</span></div>
+          <div class="check"><span class="tick">✓</span><span><b>Scalable & reliable.</b> Designed to grow with you—quickly, securely, and cost-efficiently.</span></div>
+          <div class="check"><span class="tick">✓</span><span><b>Unmatched uptime.</b> Powered by Zyte API—the proven leader in overcoming site blocks.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTNER CARDS ─ module: module_44 / feature cards (dark) -->
+    <section class="partner">
+      <div class="container grid-3">
+        <div class="lead-cell">
+          <h2>The data partner of your dreams</h2>
+          <a class="btn btn-primary" href="#">Let's talk</a>
+        </div>
+        <div class="pcard"><div class="ico">★</div><h3>Heritage and expertise</h3><p>For 15 years, Zyte has powered web data collection for the world's leading enterprises across all industries.</p></div>
+        <div class="pcard"><div class="ico">⛨</div><h3>Compliance built in</h3><p>Each data project is reviewed for regulatory risk, with direct collaboration from our legal team when required to support GDPR, CCPA, and EU AI Act alignment.</p></div>
+        <div class="pcard"><div class="ico">◆</div><h3>Custom solutions, built for scale</h3><p>We design custom extraction solutions tailored to your goals — built to handle complex sites and operate at global scale.</p></div>
+        <div class="pcard"><div class="ico">↔</div><h3>End-to-end reliability</h3><p>We manage the full data lifecycle, from discovery to testing to delivery, and backed by enterprise-grade SLAs.</p></div>
+        <div class="pcard"><div class="ico">⚡</div><h3>Powered by Zyte API</h3><p>We power every engagement with our Zyte API platform, providing enterprise-grade access, structured delivery, and infrastructure built for mission-critical data.</p></div>
+      </div>
+    </section>
+
+    <!-- LOGO WALL ─ module: social_proof -->
+    <div class="logos">
+      <div class="container">
+        <p>Trusted by data-fueled organizations</p>
+        <div class="logo-row"><span>SIXT</span><span>Red Bull</span><span>MikMak</span><span>edmunds</span><span>BORDER X LAB</span></div>
+      </div>
+    </div>
+
+    <!-- WORKING WITH ZYTE ─ module: module_31 / step cards (lavender) -->
+    <section class="working">
+      <div class="container">
+        <div class="section-head">
+          <h2>Working with Zyte Data</h2>
+          <p>Our team of engineers, project managers and compliance experts will become a valuable part of your team. With Zyte, you get a partner, not just a provider.</p>
+        </div>
+        <div class="grid-2">
+          <div class="wcard"><div class="ico">⚡</div><h3>Getting started</h3><p>From day one, we launch a highly efficient, structured onboarding process focused on defining scope, aligning expectations, delivering sample data quickly, and launching your feeds.</p></div>
+          <div class="wcard"><div class="ico">◎</div><h3>Constant alignment</h3><p>You'll have a single source of truth for project status, tickets, and communication — plus direct access to your dedicated team whenever you need us via Slack and scheduled check-ins.</p></div>
+          <div class="wcard"><div class="ico">◆</div><h3>A process driven by speed-to-value</h3><p>We prioritize fast iteration and early data delivery — so you can validate, refine, and move into production with confidence.</p></div>
+          <div class="wcard"><div class="ico">↗</div><h3>Watch the data roll in</h3><p>Production-ready data, delivered consistently and built to scale with you.</p><a class="btn btn-primary" href="#">Connect with our data team</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING BAND ─ module: rich_module (gradient) -->
+    <section class="band">
+      <div class="container">
+        <h2>Simple pricing that scales with your needs</h2>
+        <p>Standard and custom plans from $500 per month.</p>
+        <a class="btn btn-white" href="#">See plans</a>
+      </div>
+    </section>
+
+    <!-- EXAMPLES / DEMO ─ module: module_31 (tabs) + dynamic_code_snippet -->
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>Whatever you need, Zyte's done it.</h2>
+          <p>These are just a few examples — we've delivered web data across industries and tailor schemas to meet unique business needs. Reach out to discuss your project.</p>
+        </div>
+        <div class="pills">
+          <span class="pill active">Real estate listings</span>
+          <span class="pill">E-commerce &amp; product data</span>
+          <span class="pill">Business listings &amp; company data</span>
+          <span class="pill">Training data for AI &amp; LLMs</span>
+          <span class="pill">Travel &amp; hospitality data</span>
+          <span class="pill">Market &amp; financial data</span>
+          <span class="pill">News &amp; media monitoring data</span>
+          <span class="pill">Job listings &amp; hiring data</span>
+        </div>
+        <div class="demo">
+          <div class="panel">
+            <div class="head"><span>Response</span><span>Real Estate Listing · HTML</span></div>
+            <div class="resp">
+              <div class="row"><span>price</span><span>$849,000</span></div>
+              <div class="row"><span>status</span><span>ForSale</span></div>
+              <div class="row"><span>bedrooms</span><span>4</span></div>
+              <div class="row"><span>bathrooms</span><span>3</span></div>
+              <div class="row"><span>city</span><span>Austin, TX</span></div>
+              <div class="row"><span>postalCode</span><span>78704</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="head"><span>JSON</span><span>Copy</span></div>
+<pre class="code">{
+  <span class="k">"realEstateListing"</span>: {
+    <span class="k">"id"</span>: <span class="s">"hl-ATX-1427-woodland"</span>,
+    <span class="k">"url"</span>: <span class="s">"https://hearthlane.example/listings/woodland-ave-1427"</span>,
+    <span class="k">"status"</span>: <span class="s">"ForSale"</span>,
+    <span class="k">"price"</span>: {
+      <span class="k">"amount"</span>: <span class="n">849000</span>,
+      <span class="k">"currency"</span>: <span class="s">"USD"</span>,
+      <span class="k">"display"</span>: <span class="s">"$849,000"</span>
+    },
+    <span class="k">"address"</span>: {
+      <span class="k">"street"</span>: <span class="s">"1427 Woodtree Ave"</span>,
+      <span class="k">"city"</span>: <span class="s">"Austin"</span>,
+      <span class="k">"region"</span>: <span class="s">"TX"</span>,
+      <span class="k">"postalCode"</span>: <span class="s">"78704"</span>,
+      <span class="k">"country"</span>: <span class="s">"US"</span>
+    }
+  }
+}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMATS ─ module: rich_module_2 + cards -->
+    <section class="bg-alt" style="background: var(--bg-alt);">
+      <div class="container split formats">
+        <div>
+          <h2>The data you need, in any format</h2>
+          <a class="btn btn-primary" href="#">Talk to an expert</a>
+        </div>
+        <div>
+          <div class="fcard">
+            <h3>Formats that fit your workflow</h3>
+            <p>Whether you need raw files or structured feeds, we'll shape your data to match your stack.</p>
+            <div class="chips"><span class="chip">CSV</span><span class="chip">JSON</span><span class="chip">XML</span></div>
+          </div>
+          <div class="fcard">
+            <h3>Delivered where you need it</h3>
+            <p>Your data, your rules. We push it to the tools and platforms you already use — no extra effort required.</p>
+            <div class="chips"><span class="chip">GCS</span><span class="chip">S3</span><span class="chip">CSV</span><span class="chip">Azure</span><span class="chip">AWS</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS ─ module: module_text_testimonials -->
+    <section>
+      <div class="container testi">
+        <div>
+          <span class="eyebrow">Testimonials</span>
+          <h2>Our customers are doing amazing things. See what they say about Zyte Data.</h2>
+        </div>
+        <div class="testi-card">
+          <div class="top"><span class="mark">"</span><span class="stars">★★★★★</span></div>
+          <h3>Reliable Competitor Data Partner with Stellar Support</h3>
+          <p>I love the ease of the initial setup with Zyte, as they took care of all the development, and we only needed to communicate what data we needed and set up the necessary processes on our end. I find it great that Zyte handles everything for us, allowing us not to worry about maintaining a platform ourselves.</p>
+          <p class="by"><b>David P.</b> · <span>Verified G2.com Reviewer</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSIGHTS ─ module: module_27 -->
+    <section style="background: var(--bg-alt);">
+      <div class="container">
+        <div class="section-head">
+          <h2>Insights for teams outsourcing web data</h2>
+          <p>Practical guidance from the experts behind Zyte Data — from evaluation to execution.</p>
+        </div>
+        <div class="blog-grid">
+          <a class="post" href="#"><div class="thumb"></div><div class="body"><h3>Three ways data outsourcing benefits…</h3><p>The Strategic Case for Buying Web Data: Quality, Focus, and Scale.</p><div class="meta">Theresia Tanzil · June 11, 2025</div></div></a>
+          <a class="post" href="#"><div class="thumb"></div><div class="body"><h3>Web data for engineering leaders in 2026</h3><p>How engineering leaders can scale web data in 2026 using agentic AI, automated scraping, and compliant platforms, without growing…</p><div class="meta">Theresia Tanzil · January 22, 2026</div></div></a>
+          <a class="post" href="#"><div class="thumb"></div><div class="body"><h3>Global retailer enlists Zyte for data-driven, AI-…</h3><p>How a global retailer used Zyte's AI-powered scraping and LLM-driven extraction to scale data collection.</p><div class="meta">Mitch Holt</div></div></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ ─ module: module_faq -->
+    <section>
+      <div class="container">
+        <div class="section-head"><h2>Frequently asked questions</h2></div>
+        <div class="faq">
+          <details open><summary>What is managed data extraction (or managed web scraping)?</summary><div class="ans">A fully managed service where Zyte builds, runs, and maintains your web data pipeline end to end — you define the data you need, we deliver it clean and structured.</div></details>
+          <details><summary>When should I outsource web data collection instead of building in-house?</summary><div class="ans">When maintenance, anti-bot handling, and compliance would pull your engineers away from core product work.</div></details>
+          <details><summary>How does Zyte Data (managed data services) work?</summary><div class="ans">We scope your project, deliver sample data fast, then launch and maintain production feeds with a dedicated team.</div></details>
+          <details><summary>What types of web data projects can Zyte handle?</summary><div class="ans">From e-commerce and real estate to news, search, social, and training data for AI — at any scale.</div></details>
+          <details><summary>How long does it take to launch a managed data project?</summary><div class="ans">Our structured onboarding prioritizes speed-to-value, with sample data early and production feeds shortly after.</div></details>
+          <details><summary>How is data quality ensured in a managed service?</summary><div class="ans">QA is built into the lifecycle, with validation, monitoring, and human oversight before delivery.</div></details>
+          <details><summary>Is outsourcing web scraping more cost-effective than building in-house?</summary><div class="ans">Often yes — you avoid infrastructure, maintenance, and the hidden cost of failed runs and engineer time.</div></details>
+          <details><summary>How does Zyte handle site blocking and anti-bot systems?</summary><div class="ans">Powered by Zyte API, the proven leader in overcoming site blocks.</div></details>
+          <details><summary>Can Zyte deliver data in our preferred format and schedule?</summary><div class="ans">Yes — CSV, JSON, or XML, pushed to GCS, S3, Azure, AWS, or your tools on your schedule.</div></details>
+          <details><summary>Is Zyte Data managed web data extraction compliant and secure?</summary><div class="ans">Each project is reviewed for regulatory risk with legal collaboration to support GDPR, CCPA, and EU AI Act alignment.</div></details>
+        </div>
+        <div style="text-align: center; margin-top: 32px;"><a class="btn btn-primary" href="#">Talk to us</a></div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="foot-grid">
+          <div><h4>Zyte</h4><p style="max-width: 320px;">Fully managed data scraping service — custom data pipelines, built for you.</p></div>
+          <div><h4>Products</h4><a href="#">Zyte API - Ban Handling</a><a href="#">Zyte API - Headless Browser</a><a href="#">Zyte API - AI Extraction</a><a href="#">Scrapy Cloud</a></div>
+          <div><h4>Data Types</h4><a href="#">Product</a><a href="#">Data for AI</a><a href="#">Job Posting</a><a href="#">Real Estate</a></div>
+          <div><h4>Company</h4><a href="#">Meet Zyte</a><a href="#">Jobs</a><a href="#">Terms and Policies</a><a href="#">Contact us</a></div>
+        </div>
+        <div class="foot-bottom">© Zyte Group Limited 2026</div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home — Web template preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ──────────────────────────────────────────────────────────
+         Web design-system tokens (mirrors @zytedata/ds-web foundations)
+         ────────────────────────────────────────────────────────── */
+      :root {
+        /* light shell — the body of the home page */
+        --bg: #ffffff;
+        --bg-alt: #f7f7f8; /* surfaceLight.background */
+        --card: #ffffff;
+
+        /* dark shell — hero + footer */
+        --ink: #0b0d25; /* secondary.900 — navy ink */
+        --ink-2: #070917; /* secondary.950 */
+
+        /* brand / accent */
+        --brand: #c026d3; /* primary.600 — Zyte Fuchsia */
+        --brand-hover: #a21caf; /* primary.700 */
+        --accent: #db005f; /* accent.500 */
+        --headline-gradient: linear-gradient(90deg, #e8520a 0%, #c026d3 100%);
+        --band-gradient: linear-gradient(90deg, #131745 0%, #4a044e 55%, #c026d3 100%);
+        --hero-gradient: radial-gradient(900px 500px at 85% 20%, rgba(192, 38, 211, 0.35), transparent 60%),
+          linear-gradient(160deg, #0b0d25 0%, #070917 60%, #000000 100%);
+
+        /* text */
+        --text: #0b0d25; /* headings on light */
+        --text-body: #525252; /* neutral.600 */
+        --text-muted: #737373; /* neutral.500 */
+        --on-dark: #ffffff;
+        --on-dark-muted: #b9bccb;
+        --border: #e5e5e5; /* neutral.200 */
+
+        --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        --radius: 12px;
+        --radius-lg: 16px;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text-body);
+        font-family: var(--font-sans);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+      section { padding: 88px 0; }
+      a { color: inherit; text-decoration: none; }
+      h1, h2, h3, h4 { margin: 0; color: var(--text); font-weight: 600; letter-spacing: -0.02em; line-height: 1.12; }
+      p { margin: 0; }
+
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 13px 24px; border-radius: var(--radius);
+        font-size: 15px; font-weight: 600; cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      }
+      .btn-primary { background: var(--brand); color: #fff; }
+      .btn-primary:hover { background: var(--brand-hover); }
+      .btn-outline-dark { border: 1px solid rgba(255, 255, 255, 0.35); color: #fff; }
+      .btn-outline-dark:hover { border-color: #fff; }
+      .btn-outline { border: 1px solid var(--border); color: var(--text); }
+      .btn-outline:hover { border-color: var(--text-muted); }
+      .link-cta { color: var(--brand); font-weight: 600; font-size: 15px; }
+      .link-cta:hover { text-decoration: underline; }
+
+      /* ── Hero ─ module: home_page_experiment / generic_hero_v2 ── */
+      .hero { background: var(--hero-gradient); color: var(--on-dark); padding: 132px 0 116px; position: relative; overflow: hidden; }
+      .hero .container { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 40px; align-items: center; }
+      .hero h1 { color: #fff; font-size: clamp(40px, 5.2vw, 60px); max-width: 9ch; }
+      .hero p.lead { margin-top: 22px; font-size: 20px; color: var(--on-dark-muted); max-width: 46ch; }
+      .hero .actions { margin-top: 34px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .hero-art { position: relative; display: flex; justify-content: flex-end; }
+      .hero-art svg {
+        width: 100%; max-width: 460px; height: auto;
+        filter: drop-shadow(0 30px 80px rgba(226, 51, 127, 0.35));
+      }
+
+      /* ── Managed data ─ module: rich_module_2 (text + media) ── */
+      .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+      .split h2 { font-size: clamp(28px, 3.6vw, 40px); }
+      .split p { margin-top: 18px; font-size: 17px; color: var(--text-body); }
+      .split .actions { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+      .media-stack { position: relative; height: 320px; }
+      .media-stack .pane {
+        position: absolute; border-radius: var(--radius-lg); border: 1px solid var(--border);
+        background: linear-gradient(135deg, #f0f0f2, #ffffff); box-shadow: 0 20px 40px -20px rgba(11, 13, 37, 0.25);
+      }
+      .media-stack .pane.one { inset: 0 60px 60px 0; }
+      .media-stack .pane.two { inset: 60px 0 0 80px; background: linear-gradient(135deg, #fae8ff, #ffffff); border-color: #f5d0fe; }
+
+      /* ── Value props ─ module: module_5 (3-up) ── */
+      .values { background: var(--bg-alt); }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+      .value { padding-top: 18px; border-top: 3px solid; border-image: var(--headline-gradient) 1; }
+      .value h3 { font-size: 19px; }
+      .value p { margin-top: 10px; font-size: 15px; color: var(--text-body); }
+
+      /* ── Logo wall ─ module: social_proof ── */
+      .logos { padding: 56px 0; }
+      .logos p { text-align: center; font-size: 13px; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 30px; }
+      .logo-row { display: flex; flex-wrap: wrap; gap: 56px; justify-content: center; align-items: center; }
+      .logo-row span { font-size: 20px; font-weight: 700; color: #9a9aa5; }
+
+      /* ── Zyte for your business ─ module: service_card_module ── */
+      .section-head { max-width: 720px; margin: 0 auto 52px; text-align: center; }
+      .section-head h2 { font-size: clamp(28px, 3.6vw, 42px); }
+      .section-head p { margin-top: 14px; font-size: 17px; color: var(--text-body); }
+      .biz-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
+      .biz {
+        padding: 28px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      }
+      .biz h3 { font-size: 19px; }
+      .biz p { margin: 10px 0 16px; font-size: 14px; color: var(--text-body); }
+
+      /* ── Historic scale band ─ module: rich_module (gradient) ── */
+      .band { background: var(--band-gradient); color: #fff; text-align: center; }
+      .band h2 { color: #fff; font-size: clamp(28px, 4vw, 44px); }
+      .band p { margin: 18px auto 0; max-width: 620px; color: rgba(255, 255, 255, 0.85); font-size: 17px; }
+      .band .actions { margin-top: 30px; display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap; }
+      .band .actions .btn-primary { background: #fff; color: var(--ink); }
+      .band .actions .link-cta { color: #fff; }
+
+      /* ── Testimonials ─ module: module_text_testimonials ── */
+      .testi { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+      .testi h2 { font-size: clamp(28px, 4vw, 44px); }
+      .testi-card {
+        background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px;
+      }
+      .testi-card .mark { font-size: 44px; line-height: 0.6; color: var(--brand); font-family: Georgia, serif; }
+      .testi-card h3 { margin-top: 14px; font-size: 18px; }
+      .testi-card p { margin-top: 10px; font-size: 16px; color: var(--text-body); }
+      .testi-card .stars { margin-top: 18px; color: #f59e0b; letter-spacing: 2px; }
+      .testi-card .by { margin-top: 14px; display: flex; align-items: center; gap: 12px; }
+      .testi-card .by .av { width: 38px; height: 38px; border-radius: 999px; background: linear-gradient(135deg, #f0abfc, #c026d3); }
+      .testi-card .by .meta { font-size: 13px; color: var(--text-muted); }
+
+      /* ── Community ─ module: community_experiment ── */
+      .community { background: var(--bg-alt); }
+      .com-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; display: flex; flex-direction: column; }
+      .com-card .eyebrow { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand); }
+      .com-card h3 { margin-top: 12px; font-size: 19px; }
+      .com-card p { margin: 10px 0 22px; font-size: 14px; color: var(--text-body); flex: 1; }
+
+      /* ── Blog ─ module: module_27 ── */
+      .blog-head h2 { font-size: clamp(28px, 4vw, 42px); }
+      .blog-head h3 { margin-top: 10px; font-size: 18px; font-weight: 400; color: var(--text-body); }
+      .blog-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .post { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; }
+      .post .thumb { height: 120px; border-radius: var(--radius); background: linear-gradient(135deg, #131745, #c026d3); margin-bottom: 18px; opacity: 0.9; }
+      .post h4 { font-size: 16px; line-height: 1.3; }
+
+      /* ── Footer ── */
+      footer { background: var(--ink-2); color: var(--on-dark-muted); padding: 64px 0 40px; }
+      .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+      .foot-grid h4 { color: #fff; font-size: 14px; margin-bottom: 14px; }
+      .foot-grid a { display: block; color: var(--on-dark-muted); padding: 5px 0; font-size: 14px; }
+      .foot-grid a:hover { color: #fff; }
+      .foot-bottom { margin-top: 44px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; }
+
+      @media (max-width: 880px) {
+        .hero .container, .split, .testi { grid-template-columns: 1fr; }
+        .grid-3, .biz-grid, .blog-grid { grid-template-columns: 1fr; }
+        .hero-art, .media-stack { display: none; }
+        section { padding: 56px 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HERO ─ module: home_page_experiment / generic_hero_v2 -->
+    <section class="hero">
+      <div class="container">
+        <div>
+          <h1>Access the web's data. Clean, ready, and at scale.</h1>
+          <p class="lead">
+            Unblock, render, and extract any website's data with the all-in-one Web Scraping API.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#">Try free</a>
+            <a class="btn btn-outline-dark" href="#">Find out more</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg width="732" height="763" viewBox="0 0 732 763" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M342.057 527.677L709.728 196.158L632.064 110.024L247.523 456.753L226.332 502.688L227.057 502.983V762.737H342.057V527.677Z" fill="url(#paint0_linear_1_2)"></path><g opacity="0.5"><mask id="mask0_1_2" mask-type="alpha" maskUnits="userSpaceOnUse" x="226" y="110" width="484" height="653"><g opacity="0.5"><path d="M342.312 527.425L709.721 196.143L632.057 110.009L247.515 456.737L226.33 502.665H226.312V762.665H342.312V527.425Z" fill="url(#paint1_linear_1_2)"></path></g></mask><g mask="url(#mask0_1_2)"><g opacity="0.75" filter="url(#filter0_f_1_2)"><path d="M507.855 296.099C542.091 325.999 551.25 371.529 528.313 397.793C505.375 424.057 459.026 421.11 424.79 391.209C390.554 361.309 381.395 315.779 404.332 289.515C427.27 263.251 473.619 266.199 507.855 296.099Z" fill="black"></path></g></g></g><path d="M731.659 516.475V149.212L632.249 109.172L612.919 128.502V389.675L164.487 11.9873H0.500366L636.386 560.656L636.387 560.653L636.391 560.656L731.659 516.475Z" fill="url(#paint2_linear_1_2)"></path><defs><filter id="filter0_f_1_2" x="364.838" y="244.734" width="202.969" height="197.839" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend><feGaussianBlur stdDeviation="13.4297" result="effect1_foregroundBlur_1_2"></feGaussianBlur></filter><linearGradient id="paint0_linear_1_2" x1="405.811" y1="822.997" x2="536.828" y2="233.959" gradientUnits="userSpaceOnUse"><stop stop-color="#6B21A8"></stop><stop offset="1" stop-color="#E2337F"></stop></linearGradient><linearGradient id="paint1_linear_1_2" x1="376.137" y1="681.228" x2="554.042" y2="227.996" gradientUnits="userSpaceOnUse"><stop stop-color="#6B21A8"></stop><stop offset="1" stop-color="#DD6986"></stop></linearGradient><linearGradient id="paint2_linear_1_2" x1="134.498" y1="249.78" x2="597.515" y2="249.781" gradientUnits="userSpaceOnUse"><stop stop-color="#F9423A"></stop><stop offset="1" stop-color="#E2337F"></stop></linearGradient></defs></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- MANAGED DATA ─ module: rich_module_2 (text + media) -->
+    <section>
+      <div class="container split">
+        <div>
+          <h2>Let us build and manage your web data feeds.</h2>
+          <p>
+            Zyte's Managed Data service combines 15 years of web data expertise with AI automation
+            to get your feeds live faster, without setup fees or compliance risks.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#">Talk to us</a>
+            <a class="btn btn-outline" href="#">More about managed data</a>
+          </div>
+        </div>
+        <div class="media-stack" aria-hidden="true">
+          <div class="pane one"></div>
+          <div class="pane two"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALUE PROPS ─ module: module_5 (3-up) -->
+    <section class="values">
+      <div class="container grid-3">
+        <div class="value">
+          <h3>AI Built for web scraping</h3>
+          <p>We use our patented AI and automation to keep costs low, without sacrificing quality and accuracy.</p>
+        </div>
+        <div class="value">
+          <h3>Built-in legal compliance</h3>
+          <p>We are the undisputed legal compliance leaders in web data extraction. Don't do web scraping without legal peace of mind.</p>
+        </div>
+        <div class="value">
+          <h3>Accelerate your data projects</h3>
+          <p>Zyte's patented AI, with human oversight, lets businesses add websites to data feeds in hours—cutting costs and speeding up time-to-value.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOGO WALL ─ module: social_proof -->
+    <div class="logos">
+      <div class="container">
+        <p>Trusted by data-fueled organizations</p>
+        <div class="logo-row">
+          <span>ZoomInfo</span><span>Recruitics</span><span>Red Bull</span><span>Mimik</span><span>Muck Rack</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZYTE FOR YOUR BUSINESS ─ module: service_card_module -->
+    <section>
+      <div class="container">
+        <div class="section-head"><h2>Zyte for your business</h2></div>
+        <div class="biz-grid">
+          <div class="biz">
+            <h3>Product Data</h3>
+            <p>Collect quality, accurate product and pricing data from the biggest e-commerce websites and product marketplaces in the world.</p>
+            <a class="link-cta" href="#">Explore Product data →</a>
+          </div>
+          <div class="biz">
+            <h3>AI & LLM</h3>
+            <p>AI and machine learning applications often need large amounts of quality data, and web data extraction is a fast, efficient way to build structured data sets.</p>
+            <a class="link-cta" href="#">Explore AI & LLM data →</a>
+          </div>
+          <div class="biz">
+            <h3>Search</h3>
+            <p>Scraping search engines to see which websites rank in which positions in search engines for any given keyphrase by automating the process of performing a search and parsing the results to extract positions.</p>
+            <a class="link-cta" href="#">Explore Search data →</a>
+          </div>
+          <div class="biz">
+            <h3>News & Article</h3>
+            <p>Accurate articles and news data from global publishers and the largest news websites in the world.</p>
+            <a class="link-cta" href="#">Explore News & article data →</a>
+          </div>
+          <div class="biz">
+            <h3>Business Places</h3>
+            <p>Get business location data from hard-to-scrape websites and directories to drive lead generation and market research.</p>
+            <a class="link-cta" href="#">Explore Business Places data →</a>
+          </div>
+          <div class="biz">
+            <h3>Real Estate</h3>
+            <p>Collect quality, accurate real estate data and property listings data at scale, to power your business, processes, and applications.</p>
+            <a class="link-cta" href="#">Explore Job & Real estate data →</a>
+          </div>
+          <div class="biz">
+            <h3>Flights</h3>
+            <p>From monitoring flight schedules to ticket prices, flight data can present opportunities you never thought about!</p>
+            <a class="link-cta" href="#">Explore Flight data →</a>
+          </div>
+          <div class="biz">
+            <h3>Social Media</h3>
+            <p>Social Media is a global phenomenon and part of everyday life for billions of people, so many people are interested in accessing that data at scale. From sentiment analysis to brand monitoring, social media data can help you access a treasure trove of insights.</p>
+            <a class="link-cta" href="#">Explore Social Media data →</a>
+          </div>
+          <div class="biz">
+            <h3>Job Posting</h3>
+            <p>Job listings data at scale to power any process or application. Get a 360 view of the jobs boards and recruitment websites you care about.</p>
+            <a class="link-cta" href="#">Explore Job posting data →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORIC SCALE BAND ─ module: rich_module (gradient) -->
+    <section class="band">
+      <div class="container">
+        <h2>Historic scale, unprecedented reach</h2>
+        <p>Zyte has set the standards in web data extraction since 2010.</p>
+        <p>With more than 15 years and billions of monthly requests across 116 countries, we're just getting started.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#">Try free</a>
+          <a class="link-cta" href="#">Find out more about Zyte →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS ─ module: module_text_testimonials -->
+    <section>
+      <div class="container testi">
+        <h2>Humble brag? Maybe. But thousands of happy customers can't be wrong.</h2>
+        <div class="testi-card">
+          <div class="mark">"</div>
+          <h3>It Just Works</h3>
+          <p>Zyte was able to offer the most simple and effective rotating proxy solution for us. It just works.</p>
+          <div class="stars">★★★★★</div>
+          <div class="by">
+            <div class="av"></div>
+            <div class="meta">Aurélien Iemma · CEO at Lovango</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY ─ module: community_experiment -->
+    <section class="community">
+      <div class="container">
+        <div class="section-head"><h2>Join the world's biggest web scraping community</h2></div>
+        <div class="grid-3">
+          <div class="com-card">
+            <span class="eyebrow">Extract Data Community</span>
+            <h3>Join our developer community on Discord</h3>
+            <p>A vibrant Discord community of over 20,000 web scraping enthusiasts, dedicated to sharing insights, learning new technologies, and advancing their web scraping skills.</p>
+            <a class="link-cta" href="#">Join us →</a>
+          </div>
+          <div class="com-card">
+            <span class="eyebrow">Extract Data Community</span>
+            <h3>Revisit the standout sessions from Extract Summit 2025</h3>
+            <p>Catch up on top sessions, expert insights, and key takeaways from 2025. Watch on-demand and explore the highlights at your convenience.</p>
+            <a class="link-cta" href="#">Watch now →</a>
+          </div>
+          <div class="com-card">
+            <span class="eyebrow">Zyte Affiliate Program</span>
+            <h3>Start earning recurring commissions today</h3>
+            <p>Join Zyte's affiliate network and earn 50% commission on every client referral. With no setup costs and monthly payouts, you can start monetizing your audience immediately.</p>
+            <a class="link-cta" href="#">Become an affiliate →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOG ─ module: module_27 -->
+    <section>
+      <div class="container">
+        <div class="blog-head">
+          <h2>Latest web scraping insights.</h2>
+          <h3>We spend all day thinking about data extraction.</h3>
+        </div>
+        <div class="blog-grid">
+          <a class="post" href="#"><div class="thumb"></div><h4>Why I'm adding GLM-5.2 to my agentic coding arsenal</h4></a>
+          <a class="post" href="#"><div class="thumb"></div><h4>How to build your first Scrapy extension</h4></a>
+          <a class="post" href="#"><div class="thumb"></div><h4>My personal agent setup: the architecture that runs my household and my DevRel work</h4></a>
+          <a class="post" href="#"><div class="thumb"></div><h4>Data is the new water</h4></a>
+          <a class="post" href="#"><div class="thumb"></div><h4>Building robust agentic AI workflows with rapid web data</h4></a>
+          <a class="post" href="#"><div class="thumb"></div><h4>Now what exactly is loop engineering? And where do Anthropic's Fable 5 model and web scraping fit in?</h4></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+        <div class="foot-grid">
+          <div>
+            <h4>Zyte</h4>
+            <p style="max-width: 320px;">Access the web's data. Clean, ready, and at scale.</p>
+          </div>
+          <div>
+            <h4>Products</h4>
+            <a href="#">Zyte API - Ban Handling</a><a href="#">Zyte API - Headless Browser</a><a href="#">Zyte API - AI Extraction</a><a href="#">Scrapy Cloud</a>
+          </div>
+          <div>
+            <h4>Data Types</h4>
+            <a href="#">Product</a><a href="#">Data for AI</a><a href="#">Job Posting</a><a href="#">Real Estate</a>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <a href="#">Meet Zyte</a><a href="#">Jobs</a><a href="#">Terms and Policies</a><a href="#">Contact us</a>
+          </div>
+        </div>
+        <div class="foot-bottom">© Zyte Group Limited 2026</div>
+      </div>
+    </footer>
+  </body>
+</html>

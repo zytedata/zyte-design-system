@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { PRODUCT_LIST, getProductBySlug } from "@/data/products";
 import { readCanonicalDoc } from "@/data/foundations/docs";
+import { listTemplates, readTemplate } from "@/data/templates";
 import { getConfiguredProviders } from "@/lib/studio-llm";
 import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
@@ -69,6 +70,21 @@ export default async function ProductStudioPage({
   const doc = await readCanonicalDoc(product.id);
   const availableProviders = getConfiguredProviders();
 
+  // Templates double as ready-made starting points in the studio: the markdown
+  // spec seeds the editor and the prebuilt HTML seeds the page preview.
+  const templateMetas = await listTemplates(product.id);
+  const templates = (
+    await Promise.all(templateMetas.map((t) => readTemplate(product.id, t.id)))
+  )
+    .filter((t): t is NonNullable<typeof t> => t !== null)
+    .map((t) => ({
+      id: t.id,
+      title: t.title,
+      summary: t.summary,
+      markdown: t.markdown,
+      html: t.html,
+    }));
+
   return (
     <AppPageShell className="flex h-[calc(100svh-3.5rem)] flex-col overflow-hidden pt-6 pb-6">
       <div className="shrink-0">
@@ -90,6 +106,7 @@ export default async function ProductStudioPage({
           productLabel={product.label}
           designDoc={doc?.content ?? null}
           availableProviders={availableProviders}
+          templates={templates}
         />
       </div>
     </AppPageShell>

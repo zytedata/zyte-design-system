@@ -8,6 +8,7 @@ import {
   ExternalLink,
   FileCode,
   FileText,
+  MonitorPlay,
   Palette,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -26,6 +27,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { TokenSurface } from "@/components/foundations/token-surface";
+import { DesignPreview } from "@/components/foundations/design-preview";
 
 const SPEC_URL = "https://github.com/google-labs-code/design.md/blob/main/docs/spec.md";
 
@@ -223,6 +225,9 @@ export function AgenticDoc({
             <TabsTrigger value="tokens" className="gap-1.5">
               <Palette className="size-3.5" /> Token surface
             </TabsTrigger>
+            <TabsTrigger value="preview" className="gap-1.5">
+              <MonitorPlay className="size-3.5" /> Preview
+            </TabsTrigger>
             <TabsTrigger value="source" className="gap-1.5">
               <FileCode className="size-3.5" /> Markdown
             </TabsTrigger>
@@ -239,6 +244,10 @@ export function AgenticDoc({
             by the current <code className="text-foreground font-mono text-[11px]">WEB_FOUNDATIONS</code> bundle.
           </p>
           <TokenSurface bundle={bundle} />
+        </TabsContent>
+
+        <TabsContent value="preview" className="mt-6">
+          <DesignPreview bundle={bundle} />
         </TabsContent>
 
         <TabsContent value="rendered" className="mt-5 space-y-5">

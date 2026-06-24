@@ -1,16 +1,23 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getProductBySlug } from "@/data/products";
+import { readTemplate } from "@/data/templates";
 import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
+import { TemplateViewer } from "@/components/templates/template-viewer";
 
 type RouteParams = { productId: string; docId: string };
 
 export async function generateMetadata({ params }: { params: Promise<RouteParams> }) {
   const { productId, docId } = await params;
   const product = getProductBySlug(productId);
+  if (!product) return { title: `Template · ${docId}` };
+  const template = await readTemplate(product.id, docId);
   return {
-    title: product ? `${product.label} · template ${docId}` : `Template · ${docId}`,
+    title: template
+      ? `${product.label} · ${template.title}`
+      : `${product.label} · template ${docId}`,
   };
 }
 
@@ -23,18 +30,31 @@ export default async function ProductTemplateDocPage({
   const product = getProductBySlug(productId);
   if (!product) notFound();
 
+  const template = await readTemplate(product.id, docId);
+  if (!template) notFound();
+
   return (
     <AppPageShell>
-      <Badge variant="secondary">{product.label} · Template</Badge>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">{docId}</h1>
-      <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-        Placeholder for the{" "}
-        <code className="bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-xs">
-          {docId}
-        </code>{" "}
-        template inside the {product.label} scope. Recreate the prototype viewer
-        here as the renderer is ported.
-      </p>
+      <Link
+        href={`/products/${product.slug}/templates`}
+        className="text-muted-foreground hover:text-foreground text-xs font-medium transition-colors"
+      >
+        ← {product.label} templates
+      </Link>
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <h1 className="text-3xl font-semibold tracking-tight">{template.title}</h1>
+        <Badge variant="outline" className="capitalize">
+          {template.status}
+        </Badge>
+      </div>
+      {template.summary ? (
+        <p className="text-muted-foreground mt-3 max-w-3xl text-sm leading-relaxed">
+          {template.summary}
+        </p>
+      ) : null}
+
+      <TemplateViewer html={template.html} markdown={template.markdown} />
     </AppPageShell>
   );
 }

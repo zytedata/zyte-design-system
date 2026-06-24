@@ -1,6 +1,6 @@
 {
   "name": "@zytedata/ds-extract-summit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zyte Extract Summit design system tokens, foundations and design.md spec.",
   "license": "UNLICENSED",
   "publishConfig": {

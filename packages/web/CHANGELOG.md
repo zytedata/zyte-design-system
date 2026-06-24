@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- [#24](https://github.com/zytedata/zyte-design-system/pull/24) [`b054fcd`](https://github.com/zytedata/zyte-design-system/commit/b054fcd2a7a51b8d946f8f184cd454f7bb6cfffa) Thanks [@arkadiuszjaneczko1](https://github.com/arkadiuszjaneczko1)! - Document zyte.com-aligned component specs in the Web design doc: Button Variants, Card Variants, Badges & Pills, Navigation, Section Backgrounds and Page Metrics, with a Pending Token Decisions appendix. Button colours map to nearest existing foundations tokens; no tokens changed.
+
 ## 0.4.0
 
 ### Minor Changes

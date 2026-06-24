@@ -8,7 +8,8 @@ The YAML front matter is the **machine-readable token layer** for agents. The pr
 
 ### Brand DNA
 
-**Design direction:** Modern product-marketing editorial + confident technical tone.  
+**Design direction:** Modern product-marketing editorial + confident technical tone. Clean, professional SaaS. Font: Yellix only. No exceptions. Never Inter, Geist, Roboto, or system fonts. Icons: Lucide only. Never inline SVG paths, never Font Awesome. Framework: Tailwind v3 + React. No custom CSS files unless absolutely necessary.
+
 **Audience:** Builders and teams using Zyte products (engineers, data, product).  
 **Voice:** Clear, direct, helpful. Crisp hierarchy; no visual noise.
 
@@ -19,6 +20,11 @@ The YAML front matter is the **machine-readable token layer** for agents. The pr
 - Components should feel **composed from primitives**: spacing, radius, surface, and semantic colors.
 - Keep layouts **responsive by default**; start from content width constraints and spacing scales.
 - **Default to the light theme.** Light surfaces are the baseline for Web; dark is the deliberate exception (hero moments, code, immersive sections), not the default.
+- Build with **Tailwind v3 + React**; avoid custom CSS files unless absolutely necessary.
+- **Gradients are for hero sections only** — never on cards or components.
+- **The nav is always white** (`#FFFFFF`) with a bottom border — never dark, never gradient (see Components → Navigation).
+- Cards never have shadows. Outline only: 0.5px solid #e4e4e4. No box-shadow.
+
 
 ## Colors
 
@@ -64,6 +70,8 @@ Use the palette names as your mental model:
 - **Display / headlines:** **Yellix** at weight 600 — the same face, used heavier for the main hero unit, headlines (H1/H2) and large display numbers. Tokenized as `typography.family.display` → `var(--font-yellix), Yellix, sans-serif`.
 - **Code / technical:** **Geist Mono** — code, snippets, token names and technical metadata.
 
+> **Direction note (pending decision).** A newer brand direction calls for **Yellix only — never Geist, Inter, Roboto or system fonts**. The current tokens keep **Geist Sans as the Yellix fallback** and **Geist Mono for code**; honouring "Yellix only" would mean changing `typography.family.sans`/`mono` in `foundations.ts` (and choosing a mono treatment for code that isn't Geist). Left unchanged pending decision — see Token Changes.
+
 ### Main Hero Unit
 
 The hero is the single largest type moment on a page. Use the display face at its full weight:
@@ -103,7 +111,7 @@ Headings use **Yellix** at weight **600** with tight line-height. Keep a clear s
 
 - **H1** — the hero unit: **68px / 600**, `Yellix, sans-serif`. One per page.
 - **H2** — major section titles: **~44px / 600**, `Yellix, sans-serif`.
-- Lower levels (H3+) step down through the tokenized scale; switch to Geist Sans for sub-headings inside body content where the display face would feel too loud.
+- Lower levels (H3+) step down through the tokenized scale.
 - Don't skip levels for visual sizing — pick the level by document structure, then style with tokens.
 
 ### Headline Usage
@@ -138,25 +146,9 @@ A **sublead** is the supporting paragraph directly under a headline that expands
 Web uses **Yellix** as the default UI/body and display face, with **Geist Sans** as the fallback and **Geist Mono** for code. Geist ships via the [`geist`](https://www.npmjs.com/package/geist) package (Vercel). Token stacks in `foundations.ts` reference:
 
 - `var(--font-yellix)` leads both `typography.family.sans` (default body/UI) and `typography.family.display` (headlines)
-- `var(--font-geist-sans)` is the `sans` fallback if Yellix fails to load
-- `var(--font-geist-mono)` for `typography.family.mono`
+
 
 **Yellix** is not on npm — load it as a local font (`next/font/local`) and expose it as the `--font-yellix` CSS variable so the `sans` and `display` tokens resolve; if it fails to load, the stack falls back to an installed `Yellix`, then Geist Sans.
-
-**Next.js (App Router):** install `geist`, then in the root layout attach the font variables (same names the tokens expect):
-
-```tsx
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
-      <body>{children}</body>
-    </html>
-  );
-}
-```
 
 Map your global `font-family` / Tailwind `font-sans` / `font-mono` to those CSS variables so components pick up the loaded faces. Without these variables, the stack falls back to system UI fonts.
 
@@ -187,6 +179,31 @@ Use tokenized sizes/weights (see front matter). Keep headings tight and body cop
 
 - Breakpoints mirror Tailwind's defaults (`sm/md/lg/xl/2xl`) — declared in this product's `breakpoint` scale.
 - Components should stack cleanly and preserve hierarchy at small widths.
+
+### Section Backgrounds
+
+| Background | Use | Text colour |
+|---|---|---|
+| `#FEFEFE` (white) | Default content | `#181E5A` |
+| `#F3F4F5` (subtle) | Alternating sections | `#181E5A` |
+| `#EDE9FE` (accent) | Feature sections | `#181E5A` |
+| `#0F1638` (dark) | Code / integration blocks | `#ffffff` |
+| `gradient-hero` | Hero sections only | `#ffffff` |
+
+- **Gradients are for hero sections only — never on cards or components.**
+- The nav is always `#FFFFFF` (see Navigation), never dark or gradient.
+
+> **Differs from current tokens.** These section surfaces (`#FEFEFE`, `#F3F4F5`, `#EDE9FE`, `#0F1638`) don't map to current `surfaceLight.*` / `surfaceDark.*` tokens (e.g. light background is `#f7f7f8`, dark background is `#000000`). `gradient-hero` corresponds to the existing `heroGradient`. Left unchanged pending decision — see Token Changes.
+
+### Page Metrics
+
+- **Page background:** `#F3F4F5`
+- **Max content width:** 1080px · **narrow:** 898px
+- **Section padding:** 112px 176px (desktop) · 80px 24px (mobile)
+- **Card gap:** 20px (`spacing.5`)
+- **Radius scale:** 4px / 8px / 12px / 16px / 999px only
+
+> **Differs from current tokens.** `176px` and `112px` are not steps in the `spacing` scale (largest step is `128`/key `32`); content widths (1080 / 898px) aren't tokenized at all. The radius set maps to existing steps (`DEFAULT` 4 / `lg` 8 / `xl` 12 / `2xl` 16 / `full` 9999) but contradicts the doc's earlier "12px everywhere" rule. Left unchanged pending decision — see Token Changes.
 
 ## Elevation & Depth
 
@@ -221,10 +238,27 @@ The shape language is **soft and consistent** — a single, calm radius across t
 
 ### CTA Buttons
 
-- The **primary CTA** uses brand fuchsia (`primary.600`) with **weight 600** label text.
-- **Buttons use the 12px `border-radius`** (rounded corners, never square) — same radius as cards and inputs.
+- The **primary CTA** uses brand fuchsia (`primary.500`) with **weight 600** label text.
+- **Buttons use the `radius.lg` (8px) corner**; nav buttons use `radius.xl` (12px). Rounded, never square.
 - Keep one primary CTA per view; pair with a quieter secondary/ghost button for the alternate action.
 - Button labels follow the label rules — short and, where they act as eyebrow-style overlines, uppercase.
+
+#### Button Variants
+
+| Variant | BG | Text | Border | Radius |
+|---|---|---|---|---|
+| primary | `primary.500` | `neutral.0` | none | `radius.lg` (8px) |
+| secondary | `primary.200` | `primary.500` | 2px `primary.500` | `radius.lg` |
+| ghost | transparent | `primary.500` | 2px `secondary.500` | `radius.lg` |
+| ghost-dark | transparent | `neutral.0` | 2px `neutral.0` @ `opacity.25` | `radius.lg` |
+| nav-dark | `secondary.800` | `neutral.0` | none | `radius.xl` (12px) |
+| nav-accent | `primary.500` | `neutral.0` | 1px `neutral.0` @ `opacity.25` | `radius.xl` |
+| disabled | `neutral.200` | `neutral.400` | none | `radius.lg` |
+
+- **Never two primary buttons side by side.**
+- **Nav buttons use `radius.xl` (12px); all other buttons use `radius.lg` (8px).**
+
+> **Nearest-token mapping.** Some originals had no exact token, so the closest was used: `#F5DEFA → primary.200` (`#f5d0fe`), `#0F1638 → secondary.800` (`#101339`), `#D9E4E8 → neutral.200` (`#E5E5E5`), `#9BADB5 → neutral.400` (`#A3A3A3`), and `rgba(255,255,255,0.35)`/`0.2 → neutral.0 @ opacity.25` (the scale has no 35/20 step). If any need to be pixel-exact, they'd require new tokens in `foundations.ts`.
 
 ### Cards
 
@@ -233,12 +267,52 @@ The shape language is **soft and consistent** — a single, calm radius across t
 - Build card internals from the spacing scale; keep padding consistent across a card grid.
 - Don't reach for shadows, gradients or heavy fills to make a card stand out — hierarchy comes from type and spacing.
 
+#### Card Variants
+
+All cards: **`border-radius: 16px` · no box-shadow · outline border only.**
+
+| Variant | BG | Border |
+|---|---|---|
+| card-default | `#fff` | `0.5px solid #e4e4e4` |
+| card-feature | `#fff` | `0.5px solid #e4e4e4` + 3px top in accent colour |
+| card-pricing-featured | `#B02CCE` | `1px #B02CCE` |
+| card-on-dark | `rgba(255,255,255,0.05)` | `1px rgba(255,255,255,0.1)` |
+
+- **Never use `card-default` on dark backgrounds — use `card-on-dark`.**
+
+> **Differs from current tokens.** These variants use a **16px** radius (`radius.2xl`) and a hairline `0.5px solid #e4e4e4` border, vs the doc's current **12px** + slate border. `#e4e4e4` is close to but not exactly `neutral.200` (`#E5E5E5`). Left unchanged pending decision — see Token Changes.
+
 ### Icons
 
 - Use **[Lucide](https://lucide.dev/)** as the single icon library across Web — don't mix in other icon sets.
 - Use Lucide icons at their native stroke style; size them from the spacing/type scale and let them inherit `currentColor` so they pick up the surrounding text color.
 - Keep icons consistent in weight and size within a group (e.g. all icons in a feature list or nav match).
 - Icons support text — they don't replace labels for primary actions; pair an icon with a label unless the control is unambiguous.
+- Import icons from `lucide-react`. **Never inline SVG paths, and never mix in Font Awesome** or other icon sets.
+- Size icons **explicitly** (e.g. `width: 16px; height: 16px`) and set colour on the parent so the icon inherits `currentColor`.
+
+### Badges & Pills
+
+All badges: **`border-radius: 999px` (`radius.full`) · Yellix 12px / weight 600.**
+
+| Variant | BG | Text |
+|---|---|---|
+| badge-accent | `#F5DEFA` | `#B02CCE` |
+| badge-success | `rgba(0,179,136,0.09)` | `#008A69` |
+| badge-warning | `rgba(255,158,27,0.1)` | `#a06010` |
+| badge-error | `rgba(219,0,4,0.07)` | `#A10003` |
+| badge-neutral | `#F3F4F5` | `#667D87` |
+| badge-dark | `#181E5A` | `#fff` |
+
+> **New — no status ramps yet.** `foundations.ts` has no `success` / `warning` / `error` palettes (and no slate-neutral like `#667D87`), so these hexes are hardcoded here. Adding semantic status ramps would let badges reference tokens instead — see Token Changes.
+
+### Navigation
+
+- **The nav background is always `#FFFFFF`**, with `border-bottom: 1px solid #F3F4F5`. **Never dark, never gradient.**
+- Nav buttons use the **12px** radius (see Button Variants).
+- Links, badges and pills use **`#B02CCE`** (`primary.500`).
+
+> **Differs from current tokens.** `#F3F4F5` (nav border / page background) is not a current surface token (`surfaceLight.pageSections` = `#f0f0f2`). The "two distinct accent roles" direction (a `#DB005F` primary-CTA accent vs a `#B02CCE` nav/link accent) is **unresolved** in the source spec — the button table uses `#B02CCE` for primary while the principles call for `#DB005F`. Colours left unchanged pending decision — see Token Changes.
 
 ## Sections
 
@@ -367,4 +441,18 @@ Brand assets — logos, icons, illustrations, templates — live in one place an
 - Render section labels/eyebrows as pills or with a background — keep them plain uppercase in secondary.
 - Use `headlineGradient` or `accentSecondaryOnDark` outside their documented roles (headlines / ribbon / dark surfaces).
 - Introduce new “one-off” components when composition of existing ones works.
+
+## Pending Token Decisions
+
+The component specs above were added verbatim from a newer (zyte.com-aligned) direction. Several diverge from the current `foundations.ts` tokens. **No colours or tokens have been changed** — each item below needs a decision before `foundations.ts` is touched:
+
+1. **Fonts — "Yellix only, never Geist."** Current tokens keep Geist Sans as the Yellix fallback and Geist Mono for code. Honouring this means rewriting `typography.family.sans` and `typography.family.mono`.
+2. **Button / card radius.** New spec: 8px buttons, 12px nav, 16px cards. Current rule: "12px everywhere." Values exist in the `radius` scale; the doc rule and component usage would change.
+3. **Card border.** New: `0.5px solid #e4e4e4` (≈ but ≠ `neutral.200` `#E5E5E5`). Decide whether to retune `neutral.200` or add a dedicated hairline border token.
+4. **Status ramps (badges).** No `success` / `warning` / `error` palettes exist. Adding them (e.g. `#008A69`, `#a06010`/orange, `#A10003`) would be **new** colour tokens.
+5. **Slate-neutral text** (`#667D87`) used by `badge-neutral` — not in the current `neutral` ramp.
+6. **Section / page surfaces.** `#FEFEFE`, `#F3F4F5`, `#EDE9FE`, `#0F1638` don't match `surfaceLight.*` / `surfaceDark.*` (e.g. `#f7f7f8`, `#000000`). Decide whether to retune the surface stacks.
+7. **Primary-accent role conflict.** The source spec is internally inconsistent: principles say `#DB005F` is the primary-CTA accent, but the button/card tables use `#B02CCE` (= `primary.500`). Needs resolution before any colour role moves.
+8. **Spacing not in scale.** Section padding `112px` / `176px` and content widths `1080` / `898px` aren't tokenized.
+9. **Logo on dark.** Source spec permits the fuchsia mark on dark surfaces; the current Logo rules restrict the brand-fuchsia variant to neutral light surfaces.
 

@@ -156,6 +156,13 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     file: "design.body.md",
     entries: [
       {
+        date: "2026-06-24",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "Added component-level implementation specs from the zyte.com-aligned direction: Button Variants table (primary/secondary/ghost/ghost-dark/nav-dark/nav-accent/disabled, mapped to foundations tokens), Card Variants, Badges & Pills, Navigation (always-white nav), explicit icon sizing, Section Backgrounds, Page Metrics, plus a Pending Token Decisions appendix documenting divergences from foundations.ts (fonts, radius split, status ramps, surfaces). No tokens changed; button colours use nearest existing tokens.",
+      },
+      {
         date: "2026-06-23",
         author: "arkadiusz",
         kind: "changed",

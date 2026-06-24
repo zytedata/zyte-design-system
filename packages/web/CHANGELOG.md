@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [#19](https://github.com/zytedata/zyte-design-system/pull/19) [`483f0db`](https://github.com/zytedata/zyte-design-system/commit/483f0db07a3b047574ef801f8b07c7ce74f4a687) Thanks [@arkadiuszjaneczko1](https://github.com/arkadiuszjaneczko1)! - Add `typography.family.display` (Yellix) and `colors.heroGradient` (landing-page navy → fuchsia background); update Web design.body.md prose to match (hero/H1-H2 typography, 12px shape language, flat cards, Lucide icons, section numbering & ribbon mnemonic).
+
+### Patch Changes
+
+- [#19](https://github.com/zytedata/zyte-design-system/pull/19) [`483f0db`](https://github.com/zytedata/zyte-design-system/commit/483f0db07a3b047574ef801f8b07c7ce74f4a687) Thanks [@arkadiuszjaneczko1](https://github.com/arkadiuszjaneczko1)! - Fix Tailwind preset codegen so non-color scales emit flat `<slug>-*` keys. Tailwind v3's `flattenColorPalette` only deep-flattens `colors`, so previously every other scale shipped nested under `<slug>` (e.g. `borderRadius.web.xl`) and never generated a utility — consumers had to re-flatten the preset by hand. The generator now emits `borderRadius["web-xl"]`, `fontSize["web-5xl"]`, `fontFamily["web-display"]`, etc. directly, so `rounded-web-xl`, `text-web-5xl`, `font-web-display` and the equivalent utilities across all products work out of the box. Colors are unchanged (still nested, flattened natively by Tailwind).
+
+- [#19](https://github.com/zytedata/zyte-design-system/pull/19) [`483f0db`](https://github.com/zytedata/zyte-design-system/commit/483f0db07a3b047574ef801f8b07c7ce74f4a687) Thanks [@arkadiuszjaneczko1](https://github.com/arkadiuszjaneczko1)! - Make Yellix the default Web typeface: `typography.family.sans` now leads with `var(--font-yellix)` (Geist Sans demoted to fallback). design.body.md updated to match.
+
 All notable changes to `@zytedata/ds-web` are documented here.
 
 The monorepo also keeps a **per-source** machine-readable log in `src/changelog.ts` (surfaced in the DesignOps dashboard under **Web → Changelog**). This file is the **package / release** changelog; bump it when you run Changesets for a published version.

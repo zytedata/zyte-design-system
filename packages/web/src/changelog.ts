@@ -55,6 +55,27 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     file: "foundations.ts",
     entries: [
       {
+        date: "2026-06-23",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "`typography.family.sans` now leads with Yellix (`var(--font-yellix), Yellix, …`) — Yellix is the default Web typeface for UI/body, with Geist Sans as the fallback. Mono unchanged.",
+      },
+      {
+        date: "2026-06-23",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "New `typography.family.display`: Yellix brand display face (`var(--font-yellix), Yellix, sans-serif`) for the hero unit, headlines and large display numbers. Geist sans/mono unchanged.",
+      },
+      {
+        date: "2026-06-23",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "New `colors.heroGradient.DEFAULT`: navy → fuchsia diagonal (`linear-gradient(113.78deg, rgb(19, 20, 87) 39.45%, rgb(176, 44, 206) 108.24%)`) reserved for the landing-page hero background.",
+      },
+      {
         date: "2026-06-15",
         author: "arkadiusz",
         kind: "added",
@@ -134,6 +155,20 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
   {
     file: "design.body.md",
     entries: [
+      {
+        date: "2026-06-23",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Yellix is now the default Web typeface: Font Families, Type Scale, Subleads and Font Loading updated so UI/body text uses Yellix (Geist Sans demoted to fallback); mono stays Geist Mono.",
+      },
+      {
+        date: "2026-06-23",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Typography rewrite: Yellix display face, main hero unit spec (68px/600), H1/H2 sizes, headline usage, subleads, uppercase labels & eyebrows (section labels in secondary, no pill), and number treatment (tabular figures). Added spacing & rhythm rules, a soft 12px shape language, flat slate-border cards (no shadow), CTA button rules (primary 600, 12px radius), Lucide icons, a Sections chapter (section numbering eyebrows + ribbon mnemonic), a light-theme default, and the landing-page hero gradient background.",
+      },
       {
         date: "2026-06-04",
         author: "arkadiusz",

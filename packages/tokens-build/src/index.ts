@@ -344,7 +344,20 @@ export function buildTokensTailwind(
     if (!tailwindKey) continue;
     const fragment = cssVarFragment(group, parts);
     const cssVar = `var(--${slug}-${fragment})`;
-    setNested(preset[tailwindKey]!, [slug, ...parts], cssVar);
+    if (group === "colors") {
+      // Colors stay nested: Tailwind v3's flattenColorPalette deep-flattens
+      // `colors.${slug}.primary.500` into the `${slug}-primary-500` utility on
+      // its own, and consumers read the nested `colors` object directly.
+      setNested(preset[tailwindKey]!, [slug, ...parts], cssVar);
+    } else {
+      // Every other scale must ship as a flat `${slug}-*` key. Tailwind v3 only
+      // deep-flattens `colors`, so a nested `borderRadius.${slug}.xl` never emits
+      // a utility. Emitting `${slug}-xl` directly makes `rounded-${slug}-xl`,
+      // `text-${slug}-5xl`, `font-${slug}-display`, etc. generate without forcing
+      // every consumer to re-flatten the preset in their tailwind.config.
+      const flatKey = [slug, ...parts].join("-");
+      preset[tailwindKey]![flatKey] = cssVar;
+    }
   }
 
   return [

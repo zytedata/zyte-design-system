@@ -48,6 +48,11 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
       DEFAULT: "linear-gradient(90deg, #e8520a 0%, #c026d3 100%)",
       subtle: "linear-gradient(90deg, #f5d0fe 100%, #ffffff 100%)",
     },
+    /** Landing-page hero background only — navy → fuchsia diagonal. */
+    heroGradient: {
+      DEFAULT:
+        "linear-gradient(113.78deg, rgb(19, 20, 87) 39.45%, rgb(176, 44, 206) 108.24%)",
+    },
     accent: {
       "50": "#e3d3da",
       "100": "#e2b0c6",
@@ -83,7 +88,8 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
   },
   typography: {
     family: {
-      sans: 'var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      display: "var(--font-yellix), Yellix, sans-serif",
+      sans: 'var(--font-yellix), Yellix, var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       mono: "var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, monospace",
     },
     size: {

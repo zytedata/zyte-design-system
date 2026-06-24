@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: 12px;
+    color: #1a1a1a;
+    background: #fff;
+    padding: 16px;
+    user-select: none;
+  }
+
+  .section { margin-bottom: 20px; }
+
+  .section-title {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #71717a;
+    margin-bottom: 10px;
+  }
+
+  /* Toggle switch */
+  .toggle { position: relative; width: 32px; height: 18px; flex-shrink: 0; cursor: pointer; }
+  .toggle input { display: none; }
+  .track { position: absolute; inset: 0; background: #e4e4e7; border-radius: 9px; transition: background .18s; }
+  .toggle input:checked + .track { background: #18181b; }
+  .thumb {
+    position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px; background: #fff; border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(0,0,0,.2); transition: transform .18s; pointer-events: none;
+  }
+  .toggle input:checked ~ .thumb { transform: translateX(14px); }
+
+  /* Collection rows */
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0; border-bottom: 1px solid #f4f4f5;
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .row-label { display: flex; flex-direction: column; gap: 2px; }
+  .row-label span { font-size: 12px; font-weight: 500; }
+  .row-label small { font-size: 11px; color: #a1a1aa; }
+
+  /* Brand color rows */
+  .brand-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #f4f4f5;
+  }
+  .brand-row:last-child { border-bottom: none; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px;
+  }
+  .brand-label { font-size: 11px; font-weight: 600; color: #52525b; }
+
+  /* Palette / Custom pills */
+  .mode-pills { display: flex; gap: 2px; background: #f4f4f5; border-radius: 6px; padding: 2px; }
+  .pill {
+    padding: 2px 10px; font-size: 10px; font-weight: 500; border-radius: 4px;
+    cursor: pointer; color: #71717a; transition: all .15s;
+  }
+  .pill.active { background: #fff; color: #18181b; box-shadow: 0 1px 2px rgba(0,0,0,.1); }
+
+  /* Inputs */
+  .color-select {
+    width: 100%; height: 28px;
+    border: 1px solid #e4e4e7; border-radius: 6px;
+    padding: 0 24px 0 8px; font-size: 11px; font-family: inherit;
+    background: #fafafa; color: #1a1a1a; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2371717a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+  }
+  .color-select:focus { outline: none; border-color: #18181b; }
+
+  .custom-input-row { display: flex; gap: 6px; align-items: center; }
+  .color-picker {
+    width: 28px; height: 28px; padding: 2px; border: 1px solid #e4e4e7;
+    border-radius: 6px; cursor: pointer; background: none; flex-shrink: 0;
+  }
+  .hex-input {
+    flex: 1; height: 28px; border: 1px solid #e4e4e7; border-radius: 6px;
+    padding: 0 8px; font-size: 11px; font-family: 'Courier New', monospace;
+    background: #fafafa; color: #1a1a1a; letter-spacing: 0.04em;
+  }
+  .hex-input:focus { outline: none; border-color: #18181b; }
+  .hex-input.invalid { border-color: #ef4444; }
+
+  .swatches { display: flex; gap: 2px; margin-top: 6px; }
+  .swatch { flex: 1; height: 8px; border-radius: 2px; border: 1px solid rgba(0,0,0,.06); }
+
+  /* None option rows (accent / destructive keep simple layout) */
+  .simple-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 0; border-bottom: 1px solid #f4f4f5;
+  }
+  .simple-row:last-child { border-bottom: none; }
+  .simple-label { width: 76px; font-size: 11px; font-weight: 500; color: #52525b; flex-shrink: 0; }
+  .simple-swatches { display: flex; gap: 2px; flex-shrink: 0; }
+  .simple-swatch { width: 10px; height: 10px; border-radius: 2px; border: 1px solid rgba(0,0,0,.06); }
+
+  /* Button */
+  .btn {
+    width: 100%; height: 34px; background: #18181b; color: #fff;
+    border: none; border-radius: 8px; font-size: 12px; font-weight: 600;
+    font-family: inherit; cursor: pointer; margin-top: 4px; transition: background .15s;
+  }
+  .btn:hover:not(:disabled) { background: #27272a; }
+  .btn:disabled { background: #a1a1aa; cursor: not-allowed; }
+  .btn-secondary {
+    background: #fff;
+    color: #18181b;
+    border: 1px solid #d4d4d8;
+  }
+  .btn-secondary:hover:not(:disabled) { background: #f4f4f5; }
+  .btn-secondary:disabled { color: #71717a; border-color: #e4e4e7; background: #fafafa; }
+
+  .status { font-size: 11px; color: #71717a; text-align: center; margin-top: 10px; min-height: 14px; }
+  .status.ok  { color: #16a34a; }
+  .status.err { color: #dc2626; }
+  .spec-controls { display:flex; gap:8px; margin-top:10px; }
+  .spec-controls .color-select { flex: 1; }
+  .btn-inline { width: auto; height: 28px; padding: 0 12px; margin-top: 0; font-size: 11px; border-radius: 6px; }
+
+  /* Accordion */
+  .accordion { border: 1px solid #e4e4e7; border-radius: 10px; margin-bottom: 12px; overflow: hidden; background: #fff; }
+  .accordion-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px; cursor: pointer; background: #fafafa;
+    user-select: none; transition: background .15s;
+  }
+  .accordion-header:hover { background: #f4f4f5; }
+  .accordion-header .acc-title { font-size: 12px; font-weight: 600; color: #18181b; }
+  .accordion-header .acc-sub { font-size: 11px; color: #a1a1aa; margin-top: 2px; font-weight: 400; }
+  .acc-title-wrap { display: flex; flex-direction: column; }
+  .chev { width: 12px; height: 12px; border-right: 1.5px solid #71717a; border-bottom: 1.5px solid #71717a; transform: rotate(45deg); transition: transform .2s; flex-shrink: 0; margin-right: 2px; }
+  .accordion.open .chev { transform: rotate(-135deg); margin-top: 4px; }
+  .accordion-body { padding: 14px; display: none; border-top: 1px solid #f4f4f5; }
+  .accordion.open .accordion-body { display: block; }
+
+  /* Page action blocks */
+  .action-block { padding: 12px 0; border-bottom: 1px solid #f4f4f5; }
+  .action-block:first-child { padding-top: 0; }
+  .action-block:last-child { padding-bottom: 0; border-bottom: none; }
+  .action-title { font-size: 12px; font-weight: 600; color: #18181b; margin-bottom: 2px; }
+  .action-desc { font-size: 11px; color: #71717a; margin-bottom: 10px; line-height: 1.4; }
+
+  /* Summary options */
+  .summary-opts {
+    border: 1px solid #e4e4e7;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+  .summary-opts-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #71717a;
+    margin-bottom: 6px;
+  }
+  .opt-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 6px 8px;
+    align-items: center;
+    padding: 4px 0;
+    cursor: pointer;
+  }
+  .opt-row input { margin: 0; cursor: pointer; }
+  .opt-title { font-size: 11px; font-weight: 600; color: #18181b; }
+  .opt-desc { font-size: 11px; color: #71717a; line-height: 1.35; }
+
+  /* Brand header */
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 0 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #f4f4f5;
+  }
+  .brand-logo {
+    height: 26px; width: auto; display: block;
+  }
+  .brand-copy { display: flex; flex-direction: column; gap: 2px; }
+  .brand-name { font-size: 12px; font-weight: 600; color: #18181b; letter-spacing: -0.01em; }
+  .brand-tag { font-size: 11px; color: #71717a; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<!-- Brand header -->
+<div class="brand">
+  <img class="brand-logo" id="brandLogo" alt="Zyte" src="data:image/png;base64,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">
+  <div class="brand-copy">
+    <div class="brand-name">Design System Configurator</div>
+    <div class="brand-tag">Generate Tailwind-based Figma variables and spec pages.</div>
+  </div>
+</div>
+
+<!-- Accordion 0: Per-product foundations sync -->
+<div class="accordion open" id="acc-foundations">
+  <div class="accordion-header" data-target="acc-foundations">
+    <div class="acc-title-wrap">
+      <div class="acc-title">Per-product foundations</div>
+      <div class="acc-sub">Push foundation tokens (colors, typography, spacing…) from the codebase into a scoped Figma collection per product.</div>
+    </div>
+    <div class="chev"></div>
+  </div>
+  <div class="accordion-body">
+
+    <div class="section">
+      <div class="section-title">Product</div>
+      <div class="toggle-row" style="align-items: center;">
+        <div class="row-label" style="flex: 1;">
+          <span>Target product</span>
+          <small id="foundationProductSub">Creates / updates a collection scoped to this product.</small>
+        </div>
+        <select id="foundationProduct" style="
+          height: 28px; border: 1px solid #d4d4d8; border-radius: 6px;
+          background: #fff; font-size: 12px; padding: 0 8px; min-width: 140px;">
+          <option value="web">Web</option>
+          <option value="core">Core</option>
+          <option value="scrapy">Scrapy</option>
+          <option value="extractSummit">Extract Summit</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Include</div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Colors + semantic aliases</span><small>brand / accent / surface roles</small></div>
+        <label class="toggle"><input type="checkbox" id="fdColors" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Typography</span><small>font-family, size, weight, line-height, letter-spacing</small></div>
+        <label class="toggle"><input type="checkbox" id="fdTypography" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Spacing</span><small>Tailwind spacing scale (px)</small></div>
+        <label class="toggle"><input type="checkbox" id="fdSpacing" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Radius</span><small>corner-radius tokens</small></div>
+        <label class="toggle"><input type="checkbox" id="fdRadius" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Shadow</span><small>stored as string hints (effect styles come later)</small></div>
+        <label class="toggle"><input type="checkbox" id="fdShadow" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Breakpoints</span><small>sm/md/lg/xl/2xl</small></div>
+        <label class="toggle"><input type="checkbox" id="fdBreakpoint" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Opacity</span><small>0 / 25 / 50 / 75 / 100</small></div>
+        <label class="toggle"><input type="checkbox" id="fdOpacity" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label"><span>Z-index</span><small>0 / 10 / 20 / 30 / 40 / 50</small></div>
+        <label class="toggle"><input type="checkbox" id="fdZIndex" checked><div class="track"></div><div class="thumb"></div></label>
+      </div>
+    </div>
+
+    <div class="section" style="border-top: 1px dashed #e4e4e7; padding-top: 10px;">
+      <button id="syncFoundationsBtn" class="btn">Sync foundations to Figma</button>
+      <p id="foundationsStamp" style="font-size: 10px; color: #71717a; margin: 8px 0 0 0; line-height: 1.4;">
+        Web snapshot: <span id="foundationsGeneratedAt">checking…</span>
+      </p>
+      <p style="font-size: 10px; color: #a1a1aa; margin: 4px 0 0 0; line-height: 1.4;">
+        Source of truth: <code>Zyte-design-system/packages/web</code> tokens.
+        Regenerate the embedded web snapshot with <code>node scripts/gen-foundations.js</code>.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Accordion 1: Tailwind variables setup -->
+<div class="accordion" id="acc-variables">
+  <div class="accordion-header" data-target="acc-variables">
+    <div class="acc-title-wrap">
+      <div class="acc-title">Tailwind variables setup</div>
+      <div class="acc-sub">Pick collections and brand colors, then create Figma variables.</div>
+    </div>
+    <div class="chev"></div>
+  </div>
+  <div class="accordion-body">
+
+    <!-- Collections -->
+    <div class="section">
+      <div class="section-title">Collections</div>
+      <div class="toggle-row">
+        <div class="row-label">
+          <span>Color Primitive</span>
+          <small>Full Tailwind palette — 244 variables</small>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="doColors" checked>
+          <div class="track"></div><div class="thumb"></div>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label">
+          <span>Typography Primitive</span>
+          <small>Sizes, weights, line-heights — 36 variables</small>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="doTypo" checked>
+          <div class="track"></div><div class="thumb"></div>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div class="row-label">
+          <span>Tailwind Spec</span>
+          <small>CSS property spec variables from Tailwind docs</small>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="doTailwindSpec">
+          <div class="track"></div><div class="thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Brand colors -->
+    <div class="section">
+      <div class="section-title">
+        Brand Colors
+        <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#a1a1aa">— Color Semantic collection</span>
+      </div>
+
+      <div class="brand-row" id="row-primary">
+        <div class="brand-header">
+          <div class="brand-label">Primary</div>
+          <div class="mode-pills">
+            <div class="pill active" data-role="primary" data-mode="palette">Palette</div>
+            <div class="pill"       data-role="primary" data-mode="custom">Custom</div>
+          </div>
+        </div>
+        <div id="palette-primary">
+          <select class="color-select" id="sel-primary"></select>
+        </div>
+        <div id="custom-primary" style="display:none">
+          <div class="custom-input-row">
+            <input type="color" class="color-picker" id="picker-primary" value="#3b82f6">
+            <input type="text"  class="hex-input"    id="hex-primary"    value="#3b82f6" placeholder="#000000" maxlength="7">
+          </div>
+        </div>
+        <div class="swatches" id="sw-primary"></div>
+      </div>
+
+      <div class="brand-row" id="row-secondary">
+        <div class="brand-header">
+          <div class="brand-label">Secondary</div>
+          <div class="mode-pills">
+            <div class="pill active" data-role="secondary" data-mode="palette">Palette</div>
+            <div class="pill"        data-role="secondary" data-mode="custom">Custom</div>
+          </div>
+        </div>
+        <div id="palette-secondary">
+          <select class="color-select" id="sel-secondary"></select>
+        </div>
+        <div id="custom-secondary" style="display:none">
+          <div class="custom-input-row">
+            <input type="color" class="color-picker" id="picker-secondary" value="#64748b">
+            <input type="text"  class="hex-input"    id="hex-secondary"    value="#64748b" placeholder="#000000" maxlength="7">
+          </div>
+        </div>
+        <div class="swatches" id="sw-secondary"></div>
+      </div>
+
+      <div class="simple-row">
+        <div class="simple-label">Accent</div>
+        <select class="color-select" id="sel-accent" style="flex:1"></select>
+        <div class="simple-swatches" id="sw-accent"></div>
+      </div>
+
+      <div class="simple-row">
+        <div class="simple-label">Destructive</div>
+        <select class="color-select" id="sel-destructive" style="flex:1"></select>
+        <div class="simple-swatches" id="sw-destructive"></div>
+      </div>
+    </div>
+
+    <button class="btn" id="runBtn">Create Variables</button>
+  </div>
+</div>
+
+<!-- Accordion 2: Generate pages -->
+<div class="accordion" id="acc-pages">
+  <div class="accordion-header" data-target="acc-pages">
+    <div class="acc-title-wrap">
+      <div class="acc-title">Generate pages</div>
+      <div class="acc-sub">Visualize variables and Tailwind specs as Figma pages.</div>
+    </div>
+    <div class="chev"></div>
+  </div>
+  <div class="accordion-body">
+
+    <div class="action-block">
+      <div class="action-title">Plot Colors</div>
+      <div class="action-desc">Render all color variables on the current page, grouped by collection.</div>
+      <button class="btn btn-secondary" id="plotBtn">Plot Colors on Page</button>
+    </div>
+
+    <div class="action-block">
+      <div class="action-title">Plot Typography</div>
+      <div class="action-desc">Create a dedicated page showcasing Tailwind typography utilities.</div>
+      <button class="btn btn-secondary" id="typoBtn">Plot Typography Page</button>
+    </div>
+
+    <div class="action-block">
+      <div class="action-title">Add Spec</div>
+      <div class="action-desc">Generate a visually documented page for a selected Tailwind category.</div>
+      <div class="spec-controls">
+        <select class="color-select" id="specCategory"></select>
+        <button class="btn btn-secondary btn-inline" id="specBtn">Add Spec to Figma</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Accordion 3: Template agent -->
+<div class="accordion" id="acc-agent">
+  <div class="accordion-header" data-target="acc-agent">
+    <div class="acc-title-wrap">
+      <div class="acc-title">Template agent</div>
+      <div class="acc-sub">Document variables used in a selected frame for AI consumption.</div>
+    </div>
+    <div class="chev"></div>
+  </div>
+  <div class="accordion-body">
+
+    <div class="action-block">
+      <div class="action-title">Apply Variables to Frame</div>
+      <div class="action-desc">Scan the selected frame and automatically bind its raw values (colors, padding, gap, radii, font sizes, line heights…) to the closest matching Figma variable. Perfect for layouts pasted from Claude / MCP with hard-coded hex and px values.</div>
+
+      <div class="summary-opts" style="margin-bottom:8px;">
+        <div class="summary-opts-label">Mapping mode:</div>
+        <label class="opt-row">
+          <input type="checkbox" id="optSnap">
+          <span class="opt-title">Snap to nearest variable</span>
+          <span class="opt-desc">If no exact match, bind to the closest variable (red → closest red-*, 15 → closest spacing value).</span>
+        </label>
+      </div>
+
+      <div class="summary-opts">
+        <div class="summary-opts-label">Include in summary:</div>
+        <label class="opt-row">
+          <input type="checkbox" id="optBasic" checked>
+          <span class="opt-title">Basic</span>
+          <span class="opt-desc">Counts per category (e.g. Padding: 14, Colors: 6).</span>
+        </label>
+        <label class="opt-row">
+          <input type="checkbox" id="optLog">
+          <span class="opt-title">Log</span>
+          <span class="opt-desc">Detailed per-change list with paths and variable names.</span>
+        </label>
+        <label class="opt-row">
+          <input type="checkbox" id="optJson">
+          <span class="opt-title">Machine-readable</span>
+          <span class="opt-desc">Fenced JSON block for downstream AI consumption.</span>
+        </label>
+      </div>
+
+      <button class="btn btn-secondary" id="applyVarsBtn">Apply Variables to Selected Frame</button>
+    </div>
+
+    <div class="action-block">
+      <div class="action-title">Generate Frame Docs</div>
+      <div class="action-desc">Select a frame on the canvas. This walks its tree, collects every bound variable (colors, typography, spacing, radii, effects) and produces a structured markdown + JSON summary. A compact summary card is placed next to the frame; the full markdown is delivered here — copy it or download it as <code>.md</code>.</div>
+      <button class="btn btn-secondary" id="docBtn">Generate Docs for Selected Frame</button>
+
+      <div id="docResult" style="
+        display: none;
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #e4e4e7;
+        border-radius: 8px;
+        background: #fafafa;
+      ">
+        <div id="docResultMeta" style="font-size: 11px; color: #52525b; margin-bottom: 8px;"></div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button class="btn btn-secondary" id="docCopyBtn" style="flex: 1; min-width: 120px;">Copy markdown</button>
+          <button class="btn btn-secondary" id="docDownloadBtn" style="flex: 1; min-width: 120px;">Download .md</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="status" id="status"></div>
+
+<script>
+// ─── Accordion toggling ─────────────────────────────────────────────────────
+document.querySelectorAll('.accordion-header').forEach(h => {
+  h.addEventListener('click', () => {
+    const id = h.getAttribute('data-target');
+    const acc = document.getElementById(id);
+    if (acc) acc.classList.toggle('open');
+  });
+});
+
+const COLORS = {
+  primary: {50:'#fdf2f6',100:'#f7ccdf',200:'#e9669f',300:'#ff7ab4',400:'#e2337e',500:'#db005f',600:'#b5004f',700:'#7b0036',800:'#7a0035',900:'#3f0d23',950:'#260815'},
+  accentPrimary: {50:'#f4f5fa',100:'#eeeff3',200:'#dde0f3',300:'#c8dfe7',500:'#8b95ee',600:'#3f4fed',700:'#181e5a',800:'#131746',900:'#0d0e2c'},
+  accentSecondary: {100:'#f9dad9',200:'#f9c2c0',300:'#f97d78',500:'#f9433b',600:'#de271f',700:'#bd2c26',800:'#801813'},
+  accentSecondaryPurple: {50:'#f5defa',100:'#e2afee',200:'#dc64f7',500:'#b02cce',600:'#68137a',700:'#460d52',800:'#360a40'},
+  slate:   {50:'#f8fafc',100:'#f1f5f9',200:'#e2e8f0',300:'#cbd5e1',400:'#94a3b8',500:'#64748b',600:'#475569',700:'#334155',800:'#1e293b',900:'#0f172a',950:'#020617'},
+  gray:    {50:'#f9fafb',100:'#f3f4f6',200:'#e5e7eb',300:'#d1d5db',400:'#9ca3af',500:'#6b7280',600:'#4b5563',700:'#374151',800:'#1f2937',900:'#111827',950:'#030712'},
+  zinc:    {50:'#fafafa',100:'#f4f4f5',200:'#e4e4e7',300:'#d4d4d8',400:'#a1a1aa',500:'#71717a',600:'#52525b',700:'#3f3f46',800:'#27272a',900:'#18181b',950:'#09090b'},
+  neutral: {50:'#fafafa',100:'#f5f5f5',200:'#e5e5e5',300:'#d4d4d4',400:'#a3a3a3',500:'#737373',600:'#525252',700:'#404040',800:'#262626',900:'#171717',950:'#0a0a0a'},
+  stone:   {50:'#fafaf9',100:'#f5f5f4',200:'#e7e5e4',300:'#d6d3d1',400:'#a8a29e',500:'#78716c',600:'#57534e',700:'#44403c',800:'#292524',900:'#1c1917',950:'#0c0a09'},
+  red:     {50:'#fef2f2',100:'#fee2e2',200:'#fecaca',300:'#fca5a5',400:'#f87171',500:'#ef4444',600:'#dc2626',700:'#b91c1c',800:'#991b1b',900:'#7f1d1d',950:'#450a0a'},
+  orange:  {50:'#fff7ed',100:'#ffedd5',200:'#fed7aa',300:'#fdba74',400:'#fb923c',500:'#f97316',600:'#ea580c',700:'#c2410c',800:'#9a3412',900:'#7c2d12',950:'#431407'},
+  amber:   {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#fcd34d',400:'#fbbf24',500:'#f59e0b',600:'#d97706',700:'#b45309',800:'#92400e',900:'#78350f',950:'#451a03'},
+  yellow:  {50:'#fefce8',100:'#fef9c3',200:'#fef08a',300:'#fde047',400:'#facc15',500:'#eab308',600:'#ca8a04',700:'#a16207',800:'#854d0e',900:'#713f12',950:'#422006'},
+  lime:    {50:'#f7fee7',100:'#ecfccb',200:'#d9f99d',300:'#bef264',400:'#a3e635',500:'#84cc16',600:'#65a30d',700:'#4d7c0f',800:'#3f6212',900:'#365314',950:'#1a2e05'},
+  green:   {50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d',950:'#052e16'},
+  emerald: {50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b',950:'#022c22'},
+  teal:    {50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a',950:'#042f2e'},
+  cyan:    {50:'#ecfeff',100:'#cffafe',200:'#a5f3fc',300:'#67e8f9',400:'#22d3ee',500:'#06b6d4',600:'#0891b2',700:'#0e7490',800:'#155e75',900:'#164e63',950:'#083344'},
+  sky:     {50:'#f0f9ff',100:'#e0f2fe',200:'#bae6fd',300:'#7dd3fc',400:'#38bdf8',500:'#0ea5e9',600:'#0284c7',700:'#0369a1',800:'#075985',900:'#0c4a6e',950:'#082f49'},
+  blue:    {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'},
+  indigo:  {50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81',950:'#1e1b4b'},
+  violet:  {50:'#f5f3ff',100:'#ede9fe',200:'#ddd6fe',300:'#c4b5fd',400:'#a78bfa',500:'#8b5cf6',600:'#7c3aed',700:'#6d28d9',800:'#5b21b6',900:'#4c1d95',950:'#2e1065'},
+  purple:  {50:'#faf5ff',100:'#f3e8ff',200:'#e9d5ff',300:'#d8b4fe',400:'#c084fc',500:'#a855f7',600:'#9333ea',700:'#7e22ce',800:'#6b21a8',900:'#581c87',950:'#3b0764'},
+  fuchsia: {50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75',950:'#4a044e'},
+  pink:    {50:'#fdf2f8',100:'#fce7f3',200:'#fbcfe8',300:'#f9a8d4',400:'#f472b6',500:'#ec4899',600:'#db2777',700:'#be185d',800:'#9d174d',900:'#831843',950:'#500724'},
+  rose:    {50:'#fff1f2',100:'#ffe4e6',200:'#fecdd3',300:'#fda4af',400:'#fb7185',500:'#f43f5e',600:'#e11d48',700:'#be123c',800:'#9f1239',900:'#881337',950:'#4c0519'},
+};
+
+const SHADES = [50,100,200,300,400,500,600,700,800,900,950];
+const SPEC_CATEGORIES = [
+  'Layout', 'Flexbox & Grid', 'Spacing', 'Sizing', 'Typography', 'Backgrounds', 'Borders',
+  'Effects', 'Filters', 'Tables', 'Transitions & Animation', 'Transforms', 'Interactivity', 'SVG'
+];
+
+// ─── Shade generator (mirrors code.js) ─────────────────────────────────────
+function hexToHsl(hex) {
+  let r = parseInt(hex.slice(1,3),16)/255;
+  let g = parseInt(hex.slice(3,5),16)/255;
+  let b = parseInt(hex.slice(5,7),16)/255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h=0, s=0;
+  const l=(max+min)/2;
+  if (max!==min) {
+    const d=max-min;
+    s=l>0.5?d/(2-max-min):d/(max+min);
+    if(max===r) h=((g-b)/d+(g<b?6:0))/6;
+    else if(max===g) h=((b-r)/d+2)/6;
+    else h=((r-g)/d+4)/6;
+  }
+  return [h*360,s*100,l*100];
+}
+function hslToHex(h,s,l) {
+  h/=360; s/=100; l/=100;
+  let r,g,b;
+  if(s===0){r=g=b=l;}else{
+    const q=l<0.5?l*(1+s):l+s-l*s, p=2*l-q;
+    const hue2rgb=(p,q,t)=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;};
+    r=hue2rgb(p,q,h+1/3); g=hue2rgb(p,q,h); b=hue2rgb(p,q,h-1/3);
+  }
+  return '#'+[r,g,b].map(x=>Math.round(x*255).toString(16).padStart(2,'0')).join('');
+}
+function generateShades(hex) {
+  const [h,s]=hexToHsl(hex);
+  const lmap={50:97,100:93,200:86,300:74,400:61,500:48,600:38,700:29,800:21,900:15,950:9};
+  const res={};
+  for(const [shade,tl] of Object.entries(lmap)){
+    const ss=tl>85?0.55:tl<18?0.65:1;
+    res[shade]=hslToHex(h,Math.min(100,s*ss),tl);
+  }
+  return res;
+}
+function isValidHex(h){ return /^#[0-9a-fA-F]{6}$/.test(h); }
+
+// ─── State ──────────────────────────────────────────────────────────────────
+const modes = { primary: 'palette', secondary: 'palette' };
+
+// ─── Populate palette selects ────────────────────────────────────────────────
+const PALETTE_FIELDS = [
+  { id:'sel-primary',     def:'primary'  },
+  { id:'sel-secondary',   def:'slate' },
+  { id:'sel-accent',      def:''      },
+  { id:'sel-destructive', def:'red'   },
+];
+
+PALETTE_FIELDS.forEach(({ id, def }) => {
+  const sel = document.getElementById(id);
+  const none = document.createElement('option');
+  none.value = ''; none.textContent = '— none —'; sel.appendChild(none);
+  Object.keys(COLORS).forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+    if (name === def) opt.selected = true;
+    sel.appendChild(opt);
+  });
+});
+
+const specCategory = document.getElementById('specCategory');
+SPEC_CATEGORIES.forEach(name => {
+  const opt = document.createElement('option');
+  opt.value = name;
+  opt.textContent = name;
+  specCategory.appendChild(opt);
+});
+specCategory.value = 'Spacing';
+
+// ─── Swatch renderers ────────────────────────────────────────────────────────
+function renderPaletteSwatches(role, name, containerId) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  if (!name) return;
+  SHADES.forEach(shade => {
+    const d = document.createElement('div');
+    d.className = 'swatch';
+    d.style.background = COLORS[name]?.[shade] || '#ccc';
+    el.appendChild(d);
+  });
+}
+
+function renderCustomSwatches(role) {
+  const hex = document.getElementById('hex-' + role).value;
+  const el = document.getElementById('sw-' + role);
+  el.innerHTML = '';
+  if (!isValidHex(hex)) return;
+  const shades = generateShades(hex);
+  SHADES.forEach(shade => {
+    const d = document.createElement('div');
+    d.className = 'swatch';
+    d.style.background = shades[shade];
+    el.appendChild(d);
+  });
+}
+
+function updateSwatches(role) {
+  if (modes[role] === 'palette') {
+    const val = document.getElementById('sel-' + role)?.value || '';
+    renderPaletteSwatches(role, val, 'sw-' + role);
+  } else {
+    renderCustomSwatches(role);
+  }
+}
+
+// Init palette swatches
+['primary','secondary'].forEach(r => updateSwatches(r));
+['accent','destructive'].forEach(r => {
+  const sel = document.getElementById('sel-' + r);
+  renderPaletteSwatches(r, sel.value, 'sw-' + r);
+  sel.addEventListener('change', () => renderPaletteSwatches(r, sel.value, 'sw-' + r));
+});
+document.getElementById('sel-primary').addEventListener('change',   () => updateSwatches('primary'));
+document.getElementById('sel-secondary').addEventListener('change', () => updateSwatches('secondary'));
+
+// ─── Mode pills ──────────────────────────────────────────────────────────────
+document.querySelectorAll('.pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    const role = pill.dataset.role;
+    const mode = pill.dataset.mode;
+    modes[role] = mode;
+
+    // Update pill styles
+    pill.closest('.mode-pills').querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+
+    // Show/hide inputs
+    document.getElementById('palette-' + role).style.display = mode === 'palette' ? '' : 'none';
+    document.getElementById('custom-'  + role).style.display = mode === 'custom'  ? '' : 'none';
+
+    updateSwatches(role);
+  });
+});
+
+// ─── Custom color inputs ─────────────────────────────────────────────────────
+['primary', 'secondary'].forEach(role => {
+  const picker = document.getElementById('picker-' + role);
+  const hexIn  = document.getElementById('hex-'    + role);
+
+  picker.addEventListener('input', () => {
+    hexIn.value = picker.value;
+    hexIn.classList.remove('invalid');
+    updateSwatches(role);
+  });
+
+  hexIn.addEventListener('input', () => {
+    const val = hexIn.value.startsWith('#') ? hexIn.value : '#' + hexIn.value;
+    if (isValidHex(val)) {
+      hexIn.classList.remove('invalid');
+      picker.value = val;
+      hexIn.value = val;
+      updateSwatches(role);
+    } else {
+      hexIn.classList.add('invalid');
+    }
+  });
+});
+
+// ─── Submit ──────────────────────────────────────────────────────────────────
+document.getElementById('runBtn').addEventListener('click', () => {
+  const btn    = document.getElementById('runBtn');
+  const plotBtn = document.getElementById('plotBtn');
+  const typoBtn = document.getElementById('typoBtn');
+  const docBtn = document.getElementById('docBtn');
+  const applyVarsBtn = document.getElementById('applyVarsBtn');
+  const status = document.getElementById('status');
+  btn.disabled = true;
+  plotBtn.disabled = true;
+  if (typoBtn) typoBtn.disabled = true;
+  if (docBtn) docBtn.disabled = true;
+  if (applyVarsBtn) applyVarsBtn.disabled = true;
+  btn.textContent = 'Creating…';
+  status.className = 'status';
+  status.textContent = '';
+
+  const brand = {};
+
+  ['primary','secondary'].forEach(role => {
+    if (modes[role] === 'palette') {
+      const val = document.getElementById('sel-' + role).value;
+      if (val) brand[role] = { mode: 'palette', value: val };
+    } else {
+      const hex = document.getElementById('hex-' + role).value;
+      if (isValidHex(hex)) brand[role] = { mode: 'custom', hex };
+    }
+  });
+
+  ['accent','destructive'].forEach(role => {
+    const val = document.getElementById('sel-' + role).value;
+    if (val) brand[role] = { mode: 'palette', value: val };
+  });
+
+  parent.postMessage({ pluginMessage: {
+    type: 'create',
+    doColors: document.getElementById('doColors').checked,
+    doTypo:   document.getElementById('doTypo').checked,
+    doTailwindSpec: document.getElementById('doTailwindSpec').checked,
+    brand,
+  }}, '*');
+});
+
+document.getElementById('plotBtn').addEventListener('click', () => {
+  const runBtn = document.getElementById('runBtn');
+  const plotBtn = document.getElementById('plotBtn');
+  const typoBtn = document.getElementById('typoBtn');
+  const docBtn = document.getElementById('docBtn');
+  const applyVarsBtn = document.getElementById('applyVarsBtn');
+  const status = document.getElementById('status');
+  runBtn.disabled = true;
+  plotBtn.disabled = true;
+  if (typoBtn) typoBtn.disabled = true;
+  if (docBtn) docBtn.disabled = true;
+  if (applyVarsBtn) applyVarsBtn.disabled = true;
+  plotBtn.textContent = 'Plotting…';
+  status.className = 'status';
+  status.textContent = '';
+
+  parent.postMessage({ pluginMessage: { type: 'plot-colors' } }, '*');
+});
+
+document.getElementById('specBtn').addEventListener('click', () => {
+  const runBtn = document.getElementById('runBtn');
+  const plotBtn = document.getElementById('plotBtn');
+  const specBtn = document.getElementById('specBtn');
+  const typoBtn = document.getElementById('typoBtn');
+  const docBtn = document.getElementById('docBtn');
+  const applyVarsBtn = document.getElementById('applyVarsBtn');
+  const status = document.getElementById('status');
+  runBtn.disabled = true;
+  plotBtn.disabled = true;
+  specBtn.disabled = true;
+  typoBtn.disabled = true;
+  if (docBtn) docBtn.disabled = true;
+  if (applyVarsBtn) applyVarsBtn.disabled = true;
+  specBtn.textContent = 'Adding…';
+  status.className = 'status';
+  status.textContent = '';
+
+  parent.postMessage({
+    pluginMessage: {
+      type: 'create-spec-page',
+      category: document.getElementById('specCategory').value,
+    },
+  }, '*');
+});
+
+document.getElementById('typoBtn').addEventListener('click', () => {
+  const runBtn = document.getElementById('runBtn');
+  const plotBtn = document.getElementById('plotBtn');
+  const specBtn = document.getElementById('specBtn');
+  const typoBtn = document.getElementById('typoBtn');
+  const docBtn = document.getElementById('docBtn');
+  const applyVarsBtn = document.getElementById('applyVarsBtn');
+  const status = document.getElementById('status');
+  runBtn.disabled = true;
+  plotBtn.disabled = true;
+  specBtn.disabled = true;
+  typoBtn.disabled = true;
+  if (docBtn) docBtn.disabled = true;
+  if (applyVarsBtn) applyVarsBtn.disabled = true;
+  typoBtn.textContent = 'Building…';
+  status.className = 'status';
+  status.textContent = '';
+
+  parent.postMessage({ pluginMessage: { type: 'create-typography-page' } }, '*');
+});
+
+document.getElementById('docBtn').addEventListener('click', () => {
+  const runBtn = document.getElementById('runBtn');
+  const plotBtn = document.getElementById('plotBtn');
+  const specBtn = document.getElementById('specBtn');
+  const typoBtn = document.getElementById('typoBtn');
+  const docBtn = document.getElementById('docBtn');
+  const applyVarsBtn = document.getElementById('applyVarsBtn');
+  const status = document.getElementById('status');
+  runBtn.disabled = true;
+  plotBtn.disabled = true;
+  specBtn.disabled = true;
+  typoBtn.disabled = true;
+  docBtn.disabled = true;
+  if (applyVarsBtn) applyVarsBtn.disabled = true;
+  docBtn.textContent = 'Documenting…';
+  status.className = 'status';
+  status.textContent = '';
+
+  parent.postMessage({ pluginMessage: { type: 'document-frame' } }, '*');
+});
+
+document.getElementById('applyVarsBtn').addEventListener('click', () => {
+  const runBtn = document.getElementById('runBtn');
+  const plotBtn = document.getElementById('plotBtn');
+  const specBtn = document.getElementById('specBtn');
+  const typoBtn = document.getElementById('typoBtn');
+  const docBtn = document.getElementById('docBtn');
+  const applyVarsBtn = document.getElementById('applyVarsBtn');
+  const status = document.getElementById('status');
+  runBtn.disabled = true;
+  plotBtn.disabled = true;
+  specBtn.disabled = true;
+  typoBtn.disabled = true;
+  docBtn.disabled = true;
+  applyVarsBtn.disabled = true;
+  applyVarsBtn.textContent = 'Applying…';
+  status.className = 'status';
+  status.textContent = '';
+
+  parent.postMessage({
+    pluginMessage: {
+      type: 'apply-variables',
+      mapping: {
+        snap: document.getElementById('optSnap').checked,
+      },
+      summary: {
+        basic: document.getElementById('optBasic').checked,
+        log:   document.getElementById('optLog').checked,
+        json:  document.getElementById('optJson').checked,
+      },
+    },
+  }, '*');
+});
+
+// ─── Per-product foundations sync ──────────────────────────────────────────
+const foundationsSyncBtn = document.getElementById('syncFoundationsBtn');
+foundationsSyncBtn.addEventListener('click', () => {
+  foundationsSyncBtn.disabled = true;
+  foundationsSyncBtn.textContent = 'Syncing…';
+  parent.postMessage({
+    pluginMessage: {
+      type: 'sync-product-foundations',
+      productId: document.getElementById('foundationProduct').value,
+      groups: {
+        colors:     document.getElementById('fdColors').checked,
+        typography: document.getElementById('fdTypography').checked,
+        spacing:    document.getElementById('fdSpacing').checked,
+        radius:     document.getElementById('fdRadius').checked,
+        shadow:     document.getElementById('fdShadow').checked,
+        breakpoint: document.getElementById('fdBreakpoint').checked,
+        opacity:    document.getElementById('fdOpacity').checked,
+        zIndex:     document.getElementById('fdZIndex').checked,
+      }
+    }
+  }, '*');
+});
+
+// Ask the plugin when the embedded web foundations were last generated,
+// and render it under the sync button.
+function renderFoundationsStamp(generatedAt, version) {
+  const el = document.getElementById('foundationsGeneratedAt');
+  if (!el) return;
+  if (!generatedAt) {
+    el.textContent = 'not generated yet — run scripts/gen-foundations.js';
+    return;
+  }
+  const d = new Date(generatedAt);
+  const when = isNaN(d.getTime())
+    ? generatedAt
+    : d.toLocaleString(undefined, {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+  el.textContent = version ? `${when} · v${version}` : when;
+}
+parent.postMessage({ pluginMessage: { type: 'get-foundations-meta' } }, '*');
+
+// ─── Generated docs: copy + download ───────────────────────────────────────
+let lastGeneratedMarkdown = '';
+let lastGeneratedFilename = 'docs.md';
+
+document.getElementById('docCopyBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('docCopyBtn');
+  if (!lastGeneratedMarkdown) return;
+  try {
+    await navigator.clipboard.writeText(lastGeneratedMarkdown);
+    btn.textContent = 'Copied!';
+  } catch (_) {
+    // Clipboard API is blocked: fall back to a hidden textarea + execCommand.
+    const ta = document.createElement('textarea');
+    ta.value = lastGeneratedMarkdown;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); btn.textContent = 'Copied!'; }
+    catch (_e) { btn.textContent = 'Copy failed'; }
+    document.body.removeChild(ta);
+  }
+  setTimeout(() => { btn.textContent = 'Copy markdown'; }, 1500);
+});
+
+document.getElementById('docDownloadBtn').addEventListener('click', () => {
+  if (!lastGeneratedMarkdown) return;
+  const blob = new Blob([lastGeneratedMarkdown], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = lastGeneratedFilename || 'docs.md';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+});
+
+window.onmessage = (e) => {
+  const msg = e.data.pluginMessage;
+  if (!msg) return;
+
+  // Foundations snapshot metadata: update the stamp only, leave UI state alone.
+  if (msg.type === 'foundations-meta') {
+    renderFoundationsStamp(msg.generatedAt, msg.version);
+    return;
+  }
+
+  document.getElementById('runBtn').disabled = false;
+  document.getElementById('plotBtn').disabled = false;
+  document.getElementById('specBtn').disabled = false;
+  document.getElementById('typoBtn').disabled = false;
+  document.getElementById('docBtn').disabled = false;
+  document.getElementById('applyVarsBtn').disabled = false;
+  foundationsSyncBtn.disabled = false;
+  document.getElementById('runBtn').textContent = 'Create Variables';
+  document.getElementById('plotBtn').textContent = 'Plot Colors on Page';
+  document.getElementById('specBtn').textContent = 'Add Spec to Figma';
+  document.getElementById('typoBtn').textContent = 'Plot Typography Page';
+  document.getElementById('docBtn').textContent = 'Generate Docs for Selected Frame';
+  document.getElementById('applyVarsBtn').textContent = 'Apply Variables to Selected Frame';
+
+  if (msg.type === 'frame-doc-ready' && typeof msg.markdown === 'string') {
+    lastGeneratedMarkdown = msg.markdown;
+    lastGeneratedFilename = msg.filename || 'docs.md';
+    const sizeKb = (lastGeneratedMarkdown.length / 1024).toFixed(1);
+    const meta = document.getElementById('docResultMeta');
+    if (meta) {
+      meta.textContent = `${msg.uniqueCount || 0} variables · ${msg.bindingCount || 0} bindings · ${sizeKb} KB · ${lastGeneratedFilename}`;
+    }
+    const panel = document.getElementById('docResult');
+    if (panel) panel.style.display = 'block';
+  }
+  foundationsSyncBtn.textContent = 'Sync foundations to Figma';
+  const status = document.getElementById('status');
+  const statusClass = (msg.type === 'foundations-synced' || msg.type === 'frame-doc-ready') ? 'done' : msg.type;
+  status.className = 'status ' + statusClass;
+  status.textContent = msg.text || '';
+};
+</script>
+</body>
+</html>

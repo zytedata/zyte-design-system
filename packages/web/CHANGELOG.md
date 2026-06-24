@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- [#22](https://github.com/zytedata/zyte-design-system/pull/22) [`af52d7d`](https://github.com/zytedata/zyte-design-system/commit/af52d7dbf0dd9f539a89a6f35ebed4239f1ae583) Thanks [@arkadiuszjaneczko1](https://github.com/arkadiuszjaneczko1)! - Expose brand assets via the package `exports` map: `@zytedata/ds-web/assets/*` now resolves to the shipped SVGs in `src/assets` (e.g. `@zytedata/ds-web/assets/logo.primary.svg`). The files were already published but sealed off by the `exports` encapsulation; consumers can now import them directly instead of reaching into internal paths.
+
 ## 0.3.0
 
 ### Minor Changes

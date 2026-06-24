@@ -29,6 +29,7 @@
     "./tokens.scss": "./dist/tokens.scss",
     "./tailwind": "./dist/tokens.tailwind.cjs",
     "./design.md": "./dist/design.md",
+    "./assets/*": "./src/assets/*",
     "./package.json": "./package.json"
   },
   "scripts": {

@@ -64,8 +64,8 @@ jobs:
           # `pnpm release` runs `pnpm -r --filter ./packages/* build` then
           # `changeset publish`. The build step is also defensive here in
           # case the previous step is cached.
-          publish: pnpm release
-          version: pnpm version
+          publish: pnpm run release
+          version: pnpm run version
           commit: "chore(release): version packages"
           title: "chore(release): version packages"
         env:

@@ -576,7 +576,7 @@ export function WebShowcase({ bundle }: { bundle: ProductFoundations }) {
             <div>
               data = resp.json()[
               <span style={{ color: tk.color("accent", "300", "#e83281") }}>
-                "product"
+                {'"product"'}
               </span>
               ]
             </div>

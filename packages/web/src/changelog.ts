@@ -55,6 +55,13 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     file: "foundations.ts",
     entries: [
       {
+        date: "2026-06-25",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "Added `typography.size.7xl` (68px) — the display tier for the hero/H1, which was previously off-scale (scale topped out at `6xl` 60px). Emits `--web-text-7xl` / `$web-text-7xl`.",
+      },
+      {
         date: "2026-06-23",
         author: "arkadiusz",
         kind: "changed",
@@ -155,6 +162,13 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
   {
     file: "design.body.md",
     entries: [
+      {
+        date: "2026-06-25",
+        author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Reconciled heading sizes with the type scale: H1/hero = `size.7xl` (68px), H2 = `size.5xl` (48px) — replaced the off-scale prose values (68px hero / ~44px H2) so prose, the Typography primitive table and foundations.ts now agree; removed the resolved type-scale clause from the Foundations-gaps note.",
+      },
       {
         date: "2026-06-24",
         author: "arkadiusz",

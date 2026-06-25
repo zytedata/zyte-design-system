@@ -103,6 +103,7 @@ export const WEB_FOUNDATIONS: ProductFoundations = {
       "4xl": 36,
       "5xl": 48,
       "6xl": 60,
+      "7xl": 68,
     },
     weight: {
       light: 300,

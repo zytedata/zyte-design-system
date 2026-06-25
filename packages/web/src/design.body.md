@@ -23,7 +23,7 @@ The YAML front matter is the **machine-readable token layer** for agents. The pr
 - Build with **Tailwind v3 + React**; avoid custom CSS files unless absolutely necessary.
 - **Gradients are for hero sections only** — never on cards or components.
 - **The nav is always white** (`#FFFFFF`) with a bottom border — never dark, never gradient (see Components → Navigation).
-- Cards never have shadows. Outline only: 0.5px solid #e4e4e4. No box-shadow.
+- Cards never have shadows. Outline only: 0.5px solid `neutral.200` (#e5e5e5). No box-shadow.
 
 
 ## Colors
@@ -38,26 +38,26 @@ Use the palette names as your mental model:
 
 - **surface layers (chrome)**: `surfaceDark.*` / `surfaceLight.*` — four-step stacks (background → page sections → secondary → cards) for dark and light app shells
 - **surfaces/text (neutral ramp)**: `neutral.*` for borders, text, and legacy neutral fills
-- **brand**: `primary` — **Zyte Fuchsia** (base `primary.600` = `#c026d3`)
+- **brand**: `primary` — **Zyte Fuchsia** (base `primary.500` = `#b02cce`; `primary.600`/`primary.700` for hover/pressed)
 - **secondary**: `secondary` — **Indigo / Navy** (base `secondary.500` = `#181e5a`)
 - **accent**: `accent` — **Pink / Crimson** (base `accent.500` = `#db005f`); semantic `accent` role maps here
 - **headline gradient**: `headlineGradient` — linear **orange → fuchsia**; **headline highlights only**
 
 ### Runtime Semantic Values
 
-- **Primary CTA / active brand**: `primary.600` (canonical fuchsia) with accessible contrast; lighter/darker steps for hover and pressed states
-- **Links / technical emphasis**: `accentPrimary.600` (unchanged)
-- **Secondary stats / icons**: `accentSecondary.500`–`600` range; use `accentSecondaryOnDark` on dark backgrounds where extra luminance is needed
+- **Primary CTA / active brand**: `primary.500` (#b02cce, fuchsia) — fill for the primary button; use `primary.600`/`primary.700` for hover and pressed states
+- **Links / technical emphasis**: `primary.500` (#b02cce); hover `primary.700`
+- **Secondary emphasis / accent highlights**: `accent.500`–`600` (rose #db005f); on dark backgrounds use a lighter step (`accent.300`/`accent.400`) for luminance
 - **Headline highlight**: `headlineGradient` only where editorial treatment calls for orange-to-fuchsia; not for UI chrome
-- **Negative/destructive**: do **not** map to `accentSecondary` (it is now orange for marketing secondary). Prefer explicit destructive patterns or neutral emphasis until a dedicated destructive ramp exists.
+- **Negative/destructive**: foundations has **no destructive ramp** — use explicit hardcoded semantic values (see Components → Pills & Badges) or neutral emphasis until a dedicated ramp is added.
 - **Page chrome (dark UI)**: `surfaceDark.background` → `surfaceDark.pageSections` → `surfaceDark.secondary` → `surfaceDark.cards` for nested elevation
 - **Page chrome (light UI)**: same layer names under `surfaceLight.*`
 - **Backgrounds / text / borders (neutral ramp)**: `neutral.0`–`1000` for typography, borders (`neutral.200`–`300`), text (`neutral.700`–`900`); prefer **`surfaceLight` / `surfaceDark`** for app shell backgrounds instead of reusing arbitrary neutral stops for chrome
 
 ### Colour Usage Rules
 
-- Use **brand (fuchsia)** for CTAs and high-salience highlights; don’t “paint the UI” with it.
-- Use **accent primary** for links and cool secondary emphasis.
+- Use **brand fuchsia** (`primary.500`) for the primary CTA and high-salience highlights; don’t “paint the UI” with it.
+- Use **accent** (`accent.500`, rose) for secondary emphasis and accent highlights; links use brand fuchsia (`primary.500`).
 - Use **secondary** (`secondary.500`) for section labels, eyebrows and section numbers.
 - Reserve **headline gradient** for display headlines and the ribbon mnemonic, not buttons or form controls.
 - Ensure **accessible contrast** on text, icons, and interactive states.
@@ -66,11 +66,12 @@ Use the palette names as your mental model:
 
 ### Font Families
 
+- Yellix only. Never Inter, Roboto, Geist, Space Grotesk, or system fonts. Always set -webkit-font-smoothing: antialiased on html and body. Max weight: 700. Never 800 or 900.
+
 - **Default / UI / body:** **Yellix** — the default Web typeface for running text, controls, captions and metadata. Tokenized as `typography.family.sans` → `var(--font-yellix), Yellix, …` (Geist Sans is the fallback if Yellix fails to load).
 - **Display / headlines:** **Yellix** at weight 600 — the same face, used heavier for the main hero unit, headlines (H1/H2) and large display numbers. Tokenized as `typography.family.display` → `var(--font-yellix), Yellix, sans-serif`.
 - **Code / technical:** **Geist Mono** — code, snippets, token names and technical metadata.
 
-> **Direction note (pending decision).** A newer brand direction calls for **Yellix only — never Geist, Inter, Roboto or system fonts**. The current tokens keep **Geist Sans as the Yellix fallback** and **Geist Mono for code**; honouring "Yellix only" would mean changing `typography.family.sans`/`mono` in `foundations.ts` (and choosing a mono treatment for code that isn't Geist). Left unchanged pending decision — see Token Changes.
 
 ### Main Hero Unit
 
@@ -80,15 +81,15 @@ The hero is the single largest type moment on a page. Use the display face at it
 .hero-title {
   font-family: Yellix, sans-serif;
   font-feature-settings: normal;
-  font-size: 68px;
+  font-size: 68px; /* typography.size.7xl */
   font-variation-settings: normal;
   font-weight: 600;
 }
 ```
 
-- Exactly **one hero unit per page** — it is the H1 (see below).
+- Exactly **one hero unit per page** — it is the H1 (see below). Size = `size.7xl` (68).
 - Keep line-height tight; let the headline span at most two or three lines.
-- Scale the `68px` size down responsively at small breakpoints; never wrap awkwardly on mobile.
+- Scale the `7xl` (68px) size down responsively at small breakpoints; never wrap awkwardly on mobile.
 
 **Landing-page hero background.** The **landing-page** hero unit — and only that one — uses the brand navy → fuchsia diagonal gradient as its main background:
 
@@ -109,8 +110,8 @@ The hero is the single largest type moment on a page. Use the display face at it
 
 Headings use **Yellix** at weight **600** with tight line-height. Keep a clear step between levels:
 
-- **H1** — the hero unit: **68px / 600**, `Yellix, sans-serif`. One per page.
-- **H2** — major section titles: **~44px / 600**, `Yellix, sans-serif`.
+- **H1** — the hero unit: **`size.7xl` (68px) / 600**, `Yellix, sans-serif`. One per page. Don't add gradient to letters. 
+- **H2** — major section titles: **`size.5xl` (48px) / 600**, `Yellix, sans-serif`.
 - Lower levels (H3+) step down through the tokenized scale.
 - Don't skip levels for visual sizing — pick the level by document structure, then style with tokens.
 
@@ -156,7 +157,7 @@ Map your global `font-family` / Tailwind `font-sans` / `font-mono` to those CSS 
 
 Use tokenized sizes/weights (see front matter). Keep headings tight and body copy readable:
 
-- Headings: **Yellix**, weight 600, tighter line-height (H1 68px, H2 ~44px — see Headings)
+- Headings: **Yellix**, weight 600, tighter line-height (H1 `7xl` 68px, H2 `5xl` 48px — see Headings)
 - Body: **Yellix** (default), regular, normal/relaxed line-height
 - Mono: **Geist Mono** for code, snippets, token names, and technical metadata
 
@@ -184,44 +185,43 @@ Use tokenized sizes/weights (see front matter). Keep headings tight and body cop
 
 | Background | Use | Text colour |
 |---|---|---|
-| `#FEFEFE` (white) | Default content | `#181E5A` |
-| `#F3F4F5` (subtle) | Alternating sections | `#181E5A` |
-| `#EDE9FE` (accent) | Feature sections | `#181E5A` |
-| `#0F1638` (dark) | Code / integration blocks | `#ffffff` |
-| `gradient-hero` | Hero sections only | `#ffffff` |
+| `surfaceLight.cards` #ffffff | Default content | `secondary.500` #181e5a |
+| `surfaceLight.pageSections` #f0f0f2 | Alternating sections | `secondary.500` #181e5a |
+| `primary.50` #fdf4ff | Feature sections | `secondary.500` #181e5a |
+| `secondary.800` #101339 | Code / integration blocks | `neutral.0` #ffffff |
+| `heroGradient` | Hero sections only | `neutral.0` #ffffff |
 
-- **Gradients are for hero sections only — never on cards or components.**
-- The nav is always `#FFFFFF` (see Navigation), never dark or gradient.
 
-> **Differs from current tokens.** These section surfaces (`#FEFEFE`, `#F3F4F5`, `#EDE9FE`, `#0F1638`) don't map to current `surfaceLight.*` / `surfaceDark.*` tokens (e.g. light background is `#f7f7f8`, dark background is `#000000`). `gradient-hero` corresponds to the existing `heroGradient`. Left unchanged pending decision — see Token Changes.
 
 ### Page Metrics
 
-- **Page background:** `#F3F4F5`
-- **Max content width:** 1080px · **narrow:** 898px
-- **Section padding:** 112px 176px (desktop) · 80px 24px (mobile)
-- **Card gap:** 20px (`spacing.5`)
-- **Radius scale:** 4px / 8px / 12px / 16px / 999px only
-
-> **Differs from current tokens.** `176px` and `112px` are not steps in the `spacing` scale (largest step is `128`/key `32`); content widths (1080 / 898px) aren't tokenized at all. The radius set maps to existing steps (`DEFAULT` 4 / `lg` 8 / `xl` 12 / `2xl` 16 / `full` 9999) but contradicts the doc's earlier "12px everywhere" rule. Left unchanged pending decision — see Token Changes.
+- **Page background:** `surfaceLight.background` #f7f7f8
+- **Max content width:** 1080px · **narrow:** 898px — *layout constants; foundations has no `maxWidth`/`container` token scale yet (see note below)*
+- **Section padding (desktop):** `spacing.32` (128)
+- **Section padding (mobile):** `spacing.20` (80) vertical · `spacing.6` (24) horizontal
+- **Card gap:** `spacing.5` (20)
+- **Radius scale:** use `radius` tokens — `md` 6 / `lg` 8 / `xl` 12 / `2xl` 16 / `full` 9999
 
 ## Elevation & Depth
 
 - Prefer **borders + surface contrast** over shadows to express depth.
-- **No shadows on cards.** Cards are flat and defined by a slate border only (see Components → Cards).
+- **No shadows on cards.** Cards are flat and defined by a 0.5px `neutral.200` (#e5e5e5) border only (see Components → Primitive Style Rules → Surfaces).
 - Avoid heavy blur/glow effects; if a shadow is ever used it must be a single, subtle step from the `shadow` scale on a non-card surface.
 
 ## Shapes
 
 ### Shape Language
 
-The shape language is **soft and consistent** — a single, calm radius across the whole UI:
+The shape language is **soft and consistent** — rounded corners drawn from the `radius` scale in `foundations.ts`; never square-cornered, and never an ad-hoc pixel value.
 
-- **`border-radius: 12px` everywhere.** One radius for cards, buttons, inputs, chips and pills — don't mix multiple radii in a composition.
-- **Buttons always use the 12px radius** (rounded, never square-cornered) — see Components → CTA Buttons.
-- Apply the same 12px corner to cards, inputs and any contained surface so elements feel like one family.
-- Radius is tokenized in this product's `radius` scale — reference the token, don't hard-code `12px` in components.
-- **No shadows on cards** — a slate border carries the edge instead.
+- Reference the `radius` tokens, don't hard-code pixels: `md` 6 · `lg` 8 · `xl` 12 · `2xl` 16 · `full` 9999.
+- Per-component defaults (see Components → Primitive Style Rules):
+  - Buttons, inputs, code blocks: `radius.lg` (8). Nav buttons and media frames: `radius.xl` (12).
+  - Cards: `radius.2xl` (16).
+  - Toggles / checkboxes: `radius.md` (6).
+  - Pills, badges, avatars, pagination dots: `radius.full` (9999).
+- Keep radii **consistent within a component group** — don't mix unrelated radii in one composition.
+- **No shadows on cards** — a 0.5px `neutral.200` (#e5e5e5) border carries the edge instead.
 
 ## Components
 
@@ -236,83 +236,107 @@ The shape language is **soft and consistent** — a single, calm radius across t
 - Keep states explicit: hover/focus/active/disabled.
 - Prefer consistent button/link patterns across pages.
 
-### CTA Buttons
+### Primitive Style Rules
 
-- The **primary CTA** uses brand fuchsia (`primary.500`) with **weight 600** label text.
-- **Buttons use the `radius.lg` (8px) corner**; nav buttons use `radius.xl` (12px). Rounded, never square.
-- Keep one primary CTA per view; pair with a quieter secondary/ghost button for the alternate action.
-- Button labels follow the label rules — short and, where they act as eyebrow-style overlines, uppercase.
+Token-backed style rules for the generic primitives the UI is composed from. All values reference `foundations.ts`; literal values are shown inline for the key brand stops. Role split (aligned with `foundations.ts` naming): **primary CTA / active brand / nav / links / pills / badges = `primary.*` (fuchsia #b02cce)**, **secondary emphasis & accents = `accent.*` (rose #db005f)**, **text / eyebrows / labels = `secondary.*` (navy #181e5a)**.
 
-#### Button Variants
+Shared across all primitives unless overridden: font `typography.family.sans` (Yellix), max weight `weight.bold` (700), button/control padding `spacing.3` (12) y · `spacing.5` (20) x.
 
-| Variant | BG | Text | Border | Radius |
+#### Buttons
+
+Radius `radius.lg` (8) for all; nav buttons use `radius.xl` (12). Label `size.base` (16) · `weight.semibold` (600). Rounded, never square.
+
+| Variant | Background | Text | Border | Radius | Notes |
+|---|---|---|---|---|---|
+| primary | `primary.500` #b02cce | `neutral.0` | — | `radius.lg` (8) | hover `primary.600` #c026d3 |
+| secondary | transparent | `accent.500` | 2px `accent.500` | `radius.lg` (8) | |
+| ghost | transparent | `secondary.500` #181e5a | 2px `secondary.500` | `radius.lg` (8) | |
+| ghost-dark | transparent | `neutral.0` | 2px `neutral.0` @ `opacity.25` | `radius.lg` (8) | dark surfaces |
+| nav-dark | `secondary.800` #101339 | `neutral.0` | — | `radius.xl` (12) | nav only |
+| nav-accent | `primary.500` #b02cce | `neutral.0` | 1px `neutral.0` @ `opacity.25` | `radius.xl` (12) | nav only |
+| disabled | `neutral.200` #e5e5e5 | `neutral.400` #a3a3a3 | — | `radius.lg` (8) | |
+
+- One primary CTA per view — **never two primary buttons side by side**; pair with a quieter secondary/ghost.
+- Labels follow the label rules — short, and uppercase where they act as eyebrow-style overlines.
+
+#### Typography
+
+| Element | Font | Size | Weight | Color | Notes |
+|---|---|---|---|---|---|
+| Headline H1 | `family.display` | `size.7xl` (68) | 600 | `secondary.500` #181e5a | `lineHeight.tight` · `tracking.tight`; dark: `neutral.0`; highlight = `headlineGradient` (text-clip) only |
+| Headline H2 | `family.display` | `size.5xl` (48) | 600 | `secondary.500` | |
+| Headline H3 | `family.display` | `size.3xl` (30) | 600 | `secondary.500` | |
+| Subtext (sublead) | `family.sans` | `size.lg` (18) | 400 | `neutral.600` #525252 | `lineHeight.relaxed`; ~60–75ch; dark: `neutral.300` |
+| Body text | `family.sans` | `size.base` (16) | 400 | `neutral.700` #404040 | `lineHeight.normal` |
+| Eyebrow | `family.sans` | `size.xs` (12) | 600 | `secondary.500` (label) · `primary.500` (section number) | `tracking.wider` (0.8) · UPPERCASE · no bg · mb `spacing.2`; dark: label `neutral.0`, number `primary.300` |
+| Text link | `family.sans` | inherit | 500 | `primary.500` #b02cce | hover `primary.700`; dark: `neutral.0`→`primary.300`; trailing Lucide arrow `spacing.4` |
+
+#### Pills & Badges
+
+Radius `radius.full` · `size.xs` (12) · 600 · padding `spacing.1` (4) y · `spacing.3` (12) x.
+
+| Variant | Background | Text |
+|---|---|---|
+| Pill (chip/tag) | `primary.50` #fdf4ff | `primary.500` #b02cce |
+| Badge brand | `primary.100` #fae8ff | `primary.700` #a21caf |
+| Badge neutral | `surfaceLight.pageSections` #f0f0f2 | `neutral.600` #525252 |
+| Badge dark | `secondary.500` #181e5a | `neutral.0` |
+| Badge success | `rgba(0,179,136,0.09)` ⚠ | #008A69 ⚠ |
+| Badge warning | `rgba(255,158,27,0.1)` ⚠ | #a06010 ⚠ |
+| Badge error | `rgba(219,0,4,0.07)` ⚠ | #A10003 ⚠ |
+
+⚠ Semantic badge colours are hardcoded — foundations has no `success`/`warning`/`error`/`info` ramp yet.
+
+#### Surfaces (Card / Media frame / Code block)
+
+| Surface | Background | Text | Border | Radius | Padding |
+|---|---|---|---|---|---|
+| Card default | `surfaceLight.cards` #ffffff | inherit | 0.5px `neutral.200` #e5e5e5 | `radius.2xl` (16) | `spacing.6` (24) |
+| Card feature | `surfaceLight.cards` #ffffff | inherit | 0.5px `neutral.200` + 3px top in accent colour | `radius.2xl` (16) | `spacing.6` (24) |
+| Card pricing-featured | `primary.500` #b02cce | `neutral.0` | 1px `primary.500` | `radius.2xl` (16) | `spacing.6` (24) |
+| Card on-dark | `surfaceDark.cards` #0d0d14 | `neutral.0` | 1px `neutral.0` @ `opacity.25` | `radius.2xl` (16) | `spacing.6` (24) |
+| Media frame | `surfaceLight.cards` #ffffff | — | 1px `neutral.200` #e5e5e5 | `radius.xl` (12) | — |
+| Code block | `surfaceDark.secondary` #0a0a0e | `neutral.300` #d4d4d4 | — | `radius.lg` (8) | `spacing.4` (16) |
+
+- Cards carry **no shadow** — the 0.5px `neutral.200` (#e5e5e5) outline carries the edge; depth comes from border + surface contrast, not elevation.
+- **Never use `Card default` on dark backgrounds — use `Card on-dark`.**
+- Code block uses `family.mono` (Geist Mono) · `size.sm` (14); language switcher = Tab.
+
+#### Form controls
+
+| Element | Background | Text / Fill | Border | Radius | Notes |
+|---|---|---|---|---|---|
+| Input / select | `surfaceLight.cards` #ffffff | `secondary.500` #181e5a | 1px `neutral.300` #d4d4d4 | `radius.lg` (8) | focus ring 2px `primary.500`; padding `spacing.2`/`spacing.3` |
+| Toggle / checkbox (active) | `accent.500` #db005f | `neutral.0` | — | `radius.md` (6) | |
+| Tab inactive | — | `neutral.500` #737373 | — | — | padding `spacing.3` (12) · `weight.medium` (500) |
+| Tab selected | — | `primary.500` #b02cce | 2px `primary.500` indicator | — | left or bottom indicator |
+
+#### Atoms (Icon / Avatar / Rating / Pagination)
+
+| Element | Color | Size | Radius | Notes |
 |---|---|---|---|---|
-| primary | `primary.500` | `neutral.0` | none | `radius.lg` (8px) |
-| secondary | `primary.200` | `primary.500` | 2px `primary.500` | `radius.lg` |
-| ghost | transparent | `primary.500` | 2px `secondary.500` | `radius.lg` |
-| ghost-dark | transparent | `neutral.0` | 2px `neutral.0` @ `opacity.25` | `radius.lg` |
-| nav-dark | `secondary.800` | `neutral.0` | none | `radius.xl` (12px) |
-| nav-accent | `primary.500` | `neutral.0` | 1px `neutral.0` @ `opacity.25` | `radius.xl` |
-| disabled | `neutral.200` | `neutral.400` | none | `radius.lg` |
+| Icon | `currentColor` | `spacing.4/5/6` (16/20/24) | — | Lucide only; size explicit, consistent per group |
+| Avatar | — | `spacing.8`/`spacing.10` (32/40) | `radius.full` | 1px `neutral.200` border optional |
+| Rating (stars) | ⚠ no amber token | `spacing.4` (16) | — | Lucide Star; gap `spacing.0.5` (2) |
+| Pagination dots | inactive `neutral.300` / active `primary.500` | `spacing.2` (8) | `radius.full` | gap `spacing.2` (8) |
+| Pagination arrows | `neutral.500` → hover `secondary.500` | — | — | Lucide icon button |
 
-- **Never two primary buttons side by side.**
-- **Nav buttons use `radius.xl` (12px); all other buttons use `radius.lg` (8px).**
-
-> **Nearest-token mapping.** Some originals had no exact token, so the closest was used: `#F5DEFA → primary.200` (`#f5d0fe`), `#0F1638 → secondary.800` (`#101339`), `#D9E4E8 → neutral.200` (`#E5E5E5`), `#9BADB5 → neutral.400` (`#A3A3A3`), and `rgba(255,255,255,0.35)`/`0.2 → neutral.0 @ opacity.25` (the scale has no 35/20 step). If any need to be pixel-exact, they'd require new tokens in `foundations.ts`.
-
-### Cards
-
-- Cards are **flat**: **slate border only, no shadow.** Depth comes from the border and surface contrast, not elevation.
-- Use the **12px `border-radius`** consistently across all cards.
-- Build card internals from the spacing scale; keep padding consistent across a card grid.
-- Don't reach for shadows, gradients or heavy fills to make a card stand out — hierarchy comes from type and spacing.
-
-#### Card Variants
-
-All cards: **`border-radius: 16px` · no box-shadow · outline border only.**
-
-| Variant | BG | Border |
-|---|---|---|
-| card-default | `#fff` | `0.5px solid #e4e4e4` |
-| card-feature | `#fff` | `0.5px solid #e4e4e4` + 3px top in accent colour |
-| card-pricing-featured | `#B02CCE` | `1px #B02CCE` |
-| card-on-dark | `rgba(255,255,255,0.05)` | `1px rgba(255,255,255,0.1)` |
-
-- **Never use `card-default` on dark backgrounds — use `card-on-dark`.**
-
-> **Differs from current tokens.** These variants use a **16px** radius (`radius.2xl`) and a hairline `0.5px solid #e4e4e4` border, vs the doc's current **12px** + slate border. `#e4e4e4` is close to but not exactly `neutral.200` (`#E5E5E5`). Left unchanged pending decision — see Token Changes.
-
-### Icons
-
-- Use **[Lucide](https://lucide.dev/)** as the single icon library across Web — don't mix in other icon sets.
-- Use Lucide icons at their native stroke style; size them from the spacing/type scale and let them inherit `currentColor` so they pick up the surrounding text color.
-- Keep icons consistent in weight and size within a group (e.g. all icons in a feature list or nav match).
-- Icons support text — they don't replace labels for primary actions; pair an icon with a label unless the control is unambiguous.
 - Import icons from `lucide-react`. **Never inline SVG paths, and never mix in Font Awesome** or other icon sets.
-- Size icons **explicitly** (e.g. `width: 16px; height: 16px`) and set colour on the parent so the icon inherits `currentColor`.
+- Icons support text — they don't replace labels for primary actions; pair an icon with a label unless the control is unambiguous.
+- Size icons explicitly and set colour on the parent so the icon inherits `currentColor`; keep weight/size consistent within a group.
 
-### Badges & Pills
+#### Navigation
 
-All badges: **`border-radius: 999px` (`radius.full`) · Yellix 12px / weight 600.**
+| Element | Value |
+|---|---|
+| Nav bar background | always `#FFFFFF` — **never dark, never gradient** |
+| Nav bar border | `border-bottom: 1px solid` `surfaceLight.pageSections` #f0f0f2 (spec: #F3F4F5) |
+| Nav buttons | `nav-dark` / `nav-accent` variants — `radius.xl` (12) (see Buttons) |
+| Nav links / badges / pills | `primary.500` #b02cce (see Text link / Pills & Badges) |
 
-| Variant | BG | Text |
-|---|---|---|
-| badge-accent | `#F5DEFA` | `#B02CCE` |
-| badge-success | `rgba(0,179,136,0.09)` | `#008A69` |
-| badge-warning | `rgba(255,158,27,0.1)` | `#a06010` |
-| badge-error | `rgba(219,0,4,0.07)` | `#A10003` |
-| badge-neutral | `#F3F4F5` | `#667D87` |
-| badge-dark | `#181E5A` | `#fff` |
+> **Exception — transparent-on-hero nav.** Over the landing-page hero gradient the nav bar is transparent with the reversed (white) logo and light text; it becomes the white bar (above) on scroll / on all other pages.
 
-> **New — no status ramps yet.** `foundations.ts` has no `success` / `warning` / `error` palettes (and no slate-neutral like `#667D87`), so these hexes are hardcoded here. Adding semantic status ramps would let badges reference tokens instead — see Token Changes.
-
-### Navigation
-
-- **The nav background is always `#FFFFFF`**, with `border-bottom: 1px solid #F3F4F5`. **Never dark, never gradient.**
-- Nav buttons use the **12px** radius (see Button Variants).
-- Links, badges and pills use **`#B02CCE`** (`primary.500`).
-
-> **Differs from current tokens.** `#F3F4F5` (nav border / page background) is not a current surface token (`surfaceLight.pageSections` = `#f0f0f2`). The "two distinct accent roles" direction (a `#DB005F` primary-CTA accent vs a `#B02CCE` nav/link accent) is **unresolved** in the source spec — the button table uses `#B02CCE` for primary while the principles call for `#DB005F`. Colours left unchanged pending decision — see Token Changes.
+> **Foundations gaps** (left as hashes / need a decision): on-dark opacities `0.05`/`0.1` are missing from the `opacity` scale (0/25/50/75/100) · no semantic `success`/`warning`/`error`/`info` ramp · no rating/amber token · no `maxWidth`/`container` scale (content widths 1080/898 are documented as constants).
 
 ## Sections
 
@@ -321,7 +345,7 @@ All badges: **`border-radius: 999px` (`radius.full`) · Yellix 12px / weight 600
 Every major section opens with a **section number eyebrow** above the title:
 
 - Format the eyebrow as an uppercase overline (e.g. `01`, `02`, `SECTION 01`) following the Labels & Eyebrows rules.
-- It sits **above the headline**, on **no background — not a pill or chip**, in the **secondary** color (`secondary.500`).
+- It sits **above the headline**, on **no background — not a pill or chip**. Colour the **section number in brand `primary.500`** (fuchsia) and the **label in `secondary.500`** (navy), so the eyebrow carries a brand accent. On dark surfaces use `primary.300` for the number and `neutral.0`/`rgba(255,255,255,0.72)` for the label.
 - Numbering runs in document order down the page and helps readers track where they are.
 - Pair the eyebrow + headline + sublead as one tight group, then add section-scale spacing around it.
 
@@ -439,20 +463,23 @@ Brand assets — logos, icons, illustrations, templates — live in one place an
 - Hardcode colors, spacing, or the `12px` radius when token equivalents exist.
 - Put shadows on cards, or mix multiple radii in one composition.
 - Render section labels/eyebrows as pills or with a background — keep them plain uppercase in secondary.
-- Use `headlineGradient` or `accentSecondaryOnDark` outside their documented roles (headlines / ribbon / dark surfaces).
+- Use `headlineGradient` outside its documented role (headline highlights / ribbon).
 - Introduce new “one-off” components when composition of existing ones works.
 
-## Pending Token Decisions
+## 10. What NOT To Do
 
-The component specs above were added verbatim from a newer (zyte.com-aligned) direction. Several diverge from the current `foundations.ts` tokens. **No colours or tokens have been changed** — each item below needs a decision before `foundations.ts` is touched:
+| ❌ Never | ✅ Instead |
+|---|---|
+| Inter, Roboto, Geist, system fonts | Yellix only |
+| Font Awesome, custom SVG icon paths | Lucide only |
+| box-shadow on cards | `0.5px solid` `neutral.200` (#e5e5e5) outline only |
+| Hardcoded hex not in token list | Use tokens |
+| `#DB005F` (rose `accent`) for the primary CTA | Use `#B02CCE` = `primary.500` (fuchsia) |
+| `#DB005F` for nav / badges / pills | Use `#B02CCE` = `primary.500` (fuchsia) |
+| Dark/gradient nav background | Nav is always `#FFFFFF` |
+| gradient-hero on cards | Hero sections only |
+| font-weight 800 or 900 | Max is 700 |
+| border-radius outside scale | use `radius` tokens (6/8/12/16/9999) |
+| Two primary buttons side by side | primary + ghost pairing |
 
-1. **Fonts — "Yellix only, never Geist."** Current tokens keep Geist Sans as the Yellix fallback and Geist Mono for code. Honouring this means rewriting `typography.family.sans` and `typography.family.mono`.
-2. **Button / card radius.** New spec: 8px buttons, 12px nav, 16px cards. Current rule: "12px everywhere." Values exist in the `radius` scale; the doc rule and component usage would change.
-3. **Card border.** New: `0.5px solid #e4e4e4` (≈ but ≠ `neutral.200` `#E5E5E5`). Decide whether to retune `neutral.200` or add a dedicated hairline border token.
-4. **Status ramps (badges).** No `success` / `warning` / `error` palettes exist. Adding them (e.g. `#008A69`, `#a06010`/orange, `#A10003`) would be **new** colour tokens.
-5. **Slate-neutral text** (`#667D87`) used by `badge-neutral` — not in the current `neutral` ramp.
-6. **Section / page surfaces.** `#FEFEFE`, `#F3F4F5`, `#EDE9FE`, `#0F1638` don't match `surfaceLight.*` / `surfaceDark.*` (e.g. `#f7f7f8`, `#000000`). Decide whether to retune the surface stacks.
-7. **Primary-accent role conflict.** The source spec is internally inconsistent: principles say `#DB005F` is the primary-CTA accent, but the button/card tables use `#B02CCE` (= `primary.500`). Needs resolution before any colour role moves.
-8. **Spacing not in scale.** Section padding `112px` / `176px` and content widths `1080` / `898px` aren't tokenized.
-9. **Logo on dark.** Source spec permits the fuchsia mark on dark surfaces; the current Logo rules restrict the brand-fuchsia variant to neutral light surfaces.
 

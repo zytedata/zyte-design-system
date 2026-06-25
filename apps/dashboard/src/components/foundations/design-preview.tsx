@@ -165,7 +165,7 @@ function neutralRamp(bundle: ProductFoundations): string[] {
   ];
 }
 
-function buildTheme(bundle: ProductFoundations, mode: Mode): Theme {
+export function buildTheme(bundle: ProductFoundations, mode: Mode): Theme {
   const ramp = neutralRamp(bundle);
   const darkest = ramp[0]!;
   const lightest = ramp[ramp.length - 1]!;
@@ -230,7 +230,7 @@ function buildTheme(bundle: ProductFoundations, mode: Mode): Theme {
 /* Typography / scale helpers                                                  */
 /* -------------------------------------------------------------------------- */
 
-function makeScales(bundle: ProductFoundations) {
+export function makeScales(bundle: ProductFoundations) {
   const t = bundle.typography;
   const sans = t.family.sans ?? "ui-sans-serif, system-ui, sans-serif";
   const mono = t.family.mono ?? "ui-monospace, monospace";
@@ -457,7 +457,7 @@ function GalleryCard({
   );
 }
 
-function TokenGallery({
+export function TokenGallery({
   bundle,
   theme,
   s,
@@ -861,7 +861,7 @@ function ShowcasePage({
         </div>
         <h1
           style={{
-            fontSize: s.size("6xl", 60),
+            fontSize: s.size("7xl", 68),
             lineHeight: s.lh("tight", 1.1),
             fontWeight: s.weight("bold", 700),
             letterSpacing: s.track("tighter"),
@@ -935,7 +935,7 @@ function ShowcasePage({
                 border: `1px solid ${theme.border}`,
                 borderRadius: s.rad("2xl", 16),
                 padding: s.sp("6", 24),
-                boxShadow: s.shadow("lg", "0 10px 15px -3px rgb(0 0 0 / 0.1)"),
+                /* design.md: cards are flat — border only, no shadow */
               }}
             >
               <span

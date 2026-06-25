@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/tabs";
 import { TokenSurface } from "@/components/foundations/token-surface";
 import { DesignPreview } from "@/components/foundations/design-preview";
+import { WebShowcase } from "@/components/foundations/web-showcase";
 
 const SPEC_URL = "https://github.com/google-labs-code/design.md/blob/main/docs/spec.md";
 
@@ -247,7 +248,11 @@ export function AgenticDoc({
         </TabsContent>
 
         <TabsContent value="preview" className="mt-6">
-          <DesignPreview bundle={bundle} />
+          {productSlug === "web" ? (
+            <WebShowcase bundle={bundle} />
+          ) : (
+            <DesignPreview bundle={bundle} />
+          )}
         </TabsContent>
 
         <TabsContent value="rendered" className="mt-5 space-y-5">

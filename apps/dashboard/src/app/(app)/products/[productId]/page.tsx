@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowUpRight,
-  ChevronDown,
   CircleDot,
   GitBranch,
   PenLine,
@@ -16,8 +15,8 @@ import {
   buildProductDocLinks,
   getPackageName,
 } from "@/data/documentation";
-import { getChangelogs } from "@/data/foundations";
-import { readPackageVersion } from "@/data/foundations/docs";
+import { getChangelogs, getFoundations } from "@/data/foundations";
+import { readCanonicalDoc, readPackageVersion } from "@/data/foundations/docs";
 import {
   EXTRACT_SUMMIT_CORE_PRINCIPLES,
   EXTRACT_SUMMIT_DESIGN_LAYERS,
@@ -34,12 +33,8 @@ import {
 import { cn } from "@/lib/utils";
 import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { DevOnboarding } from "@/components/products/dev-onboarding";
+import { DashboardTabs } from "@/components/products/dashboard-tabs";
+import { GettingStarted } from "@/components/products/getting-started";
 import {
   JourneyCard,
   accentForIndex,
@@ -105,12 +100,37 @@ export default async function ProductDashboardPage({
   const Icon = product.icon;
 
   const packageName = getPackageName(product.slug);
-  const packageVersion = await readPackageVersion(product.id);
   const docLinks = buildProductDocLinks(product.slug);
-  const showInstall = product.capabilities.documentation.enabled;
+
+  const bundle = getFoundations(product.id);
+  const [packageVersion, canonicalDoc] = await Promise.all([
+    readPackageVersion(product.id),
+    bundle.canonicalDoc ? readCanonicalDoc(product.id) : Promise.resolve(null),
+  ]);
 
   const journeyItems = product.nav.filter(
     (item) => item.label.toLowerCase() !== "dashboard",
+  );
+
+  const gettingStarted = (
+    <GettingStarted
+      productLabel={product.label}
+      productSlug={product.slug}
+      packageName={packageName}
+      version={packageVersion}
+      links={docLinks}
+      capabilities={{
+        prototyping: product.capabilities.prototyping.enabled,
+        templates: product.capabilities.templates.enabled,
+        documentation: product.capabilities.documentation.enabled,
+        assets: product.capabilities.assets.enabled,
+      }}
+      designDoc={
+        canonicalDoc
+          ? { content: canonicalDoc.content, filename: canonicalDoc.filename }
+          : null
+      }
+    />
   );
 
   return (
@@ -156,72 +176,13 @@ export default async function ProductDashboardPage({
         </div>
       </header>
 
-      {showInstall ? (
-        <Collapsible defaultOpen={false} className="mt-10">
-          <section
-            aria-labelledby="install-quick-start-heading"
-            className="bg-card rounded-2xl border"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-3 p-5">
-              <CollapsibleTrigger asChild>
-                <button
-                  type="button"
-                  className="group hover:text-foreground -m-2 flex flex-1 items-center gap-3 rounded-md p-2 text-left transition-colors"
-                  aria-controls="install-quick-start-panel"
-                >
-                  <ChevronDown
-                    className="text-muted-foreground size-4 shrink-0 transition-transform group-data-[state=open]:rotate-180"
-                    aria-hidden="true"
-                  />
-                  <span className="min-w-0">
-                    <h2
-                      id="install-quick-start-heading"
-                      className="text-lg font-semibold"
-                    >
-                      Install &amp; quick start
-                    </h2>
-                    <p className="text-muted-foreground text-xs font-normal">
-                      Add {product.label} to your app and jump to the spec,
-                      source or live tokens.
-                    </p>
-                  </span>
-                </button>
-
-                {/* Documentation link stays a sibling of the trigger so
-                  * clicking it always navigates instead of toggling. */}
-              </CollapsibleTrigger>
-
-              <Link
-                href={`/products/${product.slug}/documentation`}
-                className="text-foreground inline-flex items-center gap-1 text-xs font-medium hover:underline"
-              >
-                View full documentation
-                <ArrowUpRight className="size-3.5" />
-              </Link>
-            </div>
-
-            <CollapsibleContent
-              id="install-quick-start-panel"
-              className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 border-t"
-            >
-              <div className="p-5">
-                <DevOnboarding
-                  bare
-                  productLabel={product.label}
-                  productSlug={product.slug}
-                  packageName={packageName}
-                  version={packageVersion}
-                  links={docLinks}
-                />
-              </div>
-            </CollapsibleContent>
-          </section>
-        </Collapsible>
-      ) : null}
-
+      <DashboardTabs
+        gettingStarted={gettingStarted}
+        overview={
+          <>
       <section
         aria-label="Product summary"
-        className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
       >
         {stats.map((stat) => (
           <article
@@ -468,6 +429,9 @@ export default async function ProductDashboardPage({
           </article>
         </section>
       ) : null}
+          </>
+        }
+      />
     </AppPageShell>
   );
 }

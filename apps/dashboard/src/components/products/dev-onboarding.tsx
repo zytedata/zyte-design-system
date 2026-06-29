@@ -1,13 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import {
   ArrowRight,
   BookOpen,
-  Check,
   Code,
-  Copy,
   ExternalLink,
   FileCode,
   Layers,
@@ -16,8 +13,7 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { InstallCommand } from "@/components/products/install-command";
 
 export type DevOnboardingProps = {
   productLabel: string;
@@ -48,14 +44,6 @@ export type DevOnboardingProps = {
   bare?: boolean;
 };
 
-type Manager = "pnpm" | "npm" | "yarn";
-
-const COMMAND_FOR: Record<Manager, (pkg: string) => string> = {
-  pnpm: (pkg) => `pnpm add ${pkg}`,
-  npm: (pkg) => `npm install ${pkg}`,
-  yarn: (pkg) => `yarn add ${pkg}`,
-};
-
 export function DevOnboarding({
   productLabel,
   packageName,
@@ -63,21 +51,6 @@ export function DevOnboarding({
   links,
   bare = false,
 }: DevOnboardingProps) {
-  const [manager, setManager] = useState<Manager>("pnpm");
-  const [copied, setCopied] = useState(false);
-
-  const command = COMMAND_FOR[manager](packageName);
-
-  async function handleCopy() {
-    try {
-      await navigator.clipboard.writeText(command);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // clipboard may be unavailable (e.g. insecure context); fail silently.
-    }
-  }
-
   // Inner "Get started" heading + intro paragraph. Suppressed in `bare`
   // mode because the consumer (e.g. the dashboard's collapsible card) is
   // already providing its own section heading and we want to avoid two
@@ -117,54 +90,17 @@ export function DevOnboarding({
   );
 
   const installBlock = (
-    <Tabs
-      value={manager}
-      onValueChange={(value) => setManager(value as Manager)}
+    <InstallCommand
+      packageName={packageName}
       className={bare ? "mt-4" : "mt-5"}
-    >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <TabsList className="h-8">
-          <TabsTrigger value="pnpm" className="text-xs">
-            pnpm
-          </TabsTrigger>
-          <TabsTrigger value="npm" className="text-xs">
-            npm
-          </TabsTrigger>
-          <TabsTrigger value="yarn" className="text-xs">
-            yarn
-          </TabsTrigger>
-        </TabsList>
-        <p className="text-muted-foreground text-xs">
+      note={
+        <>
           Requires <code className="font-mono">.npmrc</code> with the{" "}
           <code className="font-mono">@zytedata</code> scope pointed at GitHub
           Packages.
-        </p>
-      </div>
-
-      {(["pnpm", "npm", "yarn"] satisfies Manager[]).map((m) => (
-        <TabsContent key={m} value={m} className="mt-3">
-          <div className="bg-muted/40 flex items-center gap-2 rounded-xl border px-4 py-2.5 font-mono text-sm">
-            <span className="text-muted-foreground select-none">$</span>
-            <code className="flex-1 truncate">
-              {COMMAND_FOR[m](packageName)}
-            </code>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleCopy}
-              aria-label="Copy install command"
-              className="h-7 px-2"
-            >
-              {copied ? (
-                <Check className="size-4 text-emerald-500" />
-              ) : (
-                <Copy className="size-4" />
-              )}
-            </Button>
-          </div>
-        </TabsContent>
-      ))}
-    </Tabs>
+        </>
+      }
+    />
   );
 
   const resourceBlock = (

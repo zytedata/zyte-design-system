@@ -6,16 +6,16 @@ import type { ZyteLogoFill } from "@/lib/zyte-logo-svg";
 
 /** Zyte brand colours (mirrors packages/web foundations). */
 const FUCHSIA = "#C026D3";
-const ORANGE = "#E8520A";
 const INK = "#0D0D14";
 
 /** Wordmark aspect ratio from the SVG viewBox (972 × 420). */
 const RATIO = 420 / 972;
 
-const FILL_INK: ZyteLogoFill = { type: "solid", color: INK };
-const FILL_WHITE: ZyteLogoFill = { type: "solid", color: "#FFFFFF" };
-const FILL_FUCHSIA: ZyteLogoFill = { type: "solid", color: FUCHSIA };
-const FILL_GRADIENT: ZyteLogoFill = { type: "gradient", from: ORANGE, to: FUCHSIA };
+// Three approved variants: primary is the brand fuchsia wordmark; mono (ink)
+// and reversed (white) cover single-colour and dark surfaces. No gradient.
+const FILL_PRIMARY: ZyteLogoFill = { type: "solid", color: FUCHSIA };
+const FILL_MONO: ZyteLogoFill = { type: "solid", color: INK };
+const FILL_REVERSED: ZyteLogoFill = { type: "solid", color: "#FFFFFF" };
 
 function logoHeight(width: number): number {
   return Math.round(width * RATIO);
@@ -64,10 +64,14 @@ export function BrandLogoShowcase() {
               <ZyteLogo
                 width={primaryWidth}
                 height={logoHeight(primaryWidth)}
-                className="text-[#0D0D14]"
+                className="text-[#C026D3]"
               />
             </div>
-            <TileFooter caption="On light — ink wordmark" name="ink" fill={FILL_INK} />
+            <TileFooter
+              caption="On light — primary (fuchsia) wordmark"
+              name="primary"
+              fill={FILL_PRIMARY}
+            />
           </div>
           <div className="border-border/60 overflow-hidden rounded-lg border">
             <div
@@ -82,32 +86,10 @@ export function BrandLogoShowcase() {
             </div>
             <TileFooter
               caption="On dark — reversed (white) wordmark"
-              name="white"
-              fill={FILL_WHITE}
+              name="reversed"
+              fill={FILL_REVERSED}
             />
           </div>
-        </div>
-      </section>
-
-      {/* Hero / gradient treatment */}
-      <section>
-        <SectionLabel>Hero treatment</SectionLabel>
-        <div className="border-border/60 overflow-hidden rounded-lg border">
-          <div
-            className="flex items-center justify-center p-16"
-            style={{ backgroundColor: INK }}
-          >
-            <ZyteLogo
-              width={300}
-              height={logoHeight(300)}
-              gradient={{ from: ORANGE, to: FUCHSIA }}
-            />
-          </div>
-          <TileFooter
-            caption="Headline gradient (orange → fuchsia) — reserved for hero moments only"
-            name="gradient"
-            fill={FILL_GRADIENT}
-          />
         </div>
       </section>
 
@@ -161,13 +143,13 @@ export function BrandLogoShowcase() {
             <div className="flex items-center justify-center bg-white p-10">
               <ZyteLogo width={150} height={logoHeight(150)} className="text-[#C026D3]" />
             </div>
-            <TileFooter caption="Brand fuchsia" name="fuchsia" fill={FILL_FUCHSIA} />
+            <TileFooter caption="Primary (fuchsia)" name="primary" fill={FILL_PRIMARY} />
           </div>
           <div className="border-border/60 overflow-hidden rounded-lg border">
             <div className="flex items-center justify-center bg-white p-10">
               <ZyteLogo width={150} height={logoHeight(150)} className="text-[#0D0D14]" />
             </div>
-            <TileFooter caption="Monochrome ink" name="ink" fill={FILL_INK} />
+            <TileFooter caption="Monochrome ink" name="mono" fill={FILL_MONO} />
           </div>
           <div className="border-border/60 overflow-hidden rounded-lg border">
             <div
@@ -176,7 +158,7 @@ export function BrandLogoShowcase() {
             >
               <ZyteLogo width={150} height={logoHeight(150)} className="text-white" />
             </div>
-            <TileFooter caption="Reversed white" name="white" fill={FILL_WHITE} />
+            <TileFooter caption="Reversed white" name="reversed" fill={FILL_REVERSED} />
           </div>
         </div>
       </section>

@@ -79,19 +79,17 @@ function titleFromId(id: string): string {
 }
 
 const VARIANT_LABELS: Record<string, string> = {
-  primary: "Primary (ink)",
+  primary: "Primary (fuchsia)",
   reversed: "Reversed (white)",
-  hero: "Hero (gradient)",
   mono: "Monochrome",
-  fuchsia: "Brand fuchsia",
   default: "Default",
 };
 
 // Variants that read as light marks → preview on a dark backdrop.
-const DARK_BACKDROP_VARIANTS = new Set(["reversed", "hero", "white"]);
+const DARK_BACKDROP_VARIANTS = new Set(["reversed"]);
 
 // Stable display order for known logo variants; unknowns sort after, by label.
-const VARIANT_ORDER = ["primary", "reversed", "hero", "mono", "fuchsia", "default"];
+const VARIANT_ORDER = ["primary", "reversed", "mono", "default"];
 
 async function firstExistingDir(productId: ProductId): Promise<string | null> {
   for (const dir of assetDirs(productId)) {

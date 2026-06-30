@@ -44,12 +44,10 @@ export const WEB_BRANDING: ProductBranding = {
       summary:
         "The Zyte logo is our signature. Give it room, keep it legible, and never redraw it. Use the primary lockup wherever possible and fall back to the mark only in tight or square spaces.",
       principles: [
-        "Primary (ink wordmark) is the default — use it for product UI, documents, slides and any light surface. When in doubt, reach for primary.",
-        "Reversed (white) is the primary logo's partner for dark or photographic backgrounds — swap to it whenever contrast on ink/imagery would otherwise fail.",
-        "Hero (orange → fuchsia gradient) is a special-occasion treatment — reserve it for marketing hero sections, campaign key art and launch moments. Never use it in product UI, body content or anywhere it repeats.",
+        "Primary (brand fuchsia) is the default — use it for product UI, documents, slides and any light surface. When in doubt, reach for primary.",
+        "Reversed (white) is the primary logo's partner for dark or photographic backgrounds — swap to it whenever contrast on the fuchsia wordmark would otherwise fail.",
         "Monochrome (single ink or single white) is for constrained reproduction — one-colour print, embroidery, engraving, faxed/scanned docs or partner placements that only allow a single colour.",
-        "Brand fuchsia is a limited accent variant — use it only on neutral light surfaces where a touch of brand colour helps, not as a substitute for the primary logo.",
-        "One logo per surface — never combine the hero gradient and another variant in the same view; pick the single variant that fits the background.",
+        "One variant per surface — don't mix logo variants in the same view; pick the single variant that fits the background.",
         "The standalone mark is reserved for avatars, favicons and tight UI slots where the full lockup would fall below its minimum size.",
         "Minimum clear space equals the height of the 'Z' on all sides.",
         "Minimum size: 24px tall for the mark, 96px wide for the full lockup on screen.",

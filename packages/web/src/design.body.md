@@ -364,16 +364,14 @@ The Zyte logo is our most recognisable, most protected asset. Don't do any modif
 
 ### Variants
 
-- **Brand fuchsia** — default for web, product UI, documents, slides and light surfaces. 
-- **Primary (ink wordmark)** — limited accent variant; only on neutral light surfaces where a touch of brand colour helps. 
-- **Reversed (white)** — use on dark or photographic backgrounds where the ink variant would fail contrast.
-- **Hero (orange → fuchsia gradient)** — reserved for marketing hero sections other, campaign key art and launch moments. Never use in product UI, body copy or anywhere it repeats.
+- **Primary (brand fuchsia)** — the default wordmark for web, product UI, documents, slides and light surfaces.
+- **Reversed (white)** — use on dark or photographic backgrounds where the fuchsia wordmark would fail contrast.
 - **Monochrome (single ink or single white)** — one-colour print, embroidery, engraving or any context restricted to a single colour.
 
 ### Rules
 
-- Default logo is Brand fuchsia
-- One logo per surface — never combine the hero gradient variant with another variant in the same view.
+- The default logo is the primary (brand fuchsia) wordmark.
+- One variant per surface — don't mix logo variants in the same view.
 - The standalone mark is reserved for avatars, favicons and tight UI slots where the full lockup would fall below minimum size.
 - Minimum clear space equals the height of the ‘Z’ on all sides.
 - Minimum size: 24 px tall for the mark, 96 px wide for the full lockup on screen.
@@ -385,13 +383,11 @@ Resolve the logo from one of two sources, in this priority order. Never recreate
 1. **If the `@zytedata/ds-web` package is installed (npm) — preferred.** Import the SVG from the package `assets` export. This is the canonical source; always use it when the package is available.
    - Import path: `@zytedata/ds-web/assets/<file>`
    - Variant → file:
-     - Brand fuchsia (default) → `logo.fuchsia.svg`
-     - Primary (ink wordmark) → `logo.primary.svg`
+     - Primary (brand fuchsia, default) → `logo.primary.svg`
      - Reversed (white) → `logo.reversed.svg`
-     - Hero (orange → fuchsia gradient) → `logo.hero.svg`
      - Monochrome (single ink or single white) → `logo.mono.svg`
-   - Example: `import logoUrl from "@zytedata/ds-web/assets/logo.fuchsia.svg";`
-2. **If you only have this `design.md` file (package not installed) — fallback.** Use the inline `<svg>` embedded directly below, verbatim, as the logo source. It is the Brand fuchsia lockup (the default variant). Do not fabricate, redraw or recolour it; the other variants are only available via the package above.
+   - Example: `import logoUrl from "@zytedata/ds-web/assets/logo.primary.svg";`
+2. **If you only have this `design.md` file (package not installed) — fallback.** Use the inline `<svg>` embedded directly below, verbatim, as the logo source. It is the primary (brand fuchsia) lockup. Do not fabricate, redraw or recolour it; the other variants are only available via the package above.
 
 <svg xmlns="http://www.w3.org/2000/svg" width="74" height="32" fill="none" viewBox="0 0 192 83" color="currentColor"><path fill="#B02CCE" d="M113.082 0v13.728h-9.734v11.11h9.734V45.69c0 12.994 7.536 19.912 18.845 19.912 1.882 0 4.502-.211 6.281-.63V54.177c-1.153.316-2.512.42-3.769.42-5.654 0-9.63-2.62-9.63-9.118V24.838h13.399v-11.11h-13.399V0z"></path><path fill="#B02CCE" fill-rule="evenodd" d="M166.982 12.678c13.817 0 25.018 10.587 25.018 25.573 0 1.36-.108 3.984-.315 4.926h-39.258c1.467 7.548 6.699 12.263 14.969 12.263 6.285 0 11.206-2.934 12.25-7.337h11.724c-1.882 10.794-11.62 17.92-24.181 17.92-14.969 0-26.589-12.052-26.589-26.934s11.62-26.41 26.382-26.41m-.63 10.587c-6.911 0-11.935 3.668-13.61 9.956h26.589c-1.044-5.868-6.069-9.956-12.979-9.956" clip-rule="evenodd"></path><path fill="#B02CCE" d="m60.865 13.728 13.713 34.898 13.713-34.898h12.561L71.962 83H59.397l9.216-20.75-20.31-48.522zM31.419 24.942H0V13.728h45.746v11.214L14.24 53.763h31.506v11.214H0V53.763z"></path></svg>
 

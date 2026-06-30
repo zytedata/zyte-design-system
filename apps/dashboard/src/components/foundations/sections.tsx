@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 import type { ProductFoundations } from "@zytedata/ds-types";
 import type { FileChangelog } from "@zytedata/ds-types";
 import type {
@@ -258,40 +260,24 @@ export function TypographySection({ bundle }: { bundle: ProductFoundations }) {
 
 // ─── Agent (DESIGN.md) ─────────────────────────────────────────────────────
 
-function tokenSurfaceStats(bundle: ProductFoundations): Array<{ label: string; value: string }> {
-  const paletteCount = Object.keys(bundle.colors).length;
-  const semanticCount = Object.keys(bundle.semanticColors).length;
-  const tokenCount =
-    Object.keys(bundle.spacing).length +
-    Object.keys(bundle.radius).length +
-    Object.keys(bundle.shadow).length +
-    Object.keys(bundle.breakpoint).length +
-    Object.keys(bundle.opacity).length +
-    Object.keys(bundle.zIndex).length +
-    Object.keys(bundle.typography.size).length +
-    Object.keys(bundle.typography.weight).length;
-
-  return [
-    {
-      label: "Tokens",
-      value: `${tokenCount} · ${paletteCount} palettes · ${semanticCount} semantic`,
-    },
-  ];
-}
-
 export function AgenticSection({
   bundle,
   productLabel,
   productSlug,
+  icon,
+  accent,
   doc,
   artefacts,
 }: {
   bundle: ProductFoundations;
   productLabel: string;
   productSlug: string;
+  icon: LucideIcon;
+  accent: "pink" | "indigo" | "amber" | "lime";
   doc: CanonicalDocPayload | null;
   artefacts: GeneratedArtefact[];
 }) {
+  const Icon = icon;
   const meta = bundle.canonicalDoc;
 
   if (!meta) {
@@ -335,10 +321,11 @@ export function AgenticSection({
       <AgenticDoc
         productLabel={productLabel}
         productSlug={productSlug}
+        icon={<Icon className="size-6" />}
+        accent={accent}
         meta={meta}
         doc={doc}
         bundle={bundle}
-        stats={tokenSurfaceStats(bundle)}
       />
       <GeneratedArtefacts productLabel={productLabel} artefacts={artefacts} />
     </div>

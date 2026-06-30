@@ -9,9 +9,11 @@ import { siteConfig } from "@/config/site";
 import { PRODUCT_LIST, type Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { HeroBackdrop } from "@/components/landing/hero-backdrop";
+import { RotatingWord } from "@/components/landing/rotating-word";
 import { MarketingTopbar } from "@/components/layout/marketing-topbar";
 
-const HEADLINE_GRADIENT = WEB_FOUNDATIONS.colors.headlineGradient.DEFAULT;
+// Landing hero background — the brand navy → fuchsia gradient from web design.md.
+const HERO_GRADIENT = WEB_FOUNDATIONS.colors.heroGradient.DEFAULT;
 const BRAND = WEB_FOUNDATIONS.colors.primary["600"];
 const BRAND_HOVER = WEB_FOUNDATIONS.colors.primary["700"];
 const CANONICAL_DOC_VERSION = WEB_FOUNDATIONS.canonicalDoc?.version ?? "0.1";
@@ -21,11 +23,13 @@ const brandCssVars: CSSProperties = {
   ["--brand-hover" as string]: BRAND_HOVER,
 };
 
+// Light-only chips (landing is forced light) — no dark: variants so a `.dark`
+// ancestor from the dashboard theme can't tint them.
 const ACCENT_CHIP: Record<Product["accent"], string> = {
-  pink: "bg-pink-50 text-pink-700 dark:bg-pink-500/15 dark:text-pink-300",
-  indigo: "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300",
-  amber: "bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
-  lime: "bg-lime-50 text-lime-700 dark:bg-lime-500/15 dark:text-lime-300",
+  pink: "bg-pink-50 text-pink-700",
+  indigo: "bg-indigo-50 text-indigo-700",
+  amber: "bg-amber-50 text-amber-700",
+  lime: "bg-lime-50 text-lime-700",
 };
 
 function productSummary(product: Product): string {
@@ -50,88 +54,60 @@ const HERO_META: { label: string; value: string }[] = [
 
 export default function LandingPage() {
   return (
-    <>
+    <div className="force-light bg-background text-foreground min-h-dvh">
       <MarketingTopbar />
 
       <main>
+        {/* Hero carries the brand navy → fuchsia gradient (web design.md) as a
+          * dark surface; the animated backdrop stays layered on top of it. */}
         <section
-          className="relative isolate overflow-hidden border-b"
-          style={brandCssVars}
+          className="relative isolate -mt-16 overflow-hidden text-white"
+          style={{ ...brandCssVars, background: HERO_GRADIENT }}
         >
-          <HeroBackdrop />
+          {/* Force the backdrop's dark-mode variant so its grid + snakes read
+            * on the dark gradient regardless of the active theme. `contents`
+            * keeps the wrapper out of layout so the absolute layers still
+            * anchor to the section. */}
+          <div className="dark contents">
+            <HeroBackdrop />
+          </div>
 
-          <div className="relative mx-auto w-full max-w-6xl px-6 pt-20 pb-24 md:pt-28 md:pb-32">
-            {/* Readability scrim — a soft fade of the page background sitting
-              * underneath the headline + subtitle + CTAs + meta so the
-              * animated snakes and grid lines stop competing with the copy
-              * for contrast. Edge-faded by a radial mask so it blends back
-              * into the hero on every side; `-z-10` keeps it BELOW the
-              * content (which sits at `relative`'s default z=0) but still
-              * ABOVE the section's `-z-10` backdrop layer. */}
-            <div
-              aria-hidden="true"
-              className="dark:bg-background/60 bg-background/55 pointer-events-none absolute -inset-x-8 -inset-y-12 -z-10 backdrop-blur-[2px] [mask-image:radial-gradient(ellipse_70%_75%_at_30%_50%,black,transparent_85%)]"
-            />
+          <div className="relative mx-auto w-full max-w-6xl px-6 pt-36 pb-24 md:pt-44 md:pb-32">
 
-            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.18em] uppercase">
-              {siteConfig.shortName}
-              <span className="text-border mx-2" aria-hidden="true">
-                /
-              </span>
-              DesignOps workspace
-              <span className="text-border mx-2" aria-hidden="true">
-                /
-              </span>
-              alpha
-            </p>
-
-            <h1 className="mt-6 max-w-4xl text-balance text-5xl leading-[1.05] font-semibold tracking-tight md:text-7xl">
-              The Zyte{" "}
-              <span
-                className="bg-clip-text text-transparent"
-                style={{ backgroundImage: HEADLINE_GRADIENT }}
-              >
-                design system
-              </span>
-              .
+            <h1 className="max-w-4xl text-balance text-5xl leading-[1.05] font-semibold tracking-tight text-white md:text-7xl">
+              Zyte Design <RotatingWord />.
             </h1>
 
-            <p className="text-muted-foreground mt-6 max-w-2xl text-pretty text-base leading-relaxed md:text-lg">
+            <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-white/75 md:text-lg">
               {siteConfig.tagline}
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              <Button
-                size="lg"
-                asChild
-                className="text-white shadow-none [background:var(--btn-gradient)] hover:opacity-90 transition-opacity"
-                style={{ ["--btn-gradient" as string]: HEADLINE_GRADIENT } as CSSProperties}
-              >
+              <Button size="lg" asChild>
                 <Link href="/products/web">
                   Open Web workspace
                   <ArrowRight className="size-4" />
                 </Link>
               </Button>
-        
-              <Button variant="ghost" size="lg" asChild>
-                <a
-                  href={siteConfig.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
-                  <ExternalLink className="size-4" />
-                </a>
-              </Button>
+
+              <a
+                href={siteConfig.links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-white/30 px-3 text-sm font-medium text-white transition-colors hover:bg-white/10"
+              >
+                GitHub
+                <ExternalLink className="size-4" />
+              </a>
             </div>
 
-            <dl className="mt-14 grid max-w-3xl grid-cols-2 gap-x-10 gap-y-6 border-t pt-8 md:grid-cols-4">
+            <dl className="mt-14 grid max-w-3xl grid-cols-2 gap-x-10 gap-y-6 border-t border-white/15 pt-8 md:grid-cols-4">
               {HERO_META.map((stat) => (
                 <div key={stat.label}>
-                  <dt className="text-muted-foreground font-mono text-[10px] tracking-[0.18em] uppercase">
+                  <dt className="font-mono text-[10px] tracking-[0.18em] text-white/60 uppercase">
                     {stat.label}
                   </dt>
-                  <dd className="mt-1.5 text-2xl font-semibold tracking-tight">
+                  <dd className="mt-1.5 text-2xl font-semibold tracking-tight text-white">
                     {stat.value}
                   </dd>
                 </div>
@@ -144,17 +120,24 @@ export default function LandingPage() {
           <div className="mx-auto w-full max-w-6xl px-6 py-20 md:py-24">
             <header className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
               <div>
-                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.18em] uppercase">
-                  01 — Workspaces
+                {/* design.md eyebrow: number in brand fuchsia (primary.500),
+                  * label in navy (secondary.500); no pill/background. */}
+                <p className="font-mono text-[10px] tracking-[0.18em] uppercase">
+                  <span className="text-[#b02cce]">01</span>
+                  <span className="mx-1.5 text-[#181e5a]/40" aria-hidden="true">
+                    —
+                  </span>
+                  <span className="text-[#181e5a]">Workspaces</span>
                 </p>
                 <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight md:text-5xl">
                   Pick a product workspace.
                 </h2>
               </div>
               <p className="text-muted-foreground text-sm leading-relaxed md:text-base">
-                Each scope ships its own foundations, components catalog, and
-                canonical agentic spec. Pick where you want to land — switch
-                anytime from the workspace sidebar.
+                Each workspace brings together the documentation, foundations,
+                tokens, components, and templates for one Zyte product area —
+                keeping designers and developers in sync, and giving the whole
+                organization a shared layer to build on.
               </p>
             </header>
 
@@ -254,6 +237,6 @@ export default function LandingPage() {
           </div>
         </footer>
       </main>
-    </>
+    </div>
   );
 }

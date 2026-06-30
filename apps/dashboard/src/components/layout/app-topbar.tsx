@@ -114,7 +114,9 @@ function useBreadcrumbs(): Crumb[] {
   }, [pathname, activeProduct]);
 }
 
-export function AppTopbar() {
+type GithubSync = { status: "synced" | "not_synced"; lastUpdate: string };
+
+export function AppTopbar({ githubSync }: { githubSync: GithubSync }) {
   const crumbs = useBreadcrumbs();
 
   return (
@@ -152,8 +154,8 @@ export function AppTopbar() {
         <Separator orientation="vertical" className="mx-1 hidden md:block" />
         <SyncStatus
           source="github"
-          status="not_synced"
-          lastUpdate="2026-04-23 10:32 UTC (mock)"
+          status={githubSync.status}
+          lastUpdate={githubSync.lastUpdate}
           href={siteConfig.links.github}
           label="GitHub Sync"
         />

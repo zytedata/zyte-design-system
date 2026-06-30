@@ -122,6 +122,35 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/*
+ * Landing page is light-only. Web design.md treats light surfaces as the
+ * baseline (dark is reserved for hero moments), and the theme toggle lives in
+ * the dashboard, not on the marketing landing. Re-declaring the tokens on the
+ * landing wrapper overrides any `.dark` ancestor for that subtree and maps the
+ * surfaces to the web `surfaceLight` / `neutral` scale with brand fuchsia as
+ * the primary.
+ */
+.force-light {
+  color-scheme: light;
+  --background: #f7f7f8;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #b02cce;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f0f2;
+  --secondary-foreground: #171717;
+  --muted: #f0f0f2;
+  --muted-foreground: #737373;
+  --accent: #f0f0f2;
+  --accent-foreground: #171717;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #b02cce;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -139,6 +168,9 @@
   body {
     @apply bg-background text-foreground;
     font-synthesis-weight: none;
+    /* Prevent the rubber-band overscroll from revealing the dark canvas
+     * behind the (light) landing page. */
+    overscroll-behavior: none;
   }
   h1,
   h2,

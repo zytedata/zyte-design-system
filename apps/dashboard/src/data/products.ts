@@ -67,7 +67,6 @@ const WEB_NAV: ProductNavItem[] = [
   { group: "library", label: "Assets", href: "/products/web/assets" },
   { group: "workflow", label: "Agentic", href: "/products/web/agentic", matchExact: true },
   { group: "workflow", label: "Markdown Studio", href: "/products/web/studio" },
-  { group: "workflow", label: "Prototyping", href: "/products/web/prototyping" },
   {
     group: "reference",
     label: "Documentation",

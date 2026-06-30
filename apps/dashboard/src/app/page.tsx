@@ -75,7 +75,7 @@ export default function LandingPage() {
           <div className="relative mx-auto w-full max-w-6xl px-6 pt-36 pb-24 md:pt-44 md:pb-32">
 
             <h1 className="max-w-4xl text-5xl leading-[1.05] font-semibold tracking-tight text-white md:text-7xl">
-              Zyte Design <RotatingWord />.
+              Zyte Design <RotatingWord suffix="." />
             </h1>
 
             <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-white/75 md:text-lg">

@@ -22,6 +22,8 @@ export type RotatingWordProps = {
   words?: string[];
   /** Milliseconds each word holds before scrambling to the next. */
   intervalMs?: number;
+  /** Trailing punctuation that hugs the word (e.g. "."). */
+  suffix?: string;
   className?: string;
 };
 
@@ -33,6 +35,7 @@ export type RotatingWordProps = {
 export function RotatingWord({
   words = DEFAULT_WORDS,
   intervalMs = 2600,
+  suffix = "",
   className,
 }: RotatingWordProps) {
   const [cells, setCells] = useState<Cell[]>(() => cellsFor(words[0]));
@@ -102,7 +105,7 @@ export function RotatingWord({
   // never reflows or re-wraps as the word changes — that width jump was the
   // glitch on the longer words. The animated word is overlaid on top.
   const spacer = words.reduce((a, b) => (b.length >= a.length ? b : a), "");
-  const spacerDisplay = spacer.charAt(0).toUpperCase() + spacer.slice(1);
+  const spacerDisplay = spacer.charAt(0).toUpperCase() + spacer.slice(1) + suffix;
 
   return (
     <span className={cn("relative inline-block whitespace-nowrap", className)}>
@@ -111,7 +114,10 @@ export function RotatingWord({
       </span>
       <span className="absolute top-0 left-0">
         {/* Settled word for assistive tech; the animated cells are decorative. */}
-        <span className="sr-only">{current}</span>
+        <span className="sr-only">
+          {current}
+          {suffix}
+        </span>
         <span aria-hidden="true">
           {cells.map((cell, i) => (
             <span
@@ -125,6 +131,8 @@ export function RotatingWord({
               {cell.char}
             </span>
           ))}
+          {/* Punctuation hugs the word (full opacity, never scrambled). */}
+          {suffix}
         </span>
       </span>
     </span>

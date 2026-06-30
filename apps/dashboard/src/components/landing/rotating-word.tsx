@@ -98,23 +98,34 @@ export function RotatingWord({
     };
   }, [words, intervalMs]);
 
+  // Reserve the width of the longest word (rendered invisibly) so the headline
+  // never reflows or re-wraps as the word changes — that width jump was the
+  // glitch on the longer words. The animated word is overlaid on top.
+  const spacer = words.reduce((a, b) => (b.length >= a.length ? b : a), "");
+  const spacerDisplay = spacer.charAt(0).toUpperCase() + spacer.slice(1);
+
   return (
-    <span className={cn("inline-block", className)}>
-      {/* Settled word for assistive tech; the animated cells are decorative. */}
-      <span className="sr-only">{current}</span>
-      <span aria-hidden="true">
-        {cells.map((cell, i) => (
-          <span
-            key={i}
-            className={cn(
-              cell.scrambling && "opacity-50",
-              // First letter is always capitalized (same font, size and weight).
-              i === 0 && "uppercase",
-            )}
-          >
-            {cell.char}
-          </span>
-        ))}
+    <span className={cn("relative inline-block whitespace-nowrap", className)}>
+      <span aria-hidden="true" className="invisible">
+        {spacerDisplay}
+      </span>
+      <span className="absolute top-0 left-0">
+        {/* Settled word for assistive tech; the animated cells are decorative. */}
+        <span className="sr-only">{current}</span>
+        <span aria-hidden="true">
+          {cells.map((cell, i) => (
+            <span
+              key={i}
+              className={cn(
+                cell.scrambling && "opacity-50",
+                // First letter is always capitalized (same font, size, weight).
+                i === 0 && "uppercase",
+              )}
+            >
+              {cell.char}
+            </span>
+          ))}
+        </span>
       </span>
     </span>
   );

@@ -493,7 +493,10 @@ export function TokenGallery({
   const zIndexes = Object.entries(bundle.zIndex).sort(([, a], [, b]) => a - b);
 
   return (
-    <div style={{ background: theme.pageBg }}>
+    // Pin the default text colour to the (light) theme so specimens without an
+    // explicit colour (type scale, weights, families) stay readable instead of
+    // inheriting the dashboard's --foreground (white in dark mode → invisible).
+    <div style={{ background: theme.pageBg, color: theme.text }}>
       {/* Colours */}
       <section style={{ ...wrap, borderTop: `1px solid ${theme.border}` }}>
         <SectionTitle

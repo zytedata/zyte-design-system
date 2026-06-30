@@ -18,7 +18,6 @@ import { cn } from "@/lib/utils";
 import { MARKDOWN_PROSE_CLASSNAME } from "@/lib/markdown";
 import type { CanonicalDocPayload } from "@/data/foundations/docs";
 import type { ProductFoundations } from "@zytedata/ds-types";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Tabs,
@@ -32,17 +31,16 @@ import { WebShowcase } from "@/components/foundations/web-showcase";
 
 const SPEC_URL = "https://github.com/google-labs-code/design.md/blob/main/docs/spec.md";
 
-function formatBytes(bytes: number): string {
-  if (!bytes) return "0 B";
-  const units = ["B", "KB", "MB"];
-  let value = bytes;
-  let unitIndex = 0;
-  while (value >= 1024 && unitIndex < units.length - 1) {
-    value /= 1024;
-    unitIndex++;
-  }
-  return `${value.toFixed(value < 10 && unitIndex > 0 ? 1 : 0)} ${units[unitIndex]}`;
-}
+type Accent = "pink" | "indigo" | "amber" | "lime";
+
+/** Matches the dashboard header icon-badge tones (see the product dashboard). */
+const ACCENT_BADGE: Record<Accent, string> = {
+  pink: "bg-pink-100 text-pink-700 dark:bg-pink-500/15 dark:text-pink-300",
+  indigo:
+    "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300",
+  amber: "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300",
+  lime: "bg-lime-100 text-lime-700 dark:bg-lime-500/15 dark:text-lime-300",
+};
 
 /**
  * Splits a DESIGN.md into its YAML front matter (machine-readable token block)
@@ -65,24 +63,24 @@ function splitDesignDoc(markdown: string): {
   };
 }
 
-type Stat = { label: string; value: string };
-
 export type AgenticDocProps = {
   productLabel: string;
   productSlug: string;
+  /** Pre-rendered icon element (server-rendered — Lucide components cannot cross the RSC boundary). */
+  icon: React.ReactNode;
+  accent: Accent;
   meta: { assetPath: string; title: string; version: string };
   doc: CanonicalDocPayload;
   bundle: ProductFoundations;
-  stats: Stat[];
 };
 
 export function AgenticDoc({
   productLabel,
   productSlug,
-  meta,
+  icon,
+  accent,
   doc,
   bundle,
-  stats,
 }: AgenticDocProps) {
   const [copied, setCopied] = React.useState(false);
 
@@ -119,107 +117,87 @@ export function AgenticDoc({
     URL.revokeObjectURL(url);
   }, [doc.content, doc.filename]);
 
-  const lineCount = React.useMemo(
-    () => doc.content.split(/\r?\n/).length,
-    [doc.content],
-  );
-
   const { frontmatter, body } = React.useMemo(
     () => splitDesignDoc(doc.content),
     [doc.content],
   );
 
-  const fullStats: Stat[] = [
-    { label: "Spec", value: `canonical v${meta.version}` },
-    { label: "File size", value: formatBytes(doc.bytes) },
-    { label: "Lines", value: lineCount.toLocaleString() },
-    ...stats,
-  ];
-
   return (
-    <article className="bg-card overflow-hidden rounded-2xl border">
-      <header className="from-muted/40 to-card flex flex-col gap-4 border-b bg-gradient-to-br p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="uppercase tracking-wide">
-                Agentic
-              </Badge>
-              <Badge variant="outline">canonical · v{meta.version}</Badge>
-              <code className="text-muted-foreground font-mono text-xs">
-                {meta.assetPath}
-              </code>
-            </div>
-            <h2 className="text-2xl font-semibold tracking-tight">
-              {meta.title}
-            </h2>
-            <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
-              Hand-authored canonical spec for {productLabel}. Treat the YAML
-              front matter as the machine-readable token layer; the prose below
-              is the human implementation guide. Both are served verbatim to
-              coding agents.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onCopy}
-              aria-label="Copy markdown to clipboard"
-            >
-              {copied ? (
-                <>
-                  <Check className="size-4" />
-                  Copied
-                </>
-              ) : (
-                <>
-                  <Copy className="size-4" />
-                  Copy
-                </>
+    <div className="space-y-8">
+      <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-3xl">
+          <div className="flex items-center gap-3">
+            <span
+              className={cn(
+                "inline-flex size-12 items-center justify-center rounded-2xl",
+                ACCENT_BADGE[accent],
               )}
-            </Button>
-            <Button
-              variant="default"
-              size="sm"
-              onClick={onDownload}
-              aria-label="Download markdown"
+              aria-hidden="true"
             >
-              <Download className="size-4" />
-              Download
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-              aria-label="Open the design.md spec on GitHub"
-            >
-              <a href={SPEC_URL} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="size-4" />
-                Spec
-              </a>
-            </Button>
+              {icon}
+            </span>
+            <div>
+              <p className="text-muted-foreground text-xs tracking-wide uppercase">
+                {productLabel} workspace
+              </p>
+              <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
+                Agentic
+              </h1>
+            </div>
           </div>
+          <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed">
+            Hand-authored canonical spec for {productLabel}. Treat the YAML
+            front matter as the machine-readable token layer; the prose below
+            is the human implementation guide. Both are served verbatim to
+            coding agents.
+          </p>
         </div>
 
-        <dl className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
-          {fullStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-background/60 rounded-lg border px-3 py-2"
-            >
-              <dt className="text-muted-foreground text-[10px] tracking-wide uppercase">
-                {stat.label}
-              </dt>
-              <dd className="mt-0.5 truncate font-mono text-sm">{stat.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <div className="flex flex-wrap items-center gap-2 md:justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCopy}
+            aria-label="Copy design.md to clipboard"
+          >
+            {copied ? (
+              <>
+                <Check className="size-4" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Copy className="size-4" />
+                Copy design.md
+              </>
+            )}
+          </Button>
+          <Button
+            variant="default"
+            size="sm"
+            onClick={onDownload}
+            aria-label="Download design.md file"
+          >
+            <Download className="size-4" />
+            Download design.md file
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            aria-label="Open the design.md spec on GitHub"
+          >
+            <a href={SPEC_URL} target="_blank" rel="noopener noreferrer">
+              <ExternalLink className="size-4" />
+              Spec
+            </a>
+          </Button>
+        </div>
       </header>
 
-      <Tabs defaultValue="rendered" className="p-6">
+      <Tabs defaultValue="rendered">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <TabsList>
+          <TabsList variant="line">
             <TabsTrigger value="rendered" className="gap-1.5">
               <FileText className="size-3.5" /> Rendered
             </TabsTrigger>
@@ -233,7 +211,7 @@ export function AgenticDoc({
               <FileCode className="size-3.5" /> Markdown
             </TabsTrigger>
           </TabsList>
-          <span className="text-muted-foreground font-mono text-xs">
+          <span className="text-muted-foreground hidden font-mono text-xs sm:inline">
             {doc.filename}
           </span>
         </div>
@@ -287,6 +265,6 @@ export function AgenticDoc({
           </pre>
         </TabsContent>
       </Tabs>
-    </article>
+    </div>
   );
 }

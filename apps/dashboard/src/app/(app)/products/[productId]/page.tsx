@@ -17,6 +17,7 @@ import {
 } from "@/data/documentation";
 import { getChangelogs, getFoundations } from "@/data/foundations";
 import { readCanonicalDoc, readPackageVersion } from "@/data/foundations/docs";
+import { describeGitSync, getGitStatus } from "@/data/git-status";
 import {
   EXTRACT_SUMMIT_CORE_PRINCIPLES,
   EXTRACT_SUMMIT_DESIGN_LAYERS,
@@ -103,9 +104,10 @@ export default async function ProductDashboardPage({
   const docLinks = buildProductDocLinks(product.slug);
 
   const bundle = getFoundations(product.id);
-  const [packageVersion, canonicalDoc] = await Promise.all([
+  const [packageVersion, canonicalDoc, git] = await Promise.all([
     readPackageVersion(product.id),
     bundle.canonicalDoc ? readCanonicalDoc(product.id) : Promise.resolve(null),
+    getGitStatus(),
   ]);
 
   const journeyItems = product.nav.filter(
@@ -149,10 +151,12 @@ export default async function ProductDashboardPage({
             </span>
             <div>
               <p className="text-muted-foreground text-xs tracking-wide uppercase">
-                {product.label} workspace
+                Workspace
               </p>
               <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
-                {product.label} dashboard
+                {product.id === "web"
+                  ? "Website Design System"
+                  : `${product.label} dashboard`}
               </h1>
             </div>
           </div>
@@ -162,13 +166,19 @@ export default async function ProductDashboardPage({
         </div>
 
         <div className="text-muted-foreground flex flex-col gap-1.5 text-xs md:items-end">
-          <span className="inline-flex items-center gap-1.5">
-            <GitBranch className="size-3.5" />
-            <span>main</span>
-            <span aria-hidden="true">·</span>
-            <span>not synced (mock)</span>
-          </span>
-          {lastUpdated ? (
+          {git ? (
+            <>
+              <span className="inline-flex items-center gap-1.5">
+                <GitBranch className="size-3.5" />
+                <span>{git.branch}</span>
+                <span aria-hidden="true">·</span>
+                <code className="font-mono">{git.shortSha}</code>
+                <span aria-hidden="true">·</span>
+                <span>{describeGitSync(git)}</span>
+              </span>
+              <span>Last commit: {git.lastCommitDate}</span>
+            </>
+          ) : lastUpdated ? (
             <span>Last data update: {lastUpdated}</span>
           ) : (
             <span>No tracked file updates yet.</span>

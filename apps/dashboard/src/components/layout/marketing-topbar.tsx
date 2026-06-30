@@ -1,24 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { ChevronDown, LogIn } from "lucide-react";
 
 import { WEB_FOUNDATIONS } from "@zytedata/ds-web";
 
+import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { PRODUCT_LIST } from "@/data/products";
 import { ZyteLogo } from "@/components/common/zyte-logo";
-import { ThemeToggle } from "@/components/common/theme-toggle";
 import { Button } from "@/components/ui/button";
 
-// Mirror the headline gradient (orange → fuchsia): derive the two stops from
-// the `headlineGradient` token so the logo tracks any future gradient change.
-const HEADLINE_STOPS =
-  WEB_FOUNDATIONS.colors.headlineGradient.DEFAULT.match(/#[0-9a-fA-F]{3,8}/g) ?? [];
-const LOGO_GRADIENT = {
-  from: HEADLINE_STOPS[0] ?? WEB_FOUNDATIONS.colors.primary["600"],
-  to: HEADLINE_STOPS[1] ?? WEB_FOUNDATIONS.colors.primary["600"],
-};
+// Brand fuchsia (primary.500) is the default Web logo variant (design.md);
+// the wordmark renders solid fuchsia via the logo's `currentColor` fill.
+const BRAND_FUCHSIA = WEB_FOUNDATIONS.colors.primary["500"];
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,15 +25,34 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function MarketingTopbar() {
+  // Transparent over the hero at the top; solid white once the page scrolls.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 4);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="bg-background/80 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30 border-b backdrop-blur">
+    <header
+      className={cn(
+        // No layout border: the header is exactly h-16 so the hero's `-mt-16`
+        // overlay leaves no sliver. The scrolled divider is a shadow hairline.
+        "sticky top-0 z-30 transition-[background-color,box-shadow]",
+        scrolled
+          ? "bg-white text-foreground shadow-[0_1px_0_0_var(--border)]"
+          : "text-white",
+      )}
+    >
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center gap-4 px-6">
         <Link
           href="/"
           aria-label={`${siteConfig.name} home`}
-          className="text-foreground inline-flex items-center gap-2"
+          className="inline-flex items-center gap-2"
+          style={{ color: BRAND_FUCHSIA }}
         >
-          <ZyteLogo width={56} height={24} gradient={LOGO_GRADIENT} />
+          <ZyteLogo width={56} height={24} />
         </Link>
 
         <nav
@@ -53,7 +68,6 @@ export function MarketingTopbar() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2 md:ml-0">
-          <ThemeToggle />
           <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
             <Link href="/sign-in" aria-label="Sign in">
               Sign in

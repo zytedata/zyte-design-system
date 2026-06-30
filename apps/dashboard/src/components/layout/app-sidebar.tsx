@@ -38,7 +38,6 @@ import {
   type FoundationSectionGroup,
 } from "@/lib/foundations";
 import { BRAND_SECTIONS } from "@/lib/brand";
-import { ZyteLogo } from "@/components/common/zyte-logo";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import {
   Collapsible,
@@ -175,11 +174,8 @@ function ProductSwitcherButton({ active }: { active: Product | null }) {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           aria-label="Switch active product"
         >
-          <span className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-            <ZyteLogo className="size-4" width={18} height={18} />
-          </span>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">{siteConfig.shortName}</span>
+            <span className="truncate font-semibold">{siteConfig.name}</span>
             <span className="text-muted-foreground flex items-center gap-1.5 truncate text-xs">
               {ActiveIcon ? <ActiveIcon className="size-3" /> : null}
               {active ? active.label : "Select product"}

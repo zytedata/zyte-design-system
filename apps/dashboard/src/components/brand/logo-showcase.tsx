@@ -5,7 +5,7 @@ import { LogoDownloadButtons } from "@/components/brand/logo-download-buttons";
 import type { ZyteLogoFill } from "@/lib/zyte-logo-svg";
 
 /** Zyte brand colours (mirrors packages/web foundations). */
-const FUCHSIA = "#C026D3";
+const FUCHSIA = "#B02CCE";
 const INK = "#0D0D14";
 
 /** Wordmark aspect ratio from the SVG viewBox (972 × 420). */
@@ -64,7 +64,7 @@ export function BrandLogoShowcase() {
               <ZyteLogo
                 width={primaryWidth}
                 height={logoHeight(primaryWidth)}
-                className="text-[#C026D3]"
+                className="text-[#B02CCE]"
               />
             </div>
             <TileFooter
@@ -141,7 +141,7 @@ export function BrandLogoShowcase() {
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="border-border/60 overflow-hidden rounded-lg border">
             <div className="flex items-center justify-center bg-white p-10">
-              <ZyteLogo width={150} height={logoHeight(150)} className="text-[#C026D3]" />
+              <ZyteLogo width={150} height={logoHeight(150)} className="text-[#B02CCE]" />
             </div>
             <TileFooter caption="Primary (fuchsia)" name="primary" fill={FILL_PRIMARY} />
           </div>

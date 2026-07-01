@@ -45,8 +45,12 @@ export type TemplateMeta = {
 };
 
 export type Template = TemplateMeta & {
-  /** Raw markdown spec (frontmatter stripped for display). */
+  /** The use-case overlay — this template's own spec, shown first. */
   markdown: string;
+  /** The inherited base design system, shown collapsed (empty if none). */
+  baseMarkdown: string;
+  /** Full markdown file including YAML frontmatter — used for download. */
+  raw: string;
   /** Standalone HTML preview (rendered in a sandboxed iframe). */
   html: string;
 };
@@ -92,9 +96,63 @@ function readFrontmatterField(frontmatter: string, key: string): string | null {
 }
 
 function splitFrontmatter(md: string): { frontmatter: string; body: string } {
-  const match = md.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+  // Tolerate an optional leading generated banner (`<!-- … -->`) before the
+  // YAML block — composed template files start with one, so a naive `^---`
+  // match would fail and dump the entire token frontmatter into the body.
+  const match = md.match(
+    /^(?:\s*<!--[\s\S]*?-->\s*)*---\r?\n([\s\S]*?)\r?\n---\r?\n?/,
+  );
   if (!match) return { frontmatter: "", body: md };
-  return { frontmatter: match[1], body: md.slice(match[0].length).replace(/^\r?\n+/, "") };
+  return {
+    frontmatter: match[1],
+    body: md.slice(match[0].length).replace(/^\r?\n+/, ""),
+  };
+}
+
+/**
+ * Divider tokens-build writes on its own line between the base layer and the
+ * overlay. Matched line-anchored — the same token is also mentioned inline
+ * inside the base banner prose, so a plain substring search would split too
+ * early and spill the base into the overlay.
+ */
+const BASE_END_MARKER_RE = /^--- END BASE ---$/m;
+
+/**
+ * Strip the machine-facing layer scaffolding (HTML comment fences + the
+ * generated `▸ BASE/OVERLAY LAYER` banner blockquotes) so the rendered markdown
+ * reads cleanly for a non-technical viewer. The full scaffolding stays in the
+ * downloadable file.
+ */
+function stripLayerScaffolding(md: string): string {
+  const withoutComments = md.replace(/<!--[\s\S]*?-->/g, "");
+  const kept: string[] = [];
+  let inBanner = false;
+  for (const line of withoutComments.split(/\r?\n/)) {
+    if (inBanner) {
+      if (line.startsWith(">")) continue; // still inside the banner blockquote
+      inBanner = false;
+    }
+    if (/^>\s*\*\*▸ (?:BASE|OVERLAY) LAYER/.test(line)) {
+      inBanner = true;
+      continue;
+    }
+    kept.push(line);
+  }
+  return kept.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/**
+ * Split a composed template body into the use-case overlay (shown first, the
+ * template's own spec) and the inherited base design system (shown collapsed).
+ * Falls back to treating the whole body as the overlay when there is no marker
+ * (e.g. a legacy single-layer template).
+ */
+function splitLayers(body: string): { overlay: string; base: string } {
+  const m = BASE_END_MARKER_RE.exec(body);
+  if (!m) return { overlay: stripLayerScaffolding(body), base: "" };
+  const base = body.slice(0, m.index);
+  const overlay = body.slice(m.index + m[0].length);
+  return { overlay: stripLayerScaffolding(overlay), base: stripLayerScaffolding(base) };
 }
 
 async function firstExistingDir(productId: ProductId): Promise<string | null> {
@@ -165,7 +223,14 @@ export async function readTemplate(
       fs.readFile(path.join(dir, `${id}.html`), "utf-8"),
     ]);
     const { frontmatter, body } = splitFrontmatter(md);
-    return { ...toMeta(id, frontmatter), markdown: body, html };
+    const { overlay, base } = splitLayers(body);
+    return {
+      ...toMeta(id, frontmatter),
+      markdown: overlay,
+      baseMarkdown: base,
+      raw: md,
+      html,
+    };
   } catch {
     return null;
   }

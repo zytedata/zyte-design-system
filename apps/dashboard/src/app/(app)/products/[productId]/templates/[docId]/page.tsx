@@ -43,7 +43,9 @@ export default async function ProductTemplateDocPage({
       </Link>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{template.title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight capitalize">
+          {template.title}
+        </h1>
         <Badge variant="outline" className="capitalize">
           {template.status}
         </Badge>
@@ -54,7 +56,14 @@ export default async function ProductTemplateDocPage({
         </p>
       ) : null}
 
-      <TemplateViewer html={template.html} markdown={template.markdown} />
+      <TemplateViewer
+        title={template.title}
+        html={template.html}
+        markdown={template.markdown}
+        baseMarkdown={template.baseMarkdown}
+        rawMarkdown={template.raw}
+        filename={`${template.id}.md`}
+      />
     </AppPageShell>
   );
 }

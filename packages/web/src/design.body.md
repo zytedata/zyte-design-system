@@ -4,6 +4,24 @@ This document defines the visual and implementation language for **Zyte Web** (t
 
 The YAML front matter is the **machine-readable token layer** for agents. The prose below is the **human-readable implementation spec**.
 
+## How to use this file
+
+This document is **self-contained**. Depending on how you obtained it, you're in one of two scenarios — read the one that applies:
+
+**Scenario 1 — you installed the `@zytedata/ds-web` package (preferred).**
+
+- **Tokens:** consume them from the package — `@zytedata/ds-web` ships `tokens.css`, `tokens.json`, `tokens.scss` and a Tailwind preset. Don't copy hex/spacing values by hand; import the token layer so you track updates.
+- **Components & assets:** import from the package (e.g. the logo via `@zytedata/ds-web/assets/*` — see Logo → Asset source).
+- Treat this file as the human/agent-readable **spec**; the package is the **runtime source of truth**.
+
+**Scenario 2 — you only have this Markdown file (no package installed).**
+
+- Everything you need to stay on-brand is **inline in this document**: the complete token set (colours, typography, spacing, radius, shadow, breakpoints, opacity) is in the **YAML frontmatter above**, the rules are in the **prose below**, and the **logo is embedded as an inline SVG** in the Logo section.
+- Use the **frontmatter tokens as the source of truth** for all colour/type/spacing values. **Do not invent values** that are not present in this file.
+- This is enough to design and build on-brand. To upgrade to live tokens, real components and all logo variants later, install `@zytedata/ds-web`.
+
+> If you are reading a **use-case file** (marketing / report / deck), the base rules above still apply in full; the sections after the `---` divider are the use-case overlay and take precedence where they say `Overrides base:`.
+
 ## Overview
 
 ### Brand DNA

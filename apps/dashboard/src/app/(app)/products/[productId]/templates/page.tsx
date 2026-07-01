@@ -35,16 +35,18 @@ export default async function ProductTemplatesPage({
 
   return (
     <AppPageShell>
-      <Badge variant="secondary">
-        {product.label} · {enabled ? "Templates" : "Not yet wired"}
-      </Badge>
+      <Badge variant="secondary">{enabled ? "Draft" : "Not yet wired"}</Badge>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-        {product.label} templates
+        Templates
       </h1>
       <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-relaxed">
         Page-level templates assembled from {product.label} components. Each
         template pairs a standalone, design-system-styled preview with a markdown
-        spec describing its layout, look &amp; feel, and behaviour.
+        spec describing its layout, look &amp; feel, and behaviour.{" "}
+        <span className="text-foreground/80 font-medium">
+          This area is a work in progress — templates and previews are early
+          drafts and will keep changing.
+        </span>
       </p>
 
       {!enabled ? (
@@ -88,7 +90,9 @@ export default async function ProductTemplatesPage({
               className="group bg-card hover:border-foreground/30 flex flex-col rounded-xl border p-5 transition-colors"
             >
               <div className="flex items-center justify-between gap-2">
-                <h2 className="text-foreground font-semibold">{template.title}</h2>
+                <h2 className="text-foreground font-semibold capitalize">
+                  {template.title}
+                </h2>
                 <Badge variant="outline" className="shrink-0 text-xs capitalize">
                   {template.status}
                 </Badge>

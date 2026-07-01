@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deck — Web use-case preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --brand: #c026d3;
+        --accent: #db005f;
+        --navy: #131745;
+        --ink: #070917;
+        --border: #e5e5e5;
+        --headline-gradient: linear-gradient(90deg, #e8520a 0%, #c026d3 100%);
+        --hero-gradient: radial-gradient(700px 500px at 80% 15%, rgba(192,38,211,0.4), transparent 60%),
+          linear-gradient(150deg, #131745 0%, #070917 65%, #000 100%);
+        --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #d7d7de; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; padding: 32px 0; }
+      .deck { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+      /* 16:9 slide */
+      .slide { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 30px rgba(0,0,0,0.18); background: #fff; }
+      .safe { position: absolute; inset: 6%; display: flex; flex-direction: column; }
+      .logo { height: 26px; }
+      .corner { position: absolute; right: 4%; bottom: 5%; font-size: 13px; opacity: 0.6; }
+      .num { position: absolute; left: 4%; bottom: 5%; font-size: 13px; opacity: 0.5; }
+      .eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 15px; font-weight: 600; }
+      /* title slide (dark, gradient) */
+      .s-title { color: #fff; }
+      .s-title::before { content: ""; position: absolute; inset: 0; background: var(--hero-gradient); }
+      .s-title .safe { position: absolute; justify-content: space-between; }
+      .s-title h1 { font-size: 52px; font-weight: 600; line-height: 1.08; margin: 0; max-width: 18ch; }
+      .s-title .grad { background: var(--headline-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .s-title .eyebrow { color: #e6b8f0; }
+      .s-title .sub { font-size: 20px; color: #cbb9db; margin-top: 18px; }
+      /* content slide (light) */
+      .s-light { background: #fff; color: #0b0d25; }
+      .s-light .eyebrow { color: var(--brand); }
+      .s-light h2 { font-size: 40px; font-weight: 600; margin: 8px 0 28px; letter-spacing: -0.01em; }
+      .cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+      .col h3 { font-size: 20px; margin: 0 0 8px; color: var(--navy); }
+      .col p { font-size: 15px; color: #525252; margin: 0; line-height: 1.5; }
+      .col .b { width: 34px; height: 34px; border-radius: 9px; background: #fdf4ff; color: var(--brand); display: flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 14px; }
+      /* big-stat slide (dark) */
+      .s-stat { background: var(--ink); color: #fff; }
+      .s-stat .safe { justify-content: center; }
+      .s-stat .n { font-size: 120px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; background: var(--headline-gradient); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .s-stat .l { font-size: 22px; color: #b9bccb; margin-top: 12px; max-width: 24ch; }
+    </style>
+  </head>
+  <body>
+    <div class="deck">
+      <!-- Title slide -->
+      <div class="slide s-title">
+        <div class="safe">
+          <svg class="logo" viewBox="0 0 192 83" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M113.082 0v13.728h-9.734v11.11h9.734V45.69c0 12.994 7.536 19.912 18.845 19.912 1.882 0 4.502-.211 6.281-.63V54.177c-1.153.316-2.512.42-3.769.42-5.654 0-9.63-2.62-9.63-9.118V24.838h13.399v-11.11h-13.399V0z"/><path fill-rule="evenodd" d="M166.982 12.678c13.817 0 25.018 10.587 25.018 25.573 0 1.36-.108 3.984-.315 4.926h-39.258c1.467 7.548 6.699 12.263 14.969 12.263 6.285 0 11.206-2.934 12.25-7.337h11.724c-1.882 10.794-11.62 17.92-24.181 17.92-14.969 0-26.589-12.052-26.589-26.934s11.62-26.41 26.382-26.41m-.63 10.587c-6.911 0-11.935 3.668-13.61 9.956h26.589c-1.044-5.868-6.069-9.956-12.979-9.956" clip-rule="evenodd"/><path d="m60.865 13.728 13.713 34.898 13.713-34.898h12.561L71.962 83H59.397l9.216-20.75-20.31-48.522zM31.419 24.942H0V13.728h45.746v11.214L14.24 53.763h31.506v11.214H0V53.763z"/></svg>
+          <div>
+            <div class="eyebrow">Sales deck · 2026</div>
+            <h1 style="margin-top:14px">Extract data from <span class="grad">any website</span></h1>
+            <p class="sub">The complete web data platform.</p>
+          </div>
+        </div>
+        <div class="num" style="color:#fff">01</div>
+      </div>
+
+      <!-- Content slide (light) -->
+      <div class="slide s-light">
+        <div class="safe">
+          <div class="eyebrow">Why Zyte</div>
+          <h2>Three reasons teams switch</h2>
+          <div class="cols">
+            <div class="col"><div class="b">AI</div><h3>AI extraction</h3><p>Point at a site, get structured data — no brittle selectors.</p></div>
+            <div class="col"><div class="b">§</div><h3>Compliance</h3><p>Guardrails that keep collection on the right side of the line.</p></div>
+            <div class="col"><div class="b">↑</div><h3>Scale</h3><p>Managed infra handles bans, proxies and volume for you.</p></div>
+          </div>
+        </div>
+        <svg class="logo" style="position:absolute;right:4%;top:6%;height:20px" viewBox="0 0 192 83" fill="#c026d3" xmlns="http://www.w3.org/2000/svg"><path d="M113.082 0v13.728h-9.734v11.11h9.734V45.69c0 12.994 7.536 19.912 18.845 19.912 1.882 0 4.502-.211 6.281-.63V54.177c-1.153.316-2.512.42-3.769.42-5.654 0-9.63-2.62-9.63-9.118V24.838h13.399v-11.11h-13.399V0z"/><path fill-rule="evenodd" d="M166.982 12.678c13.817 0 25.018 10.587 25.018 25.573 0 1.36-.108 3.984-.315 4.926h-39.258c1.467 7.548 6.699 12.263 14.969 12.263 6.285 0 11.206-2.934 12.25-7.337h11.724c-1.882 10.794-11.62 17.92-24.181 17.92-14.969 0-26.589-12.052-26.589-26.934s11.62-26.41 26.382-26.41m-.63 10.587c-6.911 0-11.935 3.668-13.61 9.956h26.589c-1.044-5.868-6.069-9.956-12.979-9.956" clip-rule="evenodd"/><path d="m60.865 13.728 13.713 34.898 13.713-34.898h12.561L71.962 83H59.397l9.216-20.75-20.31-48.522zM31.419 24.942H0V13.728h45.746v11.214L14.24 53.763h31.506v11.214H0V53.763z"/></svg>
+        <div class="num" style="color:#0b0d25">02</div>
+      </div>
+
+      <!-- Big-stat slide (dark) -->
+      <div class="slide s-stat">
+        <div class="safe">
+          <div class="eyebrow" style="color:#e6b8f0">Proof</div>
+          <div class="n">9B</div>
+          <div class="l">requests handled every month, across 190 countries.</div>
+        </div>
+        <div class="corner" style="color:#fff">Zyte</div>
+        <div class="num" style="color:#fff">03</div>
+      </div>
+    </div>
+  </body>
+</html>

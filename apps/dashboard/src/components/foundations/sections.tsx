@@ -13,7 +13,6 @@ import { TAILWIND_COLOR_FAMILIES } from "@/data/tailwind-palette";
 import { AgenticDoc } from "@/components/foundations/agentic-doc";
 import { ChangelogView } from "@/components/foundations/changelog-view";
 import { CopyableSwatch } from "@/components/foundations/copyable-swatch";
-import { GeneratedArtefacts } from "@/components/foundations/generated-artefacts";
 import { LucideIconsCatalog } from "@/components/foundations/lucide-icons-catalog";
 import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
 import { Badge } from "@/components/ui/badge";
@@ -317,18 +316,16 @@ export function AgenticSection({
   }
 
   return (
-    <div className="space-y-6">
-      <AgenticDoc
-        productLabel={productLabel}
-        productSlug={productSlug}
-        icon={<Icon className="size-6" />}
-        accent={accent}
-        meta={meta}
-        doc={doc}
-        bundle={bundle}
-      />
-      <GeneratedArtefacts productLabel={productLabel} artefacts={artefacts} />
-    </div>
+    <AgenticDoc
+      productLabel={productLabel}
+      productSlug={productSlug}
+      icon={<Icon className="size-6" />}
+      accent={accent}
+      meta={meta}
+      doc={doc}
+      bundle={bundle}
+      artefacts={artefacts}
+    />
   );
 }
 

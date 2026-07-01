@@ -12,6 +12,12 @@ intent: >-
   rules; overrides page format, type scale and colour use for paper.
 audience: [Designers, Writers, Agents/LLMs]
 preview: report.html
+prompt: >-
+  Build a data report using the attached {product} report spec (report.md).
+  Include a cover page, a table of contents, an executive summary, and a section
+  with KPI callouts, one chart and a data table using tabular figures. Follow
+  the spec — print-legible type scale, a single readable column, and no hero
+  gradients or dark full-bleed backgrounds in the body.
 foundations: web
 ---
 

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import type { ProductDocLinks } from "@/data/documentation";
+import type { TemplateCard } from "@/data/templates";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -50,6 +51,8 @@ export type GettingStartedProps = {
   capabilities: GettingStartedCapabilities;
   /** Canonical design.md, when the product ships one. */
   designDoc: { content: string; filename: string } | null;
+  /** Use-case templates surfaced as a "what you can build" snapshot. */
+  templates: TemplateCard[];
 };
 
 type Scenario = {
@@ -70,6 +73,7 @@ export function GettingStarted({
   links,
   capabilities,
   designDoc,
+  templates,
 }: GettingStartedProps) {
   const npmrcNote = (
     <>
@@ -299,6 +303,7 @@ export function GettingStarted({
           productLabel={productLabel}
           productSlug={productSlug}
           prototypingEnabled={capabilities.prototyping}
+          templates={templates}
         />
       </div>
     </div>

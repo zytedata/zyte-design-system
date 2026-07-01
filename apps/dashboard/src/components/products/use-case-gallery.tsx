@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, Copy } from "lucide-react";
+import { ArrowRight, Check, Copy, Download, FileText } from "lucide-react";
 
+import type { TemplateCard } from "@/data/templates";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { getUseCases, type UseCase } from "@/data/use-cases";
@@ -12,43 +13,162 @@ export type UseCaseGalleryProps = {
   productLabel: string;
   productSlug: string;
   prototypingEnabled: boolean;
+  /** Use-case templates; when present, the gallery is a snapshot of them. */
+  templates: TemplateCard[];
 };
 
 /**
- * Outcome-oriented gallery ("What do you want to build?"). Each card hands the
- * user a ready-to-paste starter prompt that references the design system spec,
- * tying the personas to concrete deliverables.
+ * "What do you want to build?" — a snapshot of the product's use-case
+ * templates. Each card hands the user a starter prompt, a one-click download of
+ * the self-contained spec, and a link to open the template and iterate. Falls
+ * back to generic starter prompts for products that ship no templates yet.
  */
 export function UseCaseGallery({
   productLabel,
   productSlug,
   prototypingEnabled,
+  templates,
 }: UseCaseGalleryProps) {
-  const useCases = getUseCases(productSlug);
+  const hasTemplates = templates.length > 0;
 
   return (
     <div>
       <div className="max-w-2xl">
         <h2 className="text-lg font-semibold">What do you want to build?</h2>
         <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-          Grab a starter prompt, pair it with <code className="font-mono">design.md</code>{" "}
-          from the Vibe coding card above, and let your AI assistant draft it on{" "}
-          {productLabel} foundations.
+          {hasTemplates ? (
+            <>
+              Pick a {productLabel} template, grab its starter prompt, and{" "}
+              <span className="font-medium">download the spec</span> to drop into
+              your AI assistant — or open it to preview and iterate.
+            </>
+          ) : (
+            <>
+              Grab a starter prompt, pair it with{" "}
+              <code className="font-mono">design.md</code> from the Vibe coding
+              card above, and let your AI assistant draft it on {productLabel}{" "}
+              foundations.
+            </>
+          )}
         </p>
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        {useCases.map((useCase) => (
-          <UseCaseCard
-            key={useCase.key}
-            useCase={useCase}
-            productLabel={productLabel}
-            productSlug={productSlug}
-            prototypingEnabled={prototypingEnabled}
-          />
-        ))}
+        {hasTemplates
+          ? templates.map((template) => (
+              <TemplateBuildCard
+                key={template.id}
+                template={template}
+                productLabel={productLabel}
+              />
+            ))
+          : getUseCases(productSlug).map((useCase) => (
+              <UseCaseCard
+                key={useCase.key}
+                useCase={useCase}
+                productLabel={productLabel}
+                productSlug={productSlug}
+                prototypingEnabled={prototypingEnabled}
+              />
+            ))}
       </div>
     </div>
+  );
+}
+
+function TemplateBuildCard({
+  template,
+  productLabel,
+}: {
+  template: TemplateCard;
+  productLabel: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const prompt = template.prompt.replaceAll("{product}", productLabel);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard may be unavailable (e.g. insecure context); fail silently.
+    }
+  }
+
+  function handleDownload() {
+    const blob = new Blob([template.markdown], {
+      type: "text/markdown;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = template.filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  return (
+    <article className="bg-card flex flex-col rounded-2xl border p-5">
+      <header className="flex items-center gap-3">
+        <span
+          className="bg-muted text-foreground inline-flex size-9 shrink-0 items-center justify-center rounded-xl"
+          aria-hidden="true"
+        >
+          <FileText className="size-4.5" />
+        </span>
+        <h3 className="text-sm font-semibold capitalize">{template.title}</h3>
+      </header>
+
+      {template.summary ? (
+        <p className="text-muted-foreground mt-3 line-clamp-2 text-sm leading-relaxed">
+          {template.summary}
+        </p>
+      ) : null}
+
+      <p className="text-muted-foreground bg-muted/40 mt-3 line-clamp-3 rounded-lg border px-3 py-2 text-xs leading-relaxed">
+        {prompt}
+      </p>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleCopy}
+          aria-label={`Copy starter prompt for ${template.title}`}
+        >
+          {copied ? (
+            <>
+              <Check className="size-4 text-emerald-500" />
+              Copied
+            </>
+          ) : (
+            <>
+              <Copy className="size-4" />
+              Copy prompt
+            </>
+          )}
+        </Button>
+        <Button
+          variant="default"
+          size="sm"
+          onClick={handleDownload}
+          aria-label={`Download ${template.filename}`}
+        >
+          <Download className="size-4" />
+          Download .md
+        </Button>
+        <Link
+          href={template.href}
+          className="text-muted-foreground hover:text-foreground group ml-auto inline-flex items-center gap-1 text-xs font-medium"
+        >
+          Open &amp; iterate
+          <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      </div>
+    </article>
   );
 }
 

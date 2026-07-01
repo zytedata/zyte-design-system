@@ -12,6 +12,11 @@ intent: >-
   rules; overrides canvas, type scale and density for projection.
 audience: [Designers, Sales, Agents/LLMs]
 preview: deck.html
+prompt: >-
+  Build a 16:9 slide deck using the attached {product} deck spec (deck.md).
+  Include a title slide, a section divider, a three-point content slide, a
+  big-stat slide and a closing CTA slide. Follow the spec — oversized type, one
+  idea per slide, generous safe areas, and alternating dark/light masters.
 foundations: web
 ---
 

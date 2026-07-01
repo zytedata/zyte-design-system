@@ -18,6 +18,7 @@ import {
 import { getChangelogs, getFoundations } from "@/data/foundations";
 import { readCanonicalDoc, readPackageVersion } from "@/data/foundations/docs";
 import { describeGitSync, getGitStatus } from "@/data/git-status";
+import { listTemplateCards } from "@/data/templates";
 import {
   EXTRACT_SUMMIT_CORE_PRINCIPLES,
   EXTRACT_SUMMIT_DESIGN_LAYERS,
@@ -104,10 +105,13 @@ export default async function ProductDashboardPage({
   const docLinks = buildProductDocLinks(product.slug);
 
   const bundle = getFoundations(product.id);
-  const [packageVersion, canonicalDoc, git] = await Promise.all([
+  const [packageVersion, canonicalDoc, git, templateCards] = await Promise.all([
     readPackageVersion(product.id),
     bundle.canonicalDoc ? readCanonicalDoc(product.id) : Promise.resolve(null),
     getGitStatus(),
+    product.capabilities.templates.enabled
+      ? listTemplateCards(product.id)
+      : Promise.resolve([]),
   ]);
 
   const journeyItems = product.nav.filter(
@@ -132,6 +136,7 @@ export default async function ProductDashboardPage({
           ? { content: canonicalDoc.content, filename: canonicalDoc.filename }
           : null
       }
+      templates={templateCards}
     />
   );
 

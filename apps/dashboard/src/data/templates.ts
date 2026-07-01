@@ -208,6 +208,49 @@ export async function listTemplates(productId: ProductId): Promise<TemplateMeta[
   });
 }
 
+/** A template surfaced as a "what you can build" card in Getting started. */
+export type TemplateCard = TemplateMeta & {
+  /** Ready-to-paste starter prompt ({product} token intact). */
+  prompt: string;
+  /** Full self-contained markdown (tokens + base + overlay) for download. */
+  markdown: string;
+  /** Suggested download filename, e.g. `marketing.md`. */
+  filename: string;
+  /** Link to the template's preview / spec page. */
+  href: string;
+};
+
+/**
+ * Template cards for the Getting started snapshot: each carries its starter
+ * prompt and the full downloadable spec so a user can copy, download and
+ * iterate without leaving the page. Skips templates that ship no `prompt`.
+ */
+export async function listTemplateCards(productId: ProductId): Promise<TemplateCard[]> {
+  const slug = SLUG_BY_PRODUCT_ID[productId];
+  const metas = await listTemplates(productId);
+  const dir = await firstExistingDir(productId);
+  if (!dir || !slug) return [];
+
+  const out: TemplateCard[] = [];
+  for (const meta of metas) {
+    try {
+      const md = await fs.readFile(path.join(dir, `${meta.id}.md`), "utf-8");
+      const prompt = readFrontmatterField(splitFrontmatter(md).frontmatter, "prompt");
+      if (!prompt) continue; // only surface templates with a starter prompt
+      out.push({
+        ...meta,
+        prompt,
+        markdown: md,
+        filename: `${meta.id}.md`,
+        href: `/products/${slug}/templates/${meta.id}`,
+      });
+    } catch {
+      // skip unreadable file
+    }
+  }
+  return out;
+}
+
 /** Read a single template's spec + preview. Returns null if either is missing. */
 export async function readTemplate(
   productId: ProductId,

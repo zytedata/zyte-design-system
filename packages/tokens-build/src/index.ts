@@ -565,6 +565,7 @@ export function composeTemplateMd(
     title: meta.title ?? id,
     status: meta.status ?? "draft",
     intent: meta.intent ?? undefined,
+    prompt: meta.prompt ?? undefined,
     useCase: id,
     medium: meta.medium ?? undefined,
     extends: "design.md",

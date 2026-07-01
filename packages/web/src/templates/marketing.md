@@ -12,6 +12,13 @@ intent: >-
   brand rules; overrides layout rhythm, hero treatment and tone for pace.
 audience: [Designers, Developers, Agents/LLMs]
 preview: marketing.html
+prompt: >-
+  Build a marketing landing page using the attached {product} marketing spec
+  (marketing.md). Include a hero with headline, subhead and a primary CTA, a
+  three-up value/feature section, a social-proof logo strip, and a closing call
+  to action. Follow the spec's colours, typography, spacing and tone — plus the
+  marketing overrides (bold vertical rhythm, hero gradient background, one
+  primary CTA per view).
 foundations: web
 ---
 

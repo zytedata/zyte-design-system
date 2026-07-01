@@ -215,10 +215,11 @@ export function AgenticDoc({
             </div>
           </div>
           <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed">
-            Hand-authored canonical spec for {productLabel}. Treat the YAML
-            front matter as the machine-readable token layer; the prose below
-            is the human implementation guide. Both are served verbatim to
-            coding agents.
+            The single source of truth for how {productLabel} looks and feels —
+            its colours, type, spacing and the rules that hold them together.
+            The tokens up top are for machines; the guide below is for people.
+            Hand the whole thing to your AI assistant (or a developer) and
+            they&apos;ll build on-brand.
           </p>
         </div>
 

@@ -2,12 +2,15 @@
 
 import * as React from "react";
 import {
+  Boxes,
   Check,
   Copy,
   Download,
   ExternalLink,
   FileCode,
   FileText,
+  Hash,
+  List,
   MonitorPlay,
   Palette,
 } from "lucide-react";
@@ -16,7 +19,11 @@ import remarkGfm from "remark-gfm";
 
 import { cn } from "@/lib/utils";
 import { MARKDOWN_PROSE_CLASSNAME } from "@/lib/markdown";
-import type { CanonicalDocPayload } from "@/data/foundations/docs";
+import { GeneratedArtefacts } from "@/components/foundations/generated-artefacts";
+import type {
+  CanonicalDocPayload,
+  GeneratedArtefact,
+} from "@/data/foundations/docs";
 import type { ProductFoundations } from "@zytedata/ds-types";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,6 +70,52 @@ function splitDesignDoc(markdown: string): {
   };
 }
 
+const ID_TOKENS = "agentic-tokens";
+
+/** Slugify a heading into a stable, URL-safe anchor id. */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+/** Flatten React children (text, inline code, emphasis…) to a plain string. */
+function childrenToString(children: React.ReactNode): string {
+  return React.Children.toArray(children)
+    .map((child) => {
+      if (typeof child === "string" || typeof child === "number") {
+        return String(child);
+      }
+      if (React.isValidElement(child)) {
+        return childrenToString(
+          (child.props as { children?: React.ReactNode }).children,
+        );
+      }
+      return "";
+    })
+    .join("");
+}
+
+/** Extract `##` headings (fence-aware) for the section nav / outline. */
+function extractSections(md: string): Array<{ text: string; slug: string }> {
+  const out: Array<{ text: string; slug: string }> = [];
+  let inFence = false;
+  for (const line of md.split(/\r?\n/)) {
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+    const m = line.match(/^##\s+(.+?)\s*$/);
+    if (!m) continue;
+    const text = m[1].replace(/`/g, "").trim();
+    out.push({ text, slug: slugify(text) });
+  }
+  return out;
+}
+
 export type AgenticDocProps = {
   productLabel: string;
   productSlug: string;
@@ -72,6 +125,8 @@ export type AgenticDocProps = {
   meta: { assetPath: string; title: string; version: string };
   doc: CanonicalDocPayload;
   bundle: ProductFoundations;
+  /** Codegen token artefacts (tokens.json/css/scss/tailwind), shown in a tab. */
+  artefacts: GeneratedArtefact[];
 };
 
 export function AgenticDoc({
@@ -81,6 +136,7 @@ export function AgenticDoc({
   accent,
   doc,
   bundle,
+  artefacts,
 }: AgenticDocProps) {
   const [copied, setCopied] = React.useState(false);
 
@@ -122,6 +178,19 @@ export function AgenticDoc({
     [doc.content],
   );
 
+  const sections = React.useMemo(() => extractSections(body), [body]);
+
+  const mdComponents = React.useMemo(
+    () => ({
+      h2: ({ children }: { children?: React.ReactNode }) => (
+        <h2 id={slugify(childrenToString(children))} className="scroll-mt-24">
+          {children}
+        </h2>
+      ),
+    }),
+    [],
+  );
+
   return (
     <div className="space-y-8">
       <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -146,10 +215,11 @@ export function AgenticDoc({
             </div>
           </div>
           <p className="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed">
-            Hand-authored canonical spec for {productLabel}. Treat the YAML
-            front matter as the machine-readable token layer; the prose below
-            is the human implementation guide. Both are served verbatim to
-            coding agents.
+            The single source of truth for how {productLabel} looks and feels —
+            its colours, type, spacing and the rules that hold them together.
+            The tokens up top are for machines; the guide below is for people.
+            Hand the whole thing to your AI assistant (or a developer) and
+            they&apos;ll build on-brand.
           </p>
         </div>
 
@@ -199,7 +269,7 @@ export function AgenticDoc({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <TabsList variant="line">
             <TabsTrigger value="rendered" className="gap-1.5">
-              <FileText className="size-3.5" /> Rendered
+              <FileText className="size-3.5" /> Overview
             </TabsTrigger>
             <TabsTrigger value="tokens" className="gap-1.5">
               <Palette className="size-3.5" /> Token surface
@@ -209,6 +279,9 @@ export function AgenticDoc({
             </TabsTrigger>
             <TabsTrigger value="source" className="gap-1.5">
               <FileCode className="size-3.5" /> Markdown
+            </TabsTrigger>
+            <TabsTrigger value="artefacts" className="gap-1.5">
+              <Boxes className="size-3.5" /> Artefacts
             </TabsTrigger>
           </TabsList>
           <span className="text-muted-foreground hidden font-mono text-xs sm:inline">
@@ -233,26 +306,73 @@ export function AgenticDoc({
           )}
         </TabsContent>
 
-        <TabsContent value="rendered" className="mt-5 space-y-5">
-          {frontmatter ? (
-            <details className="bg-muted/30 group rounded-xl border">
-              <summary className="text-foreground hover:bg-muted/50 flex cursor-pointer items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-xs font-medium select-none">
-                <span className="flex items-center gap-2">
-                  <Palette className="size-3.5" />
-                  YAML front matter — machine-readable tokens
-                </span>
-                <span className="text-muted-foreground font-mono text-[11px]">
-                  {frontmatter.split(/\r?\n/).length} lines · open Token surface tab for visuals
-                </span>
-              </summary>
-              <pre className="border-t bg-transparent px-4 py-3 font-mono text-[11px] leading-relaxed">
-                <code>{frontmatter}</code>
-              </pre>
-            </details>
-          ) : null}
+        <TabsContent value="rendered" className="mt-5">
+          <div className="flex gap-6">
+            {sections.length > 0 ? (
+              <nav
+                aria-label="Document outline"
+                className="hidden w-52 shrink-0 lg:block"
+              >
+                <div className="sticky top-20 space-y-3">
+                  <p className="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase">
+                    <List className="size-3.5" />
+                    DS sections
+                  </p>
+                  <ul className="border-border/70 space-y-0.5 border-l">
+                    {frontmatter ? (
+                      <li>
+                        <a
+                          href={`#${ID_TOKENS}`}
+                          className="group text-muted-foreground hover:border-foreground hover:text-foreground -ml-px flex items-center gap-2 border-l border-transparent py-1 pl-3 text-sm transition-colors"
+                        >
+                          <Palette className="size-3 shrink-0 opacity-50 group-hover:opacity-100" />
+                          <span className="truncate">Machine-readable tokens</span>
+                        </a>
+                      </li>
+                    ) : null}
+                    {sections.map((s) => (
+                      <li key={s.slug}>
+                        <a
+                          href={`#${s.slug}`}
+                          className="group text-muted-foreground hover:border-foreground hover:text-foreground -ml-px flex items-center gap-2 border-l border-transparent py-1 pl-3 text-sm transition-colors"
+                        >
+                          <Hash className="size-3 shrink-0 opacity-50 group-hover:opacity-100" />
+                          <span className="truncate">{s.text}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </nav>
+            ) : null}
 
-          <div className={cn(MARKDOWN_PROSE_CLASSNAME)}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{body}</ReactMarkdown>
+            <div className="min-w-0 flex-1 space-y-5">
+              {frontmatter ? (
+                <details
+                  id={ID_TOKENS}
+                  className="bg-muted/30 group scroll-mt-24 rounded-xl border"
+                >
+                  <summary className="text-foreground hover:bg-muted/50 flex cursor-pointer items-center justify-between gap-3 rounded-xl px-4 py-2.5 text-xs font-medium select-none">
+                    <span className="flex items-center gap-2">
+                      <Palette className="size-3.5" />
+                      YAML front matter — machine-readable tokens
+                    </span>
+                    <span className="text-muted-foreground font-mono text-[11px]">
+                      {frontmatter.split(/\r?\n/).length} lines · open Token surface tab for visuals
+                    </span>
+                  </summary>
+                  <pre className="border-t bg-transparent px-4 py-3 font-mono text-[11px] leading-relaxed">
+                    <code>{frontmatter}</code>
+                  </pre>
+                </details>
+              ) : null}
+
+              <div className={cn(MARKDOWN_PROSE_CLASSNAME)}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+                  {body}
+                </ReactMarkdown>
+              </div>
+            </div>
           </div>
         </TabsContent>
 
@@ -263,6 +383,10 @@ export function AgenticDoc({
           >
             <code>{doc.content}</code>
           </pre>
+        </TabsContent>
+
+        <TabsContent value="artefacts" className="mt-5">
+          <GeneratedArtefacts productLabel={productLabel} artefacts={artefacts} />
         </TabsContent>
       </Tabs>
     </div>

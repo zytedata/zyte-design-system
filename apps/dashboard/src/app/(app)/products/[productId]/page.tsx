@@ -160,7 +160,7 @@ export default async function ProductDashboardPage({
               </p>
               <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
                 {product.id === "web"
-                  ? "Website Design System"
+                  ? "Website"
                   : `${product.label} dashboard`}
               </h1>
             </div>

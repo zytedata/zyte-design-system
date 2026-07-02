@@ -10,6 +10,7 @@ import { getFoundations } from "@/data/foundations";
 import { findSectionBySlug } from "@/lib/foundations";
 import { findBrandSectionBySlug } from "@/lib/brand";
 import { HeaderSearch } from "@/components/layout/header-search";
+import { FeedbackButton } from "@/components/layout/feedback-button";
 import { SyncStatus } from "@/components/layout/sync-status";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -151,6 +152,7 @@ export function AppTopbar({ githubSync }: { githubSync: GithubSync }) {
 
       <div className="ml-auto flex items-center gap-1.5">
         <HeaderSearch />
+        <FeedbackButton />
         <Separator orientation="vertical" className="mx-1 hidden md:block" />
         <SyncStatus
           source="github"

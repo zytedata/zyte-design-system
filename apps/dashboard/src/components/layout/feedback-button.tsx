@@ -32,7 +32,7 @@ export function FeedbackButton() {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full gap-0 p-0 sm:max-w-xl"
+        className="w-full gap-0 p-0 data-[side=right]:sm:max-w-2xl"
       >
         <SheetHeader className="border-b">
           <SheetTitle>Send feedback</SheetTitle>

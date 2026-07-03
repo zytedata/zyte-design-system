@@ -30,6 +30,8 @@
     "./tailwind": "./dist/tokens.tailwind.cjs",
     "./design.md": "./dist/design.md",
     "./assets/*": "./src/assets/*",
+    "./fonts.css": "./src/assets/fonts/yellix.css",
+    "./fonts/*": "./src/assets/fonts/*",
     "./package.json": "./package.json"
   },
   "scripts": {

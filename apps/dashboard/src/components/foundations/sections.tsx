@@ -15,6 +15,7 @@ import { ChangelogView } from "@/components/foundations/changelog-view";
 import { CopyableSwatch } from "@/components/foundations/copyable-swatch";
 import { LucideIconsCatalog } from "@/components/foundations/lucide-icons-catalog";
 import { TypographyLivePreview } from "@/components/foundations/typography-live-preview";
+import { FontDownloads, usesYellix } from "@/components/foundations/font-downloads";
 import { Badge } from "@/components/ui/badge";
 
 // ─── Color palette section ─────────────────────────────────────────────────
@@ -231,6 +232,9 @@ export function TypographySection({ bundle }: { bundle: ProductFoundations }) {
 
   return (
     <div className="space-y-10">
+      {usesYellix(bundle.typography.family.sans, bundle.typography.family.display) ? (
+        <FontDownloads />
+      ) : null}
       <p className="text-muted-foreground text-sm leading-relaxed">
         Same live specimens as the agentic{" "}
         <span className="text-foreground font-medium">Token surface</span> tab

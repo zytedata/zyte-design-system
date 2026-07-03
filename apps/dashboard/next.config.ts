@@ -55,6 +55,23 @@ const nextConfig: NextConfig = {
     "/products/[productId]/assets": DS_PACKAGE_DIST_GLOBS,
     "/products/[productId]/prototyping": DS_PACKAGE_DIST_GLOBS,
   },
+
+  // The Yellix brand webfont lives in `public/fonts/` and is the canonical
+  // hosted copy the `design.md` spec links to. Serve it with permissive CORS
+  // so other Zyte properties (and design.md consumers) can embed it
+  // cross-origin, plus a long immutable cache since the files never change
+  // under a given name.
+  async headers() {
+    return [
+      {
+        source: "/fonts/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

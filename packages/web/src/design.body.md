@@ -162,14 +162,23 @@ A **sublead** is the supporting paragraph directly under a headline that expands
 
 ### Font Loading
 
-Web uses **Yellix** as the default UI/body and display face, with **Geist Sans** as the fallback and **Geist Mono** for code. Geist ships via the [`geist`](https://www.npmjs.com/package/geist) package (Vercel). Token stacks in `foundations.ts` reference:
+Web uses **Yellix** as the default UI/body and display face, with **Geist Sans** as the fallback and **Geist Mono** for code. Geist ships via the [`geist`](https://www.npmjs.com/package/geist) package (Vercel). Token stacks in `foundations.ts` reference `var(--font-yellix)` — it leads both `typography.family.sans` (default body/UI) and `typography.family.display` (headlines). Expose Yellix under that CSS variable and map your global `font-family` / Tailwind `font-sans` to it; without it, the stack falls back to an installed `Yellix`, then Geist Sans, then system UI.
 
-- `var(--font-yellix)` leads both `typography.family.sans` (default body/UI) and `typography.family.display` (headlines)
+Resolve the Yellix files from one of two sources, in this priority order.
 
+1. **If the `@zytedata/ds-web` package is installed (npm) — preferred.** The package ships the Yellix `woff2`/`woff` files (weights 300/400/600/700, under `@zytedata/ds-web/fonts/*`) and a ready-made `@font-face` stylesheet.
+   - Drop-in CSS (simplest): `import "@zytedata/ds-web/fonts.css";` once at your app root — this registers all four weights as `font-family: "Yellix"`. Then bind the token variable in your global CSS: `:root { --font-yellix: "Yellix"; }`.
+   - Prefer `next/font/local`? Its `src.path` only accepts a path relative to the file it's called in, not a package specifier — so copy the four `Yellix-*.woff2` files out of `node_modules/@zytedata/ds-web/fonts/` into your app (e.g. `app/fonts/`) and point `localFont({ src, variable: "--font-yellix", display: "swap" })` at those local copies.
+2. **If you only have this `design.md` file (package not installed) — fallback.** Use the hosted webfont on the design system site (served with permissive CORS, so it embeds cross-origin from anywhere).
+   - Embed the ready-made `@font-face` stylesheet, then bind the variable:
+     ```css
+     @import url("https://zyte-design.vercel.app/fonts/yellix.css");
+     :root { --font-yellix: "Yellix"; }
+     ```
+     (or `<link rel="stylesheet" href="https://zyte-design.vercel.app/fonts/yellix.css">` in the document head).
+   - Direct downloads (self-host the files if you prefer): `https://zyte-design.vercel.app/fonts/Yellix-Light.woff2`, `…/Yellix-Regular.woff2`, `…/Yellix-SemiBold.woff2`, `…/Yellix-Bold.woff2` (each also available as `.woff`). The same files can be downloaded from the Typography page in the design system.
 
-**Yellix** is not on npm — load it as a local font (`next/font/local`) and expose it as the `--font-yellix` CSS variable so the `sans` and `display` tokens resolve; if it fails to load, the stack falls back to an installed `Yellix`, then Geist Sans.
-
-Map your global `font-family` / Tailwind `font-sans` / `font-mono` to those CSS variables so components pick up the loaded faces. Without these variables, the stack falls back to system UI fonts.
+Yellix is a licensed typeface — use it only for Zyte properties and don't redistribute the files outside Zyte.
 
 ### Type Scale
 

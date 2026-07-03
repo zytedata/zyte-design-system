@@ -38,6 +38,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Yellix @font-face defs so the Typography page can render Yellix specimens. */}
+        <link rel="stylesheet" href="/fonts/yellix.css" />
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async />
       </head>

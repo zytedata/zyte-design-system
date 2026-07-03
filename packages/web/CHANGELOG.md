@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.0
+
+### Minor Changes
+
+- [#45](https://github.com/zytedata/zyte-design-system/pull/45) [`0da43c7`](https://github.com/zytedata/zyte-design-system/commit/0da43c721bf0b5b85b4096d7ce800bf206bec53e) Thanks [@arkadiuszjaneczko1](https://github.com/arkadiuszjaneczko1)! - Web design system: fonts, brand mark, templates and design.md refinements.
+
+  - **Fonts:** ship the Yellix brand typeface (woff2/woff, weights 300/400/600/700) plus a ready-made `@font-face` stylesheet. New package exports `@zytedata/ds-web/fonts.css` and `@zytedata/ds-web/fonts/*`. `design.md` now documents both the package path and a hosted-webfont fallback (`https://zyte-design.vercel.app/fonts/yellix.css`) with direct download URLs.
+  - **Mark:** add the gradient mark as an alternative logo / favicon asset (`@zytedata/ds-web/assets/mark.svg`), documented in the Logo and Mark sections.
+  - **Templates:** per-use-case template overlays (marketing / report / deck).
+  - **Logo:** primary logo is brand fuchsia (`#B02CCE`); dropped the gradient variants and unified the brand fuchsia across the spec.
+  - **design.md editorial:** explicit "no full stop at the end of a headline" rule, and the standalone Do's/Don'ts section folded into the "What NOT To Do" table.
+
 ## 0.5.0
 
 ### Minor Changes

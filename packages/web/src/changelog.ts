@@ -174,7 +174,7 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
         author: "arkadiusz",
         kind: "added",
         message:
-          "Font Loading: the package now ships the Yellix woff2/woff files (weights 300/400/600/700) plus a ready-made `@font-face` stylesheet — import `@zytedata/ds-web/fonts.css` or load via `next/font/local` from `@zytedata/ds-web/fonts/*`. For the design.md-only path, added the hosted webfont (`https://design.zyte.com/fonts/yellix.css`, CORS-enabled) and direct download URLs. Yellix is also downloadable from the dashboard Typography page.",
+          "Font Loading: the package now ships the Yellix woff2/woff files (weights 300/400/600/700) plus a ready-made `@font-face` stylesheet — import `@zytedata/ds-web/fonts.css` or load via `next/font/local` from `@zytedata/ds-web/fonts/*`. For the design.md-only path, added the hosted webfont (`https://zyte-design.vercel.app/fonts/yellix.css`, CORS-enabled) and direct download URLs. Yellix is also downloadable from the dashboard Typography page.",
       },
       {
         date: "2026-06-25",

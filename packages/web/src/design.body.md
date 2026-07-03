@@ -172,11 +172,11 @@ Resolve the Yellix files from one of two sources, in this priority order.
 2. **If you only have this `design.md` file (package not installed) — fallback.** Use the hosted webfont on the design system site (served with permissive CORS, so it embeds cross-origin from anywhere).
    - Embed the ready-made `@font-face` stylesheet, then bind the variable:
      ```css
-     @import url("https://design.zyte.com/fonts/yellix.css");
+     @import url("https://zyte-design.vercel.app/fonts/yellix.css");
      :root { --font-yellix: "Yellix"; }
      ```
-     (or `<link rel="stylesheet" href="https://design.zyte.com/fonts/yellix.css">` in the document head).
-   - Direct downloads (self-host the files if you prefer): `https://design.zyte.com/fonts/Yellix-Light.woff2`, `…/Yellix-Regular.woff2`, `…/Yellix-SemiBold.woff2`, `…/Yellix-Bold.woff2` (each also available as `.woff`). The same files can be downloaded from the Typography page in the design system.
+     (or `<link rel="stylesheet" href="https://zyte-design.vercel.app/fonts/yellix.css">` in the document head).
+   - Direct downloads (self-host the files if you prefer): `https://zyte-design.vercel.app/fonts/Yellix-Light.woff2`, `…/Yellix-Regular.woff2`, `…/Yellix-SemiBold.woff2`, `…/Yellix-Bold.woff2` (each also available as `.woff`). The same files can be downloaded from the Typography page in the design system.
 
 Yellix is a licensed typeface — use it only for Zyte properties and don't redistribute the files outside Zyte.
 

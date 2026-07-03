@@ -2,8 +2,8 @@
  * Yellix — Zyte Web brand typeface (@font-face declarations).
  *
  * Hosted on the design system site so it can be embedded from anywhere:
- *   @import url("https://design.zyte.com/fonts/yellix.css");
- * or <link rel="stylesheet" href="https://design.zyte.com/fonts/yellix.css">.
+ *   @import url("https://zyte-design.vercel.app/fonts/yellix.css");
+ * or <link rel="stylesheet" href="https://zyte-design.vercel.app/fonts/yellix.css">.
  * Served with permissive CORS headers (see the dashboard next.config).
  */
 

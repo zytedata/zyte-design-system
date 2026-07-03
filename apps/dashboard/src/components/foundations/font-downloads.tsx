@@ -49,7 +49,7 @@ export function FontDownloads() {
         and <code className="bg-muted text-foreground rounded px-1 py-0.5 font-mono">display</code>{" "}
         tokens resolve. To embed cross-origin without hosting the files, link the stylesheet:{" "}
         <code className="bg-muted text-foreground rounded px-1 py-0.5 font-mono">
-          https://design.zyte.com/fonts/yellix.css
+          https://zyte-design.vercel.app/fonts/yellix.css
         </code>
         .
       </p>

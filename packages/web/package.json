@@ -1,6 +1,6 @@
 {
   "name": "@zytedata/ds-web",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Zyte Web design system tokens, foundations and design.md spec.",
   "license": "UNLICENSED",
   "publishConfig": {

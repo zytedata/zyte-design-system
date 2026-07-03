@@ -5,6 +5,13 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
     file: "branding.ts",
     entries: [
       {
+        date: "2026-07-03",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "New 'Mark' brand section documenting the gradient mark — a standalone, square symbol that is the alternative to the wordmark, for use as a favicon, app icon, avatar or in tight/square UI slots. Ships as its own `assets/mark.svg` (separate asset group, so it surfaces as its own card on the Assets page). Mirrored in design.body.md (Logo → Variants and Asset source) and surfaced by the dashboard's Brand → Mark page.",
+      },
+      {
         date: "2026-06-03",
         author: "arkadiusz",
         kind: "added",

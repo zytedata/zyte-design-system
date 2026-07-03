@@ -174,6 +174,8 @@ function ProductSwitcherButton({ active }: { active: Product | null }) {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           aria-label="Switch active product"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/mark.svg" alt="" className="size-8 shrink-0" />
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">{siteConfig.name}</span>
             <span className="text-muted-foreground flex items-center gap-1.5 truncate text-xs">

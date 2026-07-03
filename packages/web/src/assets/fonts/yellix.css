@@ -1,0 +1,49 @@
+/*
+ * Yellix — Zyte Web brand typeface (@font-face declarations).
+ *
+ * Ships inside @zytedata/ds-web. Import once at your app root:
+ *   import "@zytedata/ds-web/fonts.css";
+ * then map your `font-sans` / `font-family` to the `--font-yellix` stack from
+ * the typography tokens. URLs are relative to this file so bundlers resolve the
+ * woff2/woff next to it under the package's `assets/fonts/` directory.
+ */
+
+@font-face {
+  font-family: "Yellix";
+  src:
+    url("./Yellix-Light.woff2") format("woff2"),
+    url("./Yellix-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Yellix";
+  src:
+    url("./Yellix-Regular.woff2") format("woff2"),
+    url("./Yellix-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Yellix";
+  src:
+    url("./Yellix-SemiBold.woff2") format("woff2"),
+    url("./Yellix-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Yellix";
+  src:
+    url("./Yellix-Bold.woff2") format("woff2"),
+    url("./Yellix-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

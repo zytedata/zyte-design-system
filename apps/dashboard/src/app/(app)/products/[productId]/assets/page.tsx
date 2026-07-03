@@ -5,6 +5,7 @@ import { listAssets } from "@/data/assets";
 import { AppPageShell } from "@/components/layout/app-page-shell";
 import { Badge } from "@/components/ui/badge";
 import { AssetCard } from "@/components/assets/asset-card";
+import { FontAssetCard } from "@/components/assets/font-asset-card";
 
 type RouteParams = { productId: string };
 
@@ -62,6 +63,7 @@ export default async function ProductAssetsPage({
               {assets.map((asset) => (
                 <AssetCard key={asset.id} asset={asset} />
               ))}
+              {product.slug === "web" ? <FontAssetCard /> : null}
             </div>
           )}
         </>

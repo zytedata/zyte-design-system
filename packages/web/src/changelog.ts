@@ -172,6 +172,20 @@ export const WEB_FILE_CHANGELOGS: FileChangelog[] = [
       {
         date: "2026-07-03",
         author: "arkadiusz",
+        kind: "changed",
+        message:
+          "Merged the standalone 'Do’s and Don’ts' section into the 'What NOT To Do' table (former bullets are now ❌ Never / ✅ Instead rows) and dropped the orphan '10.' from the heading so all sections are consistently text-only.",
+      },
+      {
+        date: "2026-07-03",
+        author: "arkadiusz",
+        kind: "added",
+        message:
+          "Headline Usage: made the no-terminal-period rule explicit — headlines and subheads never end with a full stop (only `?`/`!` when they genuinely ask or exclaim). Added to the Headline Usage list and the 'What NOT To Do' table.",
+      },
+      {
+        date: "2026-07-03",
+        author: "arkadiusz",
         kind: "added",
         message:
           "Font Loading: the package now ships the Yellix woff2/woff files (weights 300/400/600/700) plus a ready-made `@font-face` stylesheet — import `@zytedata/ds-web/fonts.css` or load via `next/font/local` from `@zytedata/ds-web/fonts/*`. For the design.md-only path, added the hosted webfont (`https://zyte-design.vercel.app/fonts/yellix.css`, CORS-enabled) and direct download URLs. Yellix is also downloadable from the dashboard Typography page.",

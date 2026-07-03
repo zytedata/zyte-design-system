@@ -139,6 +139,7 @@ Headings use **Yellix** at weight **600** with tight line-height. Keep a clear s
 - Pair each headline with **one sublead** (see below) and, where applicable, a **section number eyebrow** (see Sections).
 - Reserve the `headlineGradient` (orange → fuchsia) for **headline highlights only** — never on buttons, body copy or UI chrome.
 - One headline per section; don't stack competing display titles.
+- **Never end a headline with a full stop.** Headlines (and subheads/display titles) carry no terminal period — e.g. "Extract data from any website", not "Extract data from any website." A question mark or exclamation mark is allowed when the headline genuinely asks or exclaims; a plain full stop is not.
 
 ### Subleads
 
@@ -528,23 +529,7 @@ Brand assets — logos, icons, illustrations, templates — live in one place an
 - Re-export or recolour assets to fit a one-off need.
 - Distribute brand assets externally without approval.
 
-## Do’s and Don’ts
-
-**Do**
-
-- Build from tokens and product foundations.
-- Keep hierarchy obvious: headings → subhead → body → meta.
-- Use brand/accent sparingly and intentionally.
-
-**Don’t**
-
-- Hardcode colors, spacing, or the `12px` radius when token equivalents exist.
-- Put shadows on cards, or mix multiple radii in one composition.
-- Render section labels/eyebrows as pills or with a background — keep them plain uppercase in secondary.
-- Use `headlineGradient` outside its documented role (headline highlights / ribbon).
-- Introduce new “one-off” components when composition of existing ones works.
-
-## 10. What NOT To Do
+## What NOT To Do
 
 | ❌ Never | ✅ Instead |
 |---|---|
@@ -559,5 +544,13 @@ Brand assets — logos, icons, illustrations, templates — live in one place an
 | font-weight 800 or 900 | Max is 700 |
 | border-radius outside scale | use `radius` tokens (6/8/12/16/9999) |
 | Two primary buttons side by side | primary + ghost pairing |
+| Full stop at the end of a headline | No terminal period on headlines/subheads (`?`/`!` only when the headline truly asks/exclaims) |
+| Ignore tokens or product foundations | Build from `tokens` + product foundations |
+| Flatten or bury the type hierarchy | Keep it obvious: heading → subhead → body → meta |
+| Flood surfaces with brand/accent | Use brand/accent sparingly and intentionally |
+| Mix multiple radii in one composition | One consistent radius per composition |
+| Section labels/eyebrows as pills or with a background | Plain uppercase in `secondary` |
+| `headlineGradient` on buttons, body or UI chrome | Headline highlights / ribbon only |
+| New “one-off” components when composition works | Compose existing components |
 
 

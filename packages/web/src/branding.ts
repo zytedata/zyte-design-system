@@ -47,8 +47,8 @@ export const WEB_BRANDING: ProductBranding = {
         "Primary (brand fuchsia) is the default — use it for product UI, documents, slides and any light surface. When in doubt, reach for primary.",
         "Reversed (white) is the primary logo's partner for dark or photographic backgrounds — swap to it whenever contrast on the fuchsia wordmark would otherwise fail.",
         "Monochrome (single ink or single white) is for constrained reproduction — one-colour print, embroidery, engraving, faxed/scanned docs or partner placements that only allow a single colour.",
+        "The gradient mark is the alternative to the wordmark — a standalone, square symbol for avatars, favicons, app icons and tight UI slots where the full lockup would fall below its minimum size. It carries its own baked-in gradient, so place it on a plain surface and never recolour it.",
         "One variant per surface — don't mix logo variants in the same view; pick the single variant that fits the background.",
-        "The standalone mark is reserved for avatars, favicons and tight UI slots where the full lockup would fall below its minimum size.",
         "Minimum clear space equals the height of the 'Z' on all sides.",
         "Minimum size: 24px tall for the mark, 96px wide for the full lockup on screen.",
       ],
@@ -60,6 +60,30 @@ export const WEB_BRANDING: ProductBranding = {
         dont: [
           "Stretch, rotate, recolour or add effects to the logo.",
           "Recreate the wordmark in a different typeface.",
+        ],
+      },
+    },
+    {
+      slug: "mark",
+      label: "Mark",
+      tagline: "The wordmark's compact alter ego — one square symbol for tight spaces.",
+      summary:
+        "The gradient mark is the standalone Zyte symbol and the alternative to the full wordmark. Reach for it as a favicon, app icon, avatar or in any tight or square slot where the lockup would drop below its minimum size. It carries its own baked-in gradient, so it always shows in full colour on a plain surface — ship it from `@zytedata/ds-web/assets/mark.svg`.",
+      principles: [
+        "The mark is the alternative to the wordmark, not a replacement — prefer the full lockup wherever it fits and drop to the mark only in tight or square spaces.",
+        "Use it for favicons, app icons, avatars and other small/square placements, especially below the wordmark's 96px minimum width.",
+        "It ships with a fixed gradient — never recolour, flatten or re-gradient it; place it on a plain, low-noise surface so the gradient stays legible.",
+        "Keep clear space around the mark and never crop, rotate or distort the symbol.",
+        "One mark, one gradient — don't pair it with the wordmark in a single lockup or repeat it until it becomes a pattern.",
+      ],
+      guidelines: {
+        do: [
+          "Pull the mark from `@zytedata/ds-web/assets/mark.svg` (or the Assets page).",
+          "Use it at favicon and app-icon sizes where the wordmark would be illegible.",
+        ],
+        dont: [
+          "Recolour, flatten or add effects to the mark's gradient.",
+          "Use the mark where the full wordmark comfortably fits.",
         ],
       },
     },

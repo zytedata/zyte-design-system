@@ -30,6 +30,12 @@ export const BRAND_SECTIONS: BrandSection[] = [
       "The Zyte logo: primary and secondary lockups, clear space, minimum sizes, approved color treatments and the misuses to avoid.",
   },
   {
+    slug: "mark",
+    label: "Mark",
+    description:
+      "The standalone gradient mark — the alternative to the wordmark for favicons, app icons, avatars and tight or square spaces.",
+  },
+  {
     slug: "voice-and-tone",
     label: "Voice & Tone",
     description:

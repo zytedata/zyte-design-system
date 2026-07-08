@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Zyte Design System",
-  shortName: "Zyte DS",
+  shortName: "DS",
   description:
     "A product workspace for the Zyte design system — foundations, tokens, components, templates and documentation across Web, Core, Scrapy and Extract Summit.",
   tagline:

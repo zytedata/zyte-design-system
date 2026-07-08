@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 
 import { siteConfig } from "@/config/site";
+import type { SessionUser } from "@/lib/auth";
 import { useActiveProduct } from "@/hooks/use-active-product";
 import { getFoundations } from "@/data/foundations";
 import { findSectionBySlug } from "@/lib/foundations";
 import { findBrandSectionBySlug } from "@/lib/brand";
 import { FeedbackButton } from "@/components/layout/feedback-button";
 import { SyncStatus } from "@/components/layout/sync-status";
+import { UserMenu } from "@/components/layout/user-menu";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
@@ -116,7 +118,13 @@ function useBreadcrumbs(): Crumb[] {
 
 type GithubSync = { status: "synced" | "not_synced"; lastUpdate: string };
 
-export function AppTopbar({ githubSync }: { githubSync: GithubSync }) {
+export function AppTopbar({
+  githubSync,
+  user,
+}: {
+  githubSync: GithubSync;
+  user: SessionUser | null;
+}) {
   const crumbs = useBreadcrumbs();
 
   return (
@@ -168,6 +176,12 @@ export function AppTopbar({ githubSync }: { githubSync: GithubSync }) {
           downloadHref={siteConfig.links.figmaPlugin}
           downloadLabel="Download plugin"
         />
+        {user ? (
+          <>
+            <Separator orientation="vertical" className="mx-1 hidden md:block" />
+            <UserMenu user={user} />
+          </>
+        ) : null}
       </div>
     </header>
   );

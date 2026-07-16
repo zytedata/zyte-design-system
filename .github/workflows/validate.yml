@@ -64,3 +64,21 @@ jobs:
 
       - name: Dashboard build smoke
         run: pnpm --filter dashboard run build
+
+  # Production deploy: only on push to main, and only after `validate` passes.
+  # Fires the Vercel deploy hook (git deployments are disabled in vercel.json),
+  # so a red CI build never triggers a production deploy and PRs never do.
+  deploy:
+    name: Trigger Vercel deploy hook
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'zytedata/zyte-design-system'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - name: Trigger deploy hook
+        run: curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}

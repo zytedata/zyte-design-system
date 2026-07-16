@@ -65,20 +65,43 @@ jobs:
       - name: Dashboard build smoke
         run: pnpm --filter dashboard run build
 
-  # Production deploy: only on push to main, and only after `validate` passes.
-  # Fires the Vercel deploy hook (git deployments are disabled in vercel.json),
-  # so a red CI build never triggers a production deploy and PRs never do.
+  # Production deploy: only on merge/push to main, and only after `validate` passes.
+  # Authenticates with VERCEL_TOKEN (a repo secret owned by a Vercel team member),
+  # so it runs regardless of who merged the PR — no Vercel account needed to merge,
+  # and Git author authorization never gates the deploy. Mirrors zyte-customer-portal.
   deploy:
-    name: Trigger Vercel deploy hook
     needs: validate
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'zytedata/zyte-design-system'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     concurrency:
       group: deploy-production
       cancel-in-progress: false
+    env:
+      # zyte-design-system project on the shared Zyte Vercel team
+      # (same team as zyte-customer-portal).
+      VERCEL_ORG_ID: team_eBRROw8VaCqyrfvvmfs5ycum
+      VERCEL_PROJECT_ID: prj_pgbdauGigDumtqIAW0zF1nJtqX0o
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
-      - name: Trigger deploy hook
-        run: curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"
-        env:
-          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.4
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # vercel build runs the monorepo install/build commands from
+      # apps/dashboard/vercel.json (root dir = apps/dashboard), which cd to the
+      # repo root, build @zytedata/ds-* packages, then build the dashboard.
+      - run: pnpm dlx vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - run: pnpm dlx vercel@latest build --prod --token="$VERCEL_TOKEN"
+      - run: pnpm dlx vercel@latest deploy --prebuilt --prod --token="$VERCEL_TOKEN"

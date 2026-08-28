@@ -1,0 +1,7 @@
+# Auto-scaffolded for Claude Code worktrees (gitignored files only).
+# Docs: https://code.claude.com/docs/en/worktrees
+.env
+.env.local
+.env.development.local
+.env.development
+.env*.local

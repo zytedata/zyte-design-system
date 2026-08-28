@@ -48,3 +48,7 @@ next-env.d.ts
 # never committed. Same for @zytedata/tokens-build and @zytedata/ds-types.
 packages/*/dist/
 packages/*/src/dist/
+.env*.local
+
+# Claude Code parallel worktrees
+.claude/worktrees/

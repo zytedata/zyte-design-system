@@ -97,7 +97,7 @@ products.
 Color changes can also be mirrored into the Figma plugin so it populates the
 new values on fetch. **Ask the user whether to do this** before touching it.
 If yes:
-- `figma-plugin/` is gitignored / local-only and hand-maintained.
+- `figma-plugin/` is git-tracked and hand-maintained (no build step; run via plain `node`).
 - For **core/scrapy/extract-summit**: edit the matching `*_COLORS` object (and
   `semanticColors`) in `figma-plugin/code.js` to match `foundations.ts`, then
   `node --check figma-plugin/code.js`.

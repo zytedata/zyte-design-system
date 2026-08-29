@@ -39,15 +39,17 @@ Phase 2 ships every product as its own publishable package on **GitHub Packages*
 | ----------------------- | --------- | ----------------------------------------------------------------------------------------------------------- |
 | `GITHUB_TOKEN`          | both      | Auto-provided. Reads from / publishes to GitHub Packages within this repo.                                  |
 | `PERSONAL_GITHUB_TOKEN` | `release` | _Optional._ Fine-grained PAT (contents/pull-requests/packages write). Required if you want the release PR's commit to trigger downstream workflows (the default `GITHUB_TOKEN` will not). |
-| `VERCEL_DEPLOY_HOOK_URL` | `deploy-vercel` | Deploy Hook URL for the dashboard project. Called on every push to `main` and every PR targeting `main`. |
+| `VERCEL_TOKEN`          | `validate` (deploy job) | Token for the shared Zyte Vercel team. Authenticates the `vercel` CLI in the `deploy` job on push to `main`. `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID` are set inline in the workflow, not as secrets. |
 
 `release.yml` sets `GITHUB_TOKEN`, `NODE_AUTH_TOKEN`, and `NPM_TOKEN` from
 `PERSONAL_GITHUB_TOKEN || GITHUB_TOKEN` so `changesets/action` publishes via
 token auth (not OIDC) to GitHub Packages.
 
 `apps/dashboard/vercel.json` sets `git.deploymentEnabled: false`, so Vercel
-does not auto-deploy on Git pushes. Production deploys are triggered by the
-`deploy-vercel.yml` workflow via `VERCEL_DEPLOY_HOOK_URL`.
+does not auto-deploy on Git pushes. Production deploys run from the `deploy` job
+in `validate.yml` (`needs: validate`, push to `main` only), which authenticates
+the `vercel` CLI with `VERCEL_TOKEN` and runs `vercel pull` → `build` →
+`deploy --prebuilt --prod`.
 
 `release.yml` also disables `NPM_CONFIG_PROVENANCE` for the publish step.
 GitHub Packages publishes are restricted/private, and provenance generation

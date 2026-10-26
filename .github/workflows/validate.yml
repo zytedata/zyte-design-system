@@ -32,7 +32,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          check-latest: true
           cache: pnpm
           # Allow `pnpm install` to read @zytedata/* from GitHub Packages once we
           # have published versions; for an unpublished workspace this is a
@@ -96,7 +97,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          check-latest: true
           cache: pnpm
 
       # vercel build runs the monorepo install/build commands from
